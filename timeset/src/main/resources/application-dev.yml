@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /treasure
+    context-path: /timeset
   port: 8080
 
 spring:
@@ -15,22 +15,22 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/treasure_db?serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/timeset_db?serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
 
 mybatis:
   mapper-locations: classpath*:mapping/*Mapper.xml
-  type-aliases-package: com.treasure.demo
+  type-aliases-package: com.timeset
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     ##showSql
 
-pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  supportMethodsArguments: true
-  params: count=countSql
+#pagehelper:
+#  helperDialect: mysql
+#  reasonable: true
+#  supportMethodsArguments: true
+#  params: count=countSql
 
 
