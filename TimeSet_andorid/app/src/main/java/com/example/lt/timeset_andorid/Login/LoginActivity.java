@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.lt.timeset_andorid.R;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 //    private OkHttpClient okHttpClient;
