@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /timeset
+    context-path: /
   port: 8080
 
 spring:
@@ -15,7 +15,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:jdbc:mysql://47.92.229.147:3306/timeset?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://47.92.229.147:3306/timeset?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
