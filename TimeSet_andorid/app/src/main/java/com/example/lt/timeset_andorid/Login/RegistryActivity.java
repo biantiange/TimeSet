@@ -7,6 +7,7 @@ import com.example.lt.timeset_andorid.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 public class RegistryActivity extends AppCompatActivity {
 
     @Override

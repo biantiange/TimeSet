@@ -6,4 +6,12 @@
     <select id="selectAllPhone" resultType="com.timeset.user.entity.User">
         select id,phone from user
     </select>
+
+    <select id="findByPhone" resultType="com.timeset.user.entity.User">
+        select *from user where phone = #{phone}
+    </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.timeset.user.entity.User">
+        insert into user (phone,password,user_name,head_img) values()
+    </insert>
 </mapper>

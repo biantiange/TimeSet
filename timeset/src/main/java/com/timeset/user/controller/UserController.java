@@ -19,8 +19,11 @@ import java.util.List;
 public class UserController {
     @Resource
     private UserServiceImpl userService;
+
     @RequestMapping("/all")
     public List<User> showAllPhone(){
         return userService.findAllPhone();
     }
+
+
 }
