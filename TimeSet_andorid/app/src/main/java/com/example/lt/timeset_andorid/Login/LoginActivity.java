@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.example.lt.timeset_andorid.R;
 /**
  * 卢朋娇
  */
+
+
 public class LoginActivity extends AppCompatActivity {
 
 //    private OkHttpClient okHttpClient;

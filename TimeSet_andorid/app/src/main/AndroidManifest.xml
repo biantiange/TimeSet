@@ -28,17 +28,19 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
 
-        <activity android:name=".Login.LoginActivity">
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".Login.RegistryActivity" />
-        <activity android:name=".Login.PhoneTestActivity" />
 
+        <activity android:name=".Login.LoginActivity" />
+        <activity android:name=".Login.PhoneTestActivity" />
+        <activity android:name=".Login.RegistryActivity"></activity>
+        <activity android:name=".Album.AddAlbum" />
     </application>
 
 </manifest>
