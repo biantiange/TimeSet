@@ -29,6 +29,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".Login.ForgetPasswordActivity" />
         <activity android:name=".Login.RegistryActivity"></activity>
+        <activity android:name=".Album.AddAlbum" />
     </application>
 
 </manifest>
