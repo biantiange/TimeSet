@@ -32,11 +32,17 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/iv_headImg"
         android:src="@drawable/moren_img"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
         android:layout_width="100dp"
         android:layout_height="80dp" />
+   <!-- <indi.liyi.viewer.ImageViewer
+        android:src="@drawable/moren_img"
+        android:id="@+id/iver_add_record"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />-->
 
     <include
         android:layout_margin="10dp"
