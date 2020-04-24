@@ -5,20 +5,25 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.lt.timeset_andorid.R;
+/**
+ * 卢朋娇
+ *
+ *
+ *
+ * 
+ */
 
-import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
+
 //    private OkHttpClient okHttpClient;
     private SharedPreferences sharedPreferences;
     //控件
@@ -38,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(0xffffcc00);
+            getWindow().setStatusBarColor(0xff7adfb8);
         }
         findViews();
     }
@@ -74,12 +79,14 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.btn_zhuce:
-                    //跳转到注册界面
-                    Intent intent = new Intent(LoginActivity.this, RegistryActivity.class);
+//                    Intent intent = new Intent(LoginActivity.this, PhoneTestActivity.class);
+//                    intent.putExtra("flag",1);
+                    Intent intent = new Intent(LoginActivity.this,RegistryActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.btn_forgetPwd:
-                    Intent intent1 = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                    Intent intent1 = new Intent(LoginActivity.this, PhoneTestActivity.class);
+//                    intent1.putExtra("flag",2);
                     startActivity(intent1);
                     break;
             }
