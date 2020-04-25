@@ -6,11 +6,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
-import android.text.TextUtils;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,10 +21,9 @@ import com.example.lt.timeset_andorid.R;
 import com.mob.MobSDK;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
+import androidx.appcompat.app.AppCompatActivity;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import okhttp3.Call;
