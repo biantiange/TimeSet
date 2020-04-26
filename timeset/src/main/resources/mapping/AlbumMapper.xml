@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.timeset.album.mapper.AlbumMapper">
     <select id="findAll" resultType="com.timeset.album.entity.Album">
-        select * from photo
+        select * from album
     </select>
 
     <insert id="addAlbum" useGeneratedKeys="true">
