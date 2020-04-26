@@ -11,6 +11,24 @@ import java.util.List;
  * @Date 2020-04-21 16:53
  */
 public interface UserMapper {
-    public List<User> selectAllPhone();
-    public User findByPhone(String phone);
+    //增加用户
+    public int insertUser(User user);
+
+    //根据id或者phone删除用户
+    public int deleteUser(String phone);
+
+    //根据id或者phone修改用户名
+    public int updateUserNameByPhone(String phone,String userName);
+
+    //根据id或者phone修改用户头像
+    public  int updateUserImgByPhone(String phone,String headImg);
+
+    //根据id和手机号修改密码
+    public  int updateUserPasswordByPhone(String phone,String password);
+
+    //查询所有用户
+    public List<User> findAllPhone();
+
+    //根据id或者phone查询用户
+    public User findUserByPhone(String phone);
 }
