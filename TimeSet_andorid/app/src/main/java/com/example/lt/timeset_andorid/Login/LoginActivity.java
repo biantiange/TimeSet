@@ -6,15 +6,29 @@ import android.os.Build;
 import android.os.Bundle;
 
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.lt.timeset_andorid.MainActivity;
 import com.example.lt.timeset_andorid.R;
+import com.google.gson.Gson;
 
+import java.io.IOException;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import cn.smssdk.SMSSDK;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * 卢朋娇
@@ -27,7 +41,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-//    private OkHttpClient okHttpClient;
+    private OkHttpClient okHttpClient;
     private SharedPreferences sharedPreferences;
     //控件
     private EditText etUserPhone;
@@ -49,9 +63,18 @@ public class LoginActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(0xff7adfb8);
         }
         findViews();
+
+        // 2. 判断sharedP中是否已经有登录用户
+        sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        if (sharedPreferences!=null && sharedPreferences.getBoolean("flag", false)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void findViews() {
+        okHttpClient = new OkHttpClient();
         //控件
         etUserPhone = findViewById(R.id.et_userPhone);
         etUserPwd = findViewById(R.id.et_userPassword);
@@ -78,21 +101,80 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "请按要求输入哦", Toast.LENGTH_SHORT).show();
                     } else {
                         //发给数据库做验证
-//                        MyOkHttp(Constant.BASE_IP + "LoginServlet?phoneNumber=" + userPhone + "&&password=" + userPwd);
+                        MyOkHttp(Constant.IP + "user/login?phone=" + userPhone + "&&password=" + userPwd);
                     }
                     break;
                 case R.id.btn_zhuce:
-//                    Intent intent = new Intent(LoginActivity.this, PhoneTestActivity.class);
-//                    intent.putExtra("flag",1);
                     Intent intent = new Intent(LoginActivity.this,RegistryActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.btn_forgetPwd:
                     Intent intent1 = new Intent(LoginActivity.this, PhoneTestActivity.class);
-//                    intent1.putExtra("flag",2);
                     startActivity(intent1);
                     break;
             }
         }
+    }
+
+    public void MyOkHttp(String url) {
+        final Request request = new Request.Builder().url(url).build();
+        final Call call = okHttpClient.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                //登录失败
+                handler.sendEmptyMessage(1);   //网络原因请求失败
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                //登录成功，返回的是user的全部信息
+                String jsonStr = response.body().string();
+                Log.e("LoginActivity", "响应：" + jsonStr);
+                //登录成功，返回全部信息
+                if (jsonStr != null && !jsonStr.equals("")) {
+                    Message message=new Message();
+                    message.what=2;
+                    message.obj=jsonStr;
+                    handler.sendMessage(message);
+                } else {
+                    handler.sendEmptyMessage(3);
+                }
+            }
+        });
+    }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            if (msg.what == 1) {
+                Toast.makeText(LoginActivity.this,"因网络原因请求失败",Toast.LENGTH_SHORT).show();
+            }else if(msg.what == 3){
+                Toast.makeText(LoginActivity.this,"用户名或密码错误，登录失败",Toast.LENGTH_SHORT).show();
+            }else{   // ==2登录成功
+                //存到SharedPreferences中并显示登录成功，跳转到MainActivity
+                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+               // 保存到SharedPreferences
+                save(msg.obj.toString());
+                //跳转到MainActivity界面
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+    };
+
+    private void save(String jsonStr){
+        Log.e("LoginActivity", "要开始存储了");
+        User user = new Gson().fromJson(jsonStr,User.class);
+        sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("phone", user.getPhone());
+        editor.putString("headImg", user.getHeadImg());
+        editor.putString("userName", user.getUserName());
+        editor.putBoolean("flag" , true);   //是否第一次登录，如果不是则后续登录不用输密码
+        editor.commit();   //提交
+        Log.e("LoginActivity", "存储结束了" + user.toString() );
     }
 }
