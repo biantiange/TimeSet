@@ -42,7 +42,9 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -64,6 +66,7 @@ public class RegistryActivity extends AppCompatActivity {
     private MyListener myListener;
     private ImageView headImg;  // 头像
     private boolean flag=false;   //是否更新了头像
+    private String headImgPath = "";
 
     // alertDialog
     private AlertDialog.Builder builder;
@@ -85,7 +88,7 @@ public class RegistryActivity extends AppCompatActivity {
     private static int output_X = 80;
     private static int output_Y = 80;
 
-    private EditText etPhone, etYanzhengma, etPwd1, etPwd;
+    private EditText etPhone, etYanzhengma, etPwd1, etPwd,etUserName;
     private Button btnSubmit, btnGetMsg, btnReturn;  //btnSubmit是next按钮
     private ImageView ivPhone,ivPwd,ivPwd1;    //输入错误与否的图片
     private int i = 30;//计时器
@@ -133,6 +136,7 @@ public class RegistryActivity extends AppCompatActivity {
         etYanzhengma = findViewById(R.id.et_yanzhengma);
         etPwd = findViewById(R.id.et_password);
         etPwd1 = findViewById(R.id.et_password1);
+        etUserName = findViewById(R.id.et_name);
         btnGetMsg = findViewById(R.id.btn_yanzhengma);
         btnSubmit = findViewById(R.id.btn_submit);
         btnSubmit.setOnClickListener(myListener);
@@ -143,46 +147,41 @@ public class RegistryActivity extends AppCompatActivity {
         ivPwd = findViewById(R.id.iv_pwd);
         ivPwd1 = findViewById(R.id.iv_pwd1);
         //给editText添加内容改变事件
-        etPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    Log.e("phone焦点","失去");
-                    if (!MobUtil.judgePhoneNums(etPhone.getText().toString())) {
-                        ivPhone.setBackgroundResource(R.drawable.error);
-                    }else{
-                        ivPhone.setBackgroundResource(R.drawable.right);
+        etPhone.setOnFocusChangeListener((View v, boolean hasFocus)-> {
+                    if(!hasFocus){
+                        Log.e("phone焦点","失去");
+                        if (!MobUtil.judgePhoneNums(etPhone.getText().toString())) {
+                            ivPhone.setBackgroundResource(R.drawable.error);
+                        }else{
+                            ivPhone.setBackgroundResource(R.drawable.right);
+                        }
                     }
                 }
-            }
-        });
-        etPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    Log.e("焦点","失去");
-                    String str = etPwd.getText().toString();
-                    if (isSpecialChar(str)|| str.length()<8 || str.length()>12) {   //含有非法字符
-                        ivPwd.setBackgroundResource(R.drawable.error);
-                    }else{
-                        ivPwd.setBackgroundResource(R.drawable.right);
+        );
+        etPwd.setOnFocusChangeListener((View v, boolean hasFocus)-> {
+                    if(!hasFocus){
+                        Log.e("焦点","失去");
+                        String str = etPwd.getText().toString();
+                        if (isSpecialChar(str)|| str.length()<8 || str.length()>12) {   //含有非法字符
+                            ivPwd.setBackgroundResource(R.drawable.error);
+                        }else{
+                            ivPwd.setBackgroundResource(R.drawable.right);
+                        }
                     }
                 }
-            }
-        });
-        etPwd1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    String str = etPwd1.getText().toString();
-                    if (isSpecialChar(str)|| str.length()<8 || str.length()>12) {
-                        ivPwd1.setBackgroundResource(R.drawable.error);
-                    }else{
-                        ivPwd1.setBackgroundResource(R.drawable.right);
+        );
+
+        etPwd1.setOnFocusChangeListener((View v, boolean hasFocus) ->{
+                    if(!hasFocus){
+                        String str = etPwd1.getText().toString();
+                        if (isSpecialChar(str)|| str.length()<8 || str.length()>12) {
+                            ivPwd1.setBackgroundResource(R.drawable.error);
+                        }else{
+                            ivPwd1.setBackgroundResource(R.drawable.right);
+                        }
                     }
                 }
-            }
-        });
+        );
     }
 
     /*
@@ -220,16 +219,15 @@ public class RegistryActivity extends AppCompatActivity {
 
             } else if(msg.what== 5){
                 //网络请求结果
-//                if (msg.obj.equals("OK")) {
-//                    //Looper.prepare();
-//                    Toast.makeText(ForgetPasswordActivity.this, "操作成功", Toast.LENGTH_LONG).show();
-//                    finish();
-//                } else if (msg.obj.equals("")) {
-//                    Toast.makeText(ForgetPasswordActivity.this, "该手机号已被注册了哦", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(ForgetPasswordActivity.this, "操作失败", Toast.LENGTH_LONG).show();
-//                }
-
+                if (msg.obj.equals("OK")) {
+                    // 操作成功，返回登录界面
+                    Toast.makeText(RegistryActivity.this, "操作成功", Toast.LENGTH_LONG).show();
+                    finish();
+                } else if (msg.obj.equals("")) {
+                    Toast.makeText(RegistryActivity.this, "该手机号已被注册了哦", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(RegistryActivity.this, "操作失败", Toast.LENGTH_LONG).show();
+                }
             }else {
                 int i = msg.arg1;
                 int i1 = msg.arg2;
@@ -325,17 +323,71 @@ public class RegistryActivity extends AppCompatActivity {
                         if(etPwd.getText().toString().equals(etPwd1.getText().toString())){
                             //注册
                             Log.e("获取到的信息：",ivPhone+"-"+ivPwd);
-//                            MyOkHttp(Constant.IP + "user/register");
+                            MyOkHttp(Constant.IP + "user/registry");
                             //finish();
                         }else{
                             Toast.makeText(RegistryActivity.this,"密码与确认密码不相等",Toast.LENGTH_LONG).show();
                         }
                     }else{
-                        Toast.makeText(RegistryActivity.this,"提交失败,请根据输入框的图片提示来修改您的数据,以来得到您想要的效果",Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegistryActivity.this,"请检查是否有错误项",Toast.LENGTH_LONG).show();
                     }
                     break;
             }
         }
+    }
+
+
+    //修改数据库，在数据库中加入新用户
+    public void MyOkHttp(String url) {
+//        File file = new File("/storage/emulated/0/song/10086电话录音2018-11-21-21-58-18.amr");
+        Request request = null;
+        if(flag){   //用户是否改变了头像，如果是，找到对应路径并上传，如果没有就不上传，数据库中头像路径存null，个人中心gilde展示时error设置成R.drawable.moren_img.jpg
+            Log.e("注册","用户改变了头像");
+            File file = new File(headImgPath);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);//把文件与类型放入请求体
+            MultipartBody multipartBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("phone", etPhone.getText().toString())//添加表单数据
+                    .addFormDataPart("password", etPwd.getText().toString())
+                    .addFormDataPart("username", etUserName.getText()==null?etPhone.getText().toString():etUserName.getText().toString())  //如果用户没填昵称，就是手机号
+                    .addFormDataPart("file", file.getName(), requestBody)//文件名,请求体里的文件
+                    .build();
+            request = new Request.Builder()
+//                    .header("Authorization", "Bearer d3e63518-1ba7-4342-b94c-63c8b9b9046b")//添加请求头的身份认证Token
+                    .url(url)
+                    .post(multipartBody)
+                    .build();
+        }else{  //用户未改变头像
+            Log.e("注册","用户未改变头像");
+            FormBody.Builder builder = new FormBody.Builder();
+            FormBody body = builder.add("phone",etPhone.getText().toString())
+                    .add("password",etPwd.getText().toString())
+                    .add("userName",etUserName.getText()==null?etPhone.getText().toString():etUserName.getText().toString())
+                    .build();
+            request = new Request.Builder()
+                    .post(body)
+                    .url(url)
+                    .build();
+        }
+        final Call call = okHttpClient.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                handler.sendEmptyMessage(4);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String jsonStr = response.body().string();
+                Log.e("RegisterActivity", "响应：" + jsonStr);
+                Message message = new Message();
+                message.what = 5;
+                message.obj = jsonStr;
+                handler.sendMessage(message);
+            }
+        });
     }
 
     // 从本地相册选取图片作为头像
@@ -465,40 +517,6 @@ public class RegistryActivity extends AppCompatActivity {
 
     }
 
-    //修改数据库，在数据库中加入新用户
-//    public void MyOkHttp(String url) {
-//        if(flag){   //说明更新了头像，就上传他更新的
-//            File file = new File(headImg.getDrawable().get)
-//        }else{
-//            //上传默认的
-//
-//        }
-//        RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"),file);
-//        final Call call = okHttpClient.newCall(request);
-//
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//                Message message = new Message();
-//                message.what = 4;
-//                handler.sendMessage(message);
-//                //Toast.makeText(LoginActivity.this,"用户名或密码错误", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                // Toast.makeText(RegisterActivity.this,"操作成功", Toast.LENGTH_SHORT).show();
-//                String jsonStr = response.body().string();
-//                Log.e("RegisterActivity", "响应：" + jsonStr);
-//                // jsonStr = new Gson().fromJson(jsonStr,String.class);
-//                Message message = new Message();
-//                message.what = 5;
-//                message.obj = jsonStr;
-//                handler.sendMessage(message);
-//            }
-//        });
-//    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
