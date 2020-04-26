@@ -21,21 +21,30 @@ public class UserController {
     @Resource
     private UserServiceImpl userService;
 
-    @RequestMapping("/insert")
-    public int insertUser(@RequestParam("phone") String phone, @RequestParam("password") String password, @RequestParam("userName") String userName,  @RequestParam(value = "headImg",required = false)String headImg) {
+    @RequestMapping("/add")
+    public String insertUser(@RequestParam("phone") String phone, @RequestParam(value = "password",required = false) String password, @RequestParam(value = "userName",required = false) String userName,  @RequestParam(value = "headImg",required = false)String headImg) {
         System.out.println("插入用户");
         User user = new User();
-        user.setPhone(phone);
-        user.setPassword(password);
-        user.setUser_name(userName);
-        if (headImg != null && !headImg.equals("")) {
-            user.setHead_img(headImg);
+        if(userService.findUserByPhone(phone)==null) {
+            user.setPhone(phone);
+            if (password != null && !password.equals("")) {
+                user.setPassword(password);
+            }
+            if (userName != null && !userName.equals("")) {
+                user.setUserName(userName);
+            }
+            if (headImg != null && !headImg.equals("")) {
+                user.setHeadImg(headImg);
+            }
+            int result = userService.insertUser(user);
+            if (result != 0) {
+                return user.getId()+"";
+            }else{
+                return "注册失败！";
+            }
+        }else{
+           return "手机号已经被注册！";
         }
-        int result = userService.insertUser(user);
-        if (result != 0) {
-            return user.getId();
-        }
-        return -1;
     }
 
     @RequestMapping("/delete")
@@ -43,37 +52,37 @@ public class UserController {
         System.out.println("删除用户");
         int result = userService.deleteUser(phone);
         if (result != 0) {
-            return 1;
+            return 0;
         }
         return -1;
     }
 
-    @RequestMapping("/updateUserNameByPhone")
+    @RequestMapping("/updateUserName")
     public int updateUserNameByPhone(@RequestParam("phone") String phone, @RequestParam("userName") String userName) {
         System.out.println("修改用户名");
         int result = userService.updateUserNameByPhone(phone, userName);
         if (result != 0) {
-            return 1;
+            return 0;
         }
         return -1;
     }
 
-    @RequestMapping("/updateUserImgByPhone")
+    @RequestMapping("/updateUserImg")
     public int updateUserImgByPhone(@RequestParam("phone") String phone, @RequestParam("headImg") String headImg) {
         System.out.println("修改用户头像");
         int result = userService.updateUserImgByPhone(phone, headImg);
         if (result != 0) {
-            return 1;
+            return 0;
         }
         return -1;
     }
 
-    @RequestMapping("/updateUserPasswordByPhone")
+    @RequestMapping("/updateUserPassword")
     public int updateUserPasswordByPhone(@RequestParam("phone") String phone, @RequestParam("password") String password) {
         System.out.println("修改用户密码");
         int result = userService.updateUserPasswordByPhone(phone, password);
         if (result != 0) {
-            return 1;
+            return 0;
         }
         return -1;
     }

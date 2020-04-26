@@ -22,41 +22,57 @@ public class AlbumController {
     private AlbumServiceImpl albumService;
 
     @RequestMapping("/all")
-    public List<Album> all(){
+    public List<Album> all(@RequestParam("userId") int userId){
         System.out.println("查询所有相册");
-        return albumService.findAll();
+        return albumService.findAll(userId);
     }
 
     @RequestMapping("/add")
-    public void findByAlbum(@RequestParam("userId") int userId,@RequestParam("theme")String theme,@RequestParam("albumName")String albumName){
+    public int findByAlbum(@RequestParam("userId") int userId,@RequestParam("theme")String theme,@RequestParam("albumName")String albumName){
         System.out.println("增加相册");
         if(userId!=0 && theme!=null && !theme.equals("") && albumName!=null && !albumName.equals("")) {
-            albumService.addAlbum(userId,theme,albumName);
+            int result=albumService.addAlbum(userId,theme,albumName);
+            if(result!=0){
+                return 0;
+            }
         }
+        return -1;
     }
 
     @RequestMapping("/delete")
-    public void deleteAlbum(@RequestParam("userId") int userId,@RequestParam("id")int id){
+    public int deleteAlbum(@RequestParam("userId") int userId,@RequestParam("id")int id){
         System.out.println("删除相册");
         if(userId!=0 && id!=0){
-            albumService.deleteAlbum(userId,id);
+            int result=albumService.deleteAlbum(userId,id);
+            if(result!=0){
+                return 0;
+            }
         }
+        return -1;
     }
 
     @RequestMapping("/updateName")
-    public void updateName(@RequestParam("userId") int userId,@RequestParam("id")int id,@RequestParam("albumName") String albumName){
+    public int updateName(@RequestParam("userId") int userId,@RequestParam("id")int id,@RequestParam("albumName") String albumName){
         System.out.println("修改相册名");
         if(userId!=0 && id!=0 && albumName!=null){
-           albumService.updateNameAlbum(userId,id,albumName);
+           int result=albumService.updateNameAlbum(userId,id,albumName);
+            if(result!=0){
+                return 0;
+            }
         }
+        return -1;
     }
 
     @RequestMapping("/updateTheme")
-    public void updateTheme(@RequestParam("userId") int userId,@RequestParam("id")int id,@RequestParam("theme") String theme){
+    public int updateTheme(@RequestParam("userId") int userId,@RequestParam("id")int id,@RequestParam("theme") String theme){
         System.out.println("修改相册主题");
         if(userId!=0 && id!=0 && theme!=null){
-            albumService.updateThemeAlbum(userId,id,theme);
+            int result=albumService.updateThemeAlbum(userId,id,theme);
+            if(result!=0){
+                return 0;
+            }
         }
+        return -1;
 
     }
 

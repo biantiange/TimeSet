@@ -10,8 +10,8 @@ public class User {
     private int id;
     private String phone;
     private String password;
-    private String user_name;
-    private String head_img;
+    private String userName;
+    private String headImg;
 
     public int getId() {
         return id;
@@ -37,30 +37,30 @@ public class User {
         this.password = password;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getHead_img() {
-        return head_img;
+    public String getHeadImg() {
+        return headImg;
     }
 
-    public void setHead_img(String head_img) {
-        this.head_img = head_img;
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
     }
 
     @Override
     public String toString() {
-        return "user{" +
+        return "User{" +
                 "id=" + id +
                 ", phone='" + phone + '\'' +
                 ", password='" + password + '\'' +
-                ", user_name='" + user_name + '\'' +
-                ", head_img='" + head_img + '\'' +
+                ", userName='" + userName + '\'' +
+                ", headImg='" + headImg + '\'' +
                 '}';
     }
 }

@@ -22,7 +22,7 @@ public class AlbumServiceImpl {
     private AlbumMapper albumMapper;
 
     //查找全部相册
-    public List<Album> findAll(){return albumMapper.findAll();};
+    public List<Album> findAll(int userId){return albumMapper.findAll(userId);};
 
     //增加相册
     public int addAlbum(int userId,String theme,String albumName){return albumMapper.addAlbum(userId,theme,albumName);};
