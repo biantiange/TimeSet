@@ -98,9 +98,7 @@ public class PhoneTestActivity extends AppCompatActivity {
         ivPwd = findViewById(R.id.iv_pwd);
         ivPwd1 = findViewById(R.id.iv_pwd1);
         //给editText添加内容改变事件
-        etPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+        etPhone.setOnFocusChangeListener((View v, boolean hasFocus)-> {
                 if(!hasFocus){
                     Log.e("phone焦点","失去");
                     if (!MobUtil.judgePhoneNums(etPhone.getText().toString())) {
@@ -110,10 +108,8 @@ public class PhoneTestActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
-        etPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+        );
+        etPwd.setOnFocusChangeListener((View v, boolean hasFocus)-> {
                 if(!hasFocus){
                     Log.e("焦点","失去");
                     String str = etPwd.getText().toString();
@@ -124,10 +120,9 @@ public class PhoneTestActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
-        etPwd1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+        );
+
+        etPwd1.setOnFocusChangeListener((View v, boolean hasFocus) ->{
                 if(!hasFocus){
                     String str = etPwd1.getText().toString();
                     if (isSpecialChar(str)|| str.length()<8 || str.length()>12) {
@@ -137,45 +132,9 @@ public class PhoneTestActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        );
     }
 
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            if (msg.what == -9) {
-                btnGetMsg.setText("重新发送(" + i + ")");
-            } else if (msg.what == -8) {
-                btnGetMsg.setText("获取验证码");
-                btnGetMsg.setClickable(true);
-                i = 30;
-            } else if (msg.what == 4) {
-                //网络请求失败
-                Toast.makeText(PhoneTestActivity.this,"因网络原因请求失败", Toast.LENGTH_SHORT).show();
-
-            } else if(msg.what== 5){
-                //网络请求结果
-                if (msg.obj.equals("OK")) {
-                    Toast.makeText(PhoneTestActivity.this, "操作成功", Toast.LENGTH_LONG).show();
-                    finish();
-                } else if (msg.obj.equals("")) {
-                    Toast.makeText(PhoneTestActivity.this, "该手机号已被注册了哦", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(PhoneTestActivity.this, "操作失败", Toast.LENGTH_LONG).show();
-                }
-
-            }else {
-                int i = msg.arg1;
-                int i1 = msg.arg2;
-                Object o = msg.obj;
-                if (i1 == SMSSDK.RESULT_COMPLETE) {
-                    // 短信注册成功后，返回LoginActivity,然后提示
-                } else if (i == SMSSDK.EVENT_GET_VOICE_VERIFICATION_CODE) {
-                    Toast.makeText(PhoneTestActivity.this, "正在获取验证码", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    };
 
     private class MyListener implements View.OnClickListener {
         @Override
@@ -225,13 +184,8 @@ public class PhoneTestActivity extends AppCompatActivity {
                         Log.e("背景图片","相等了");
                         if(etPwd.getText().toString().equals(etPwd1.getText().toString())){
                             Log.e("密码与确认密码","想等了");
-//                            if(getIntent().getIntExtra("flag",0)==1){
-                                //做注册操作
-//                                MyOkHttp(Constant.IP+"user/register?phoneNumber="+ etPhone.getText().toString() + "&&password=" + etPwd.getText().toString());
-//                            }else{
                                 //做忘记密码操作
-                                MyOkHttp(Constant.IP+"user/forget?phoneNumber="+ etPhone.getText().toString() + "&&password=" + etPwd.getText().toString());
-//                            }
+                                MyOkHttp(Constant.IP+"user/forget?phone="+ etPhone.getText().toString() + "&&password=" + etPwd.getText().toString());
                         }else{
                             Log.e("密码与确认密码","不相等");
                             Toast.makeText(PhoneTestActivity.this,"密码与确认密码不相等",Toast.LENGTH_LONG).show();
@@ -270,6 +224,45 @@ public class PhoneTestActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            if (msg.what == -9) {
+                btnGetMsg.setText("重新发送(" + i + ")");
+            } else if (msg.what == -8) {
+                btnGetMsg.setText("获取验证码");
+                btnGetMsg.setClickable(true);
+                i = 30;
+            } else if (msg.what == 4) {
+                //网络请求失败
+                Toast.makeText(PhoneTestActivity.this,"因网络原因请求失败", Toast.LENGTH_SHORT).show();
+
+            } else if(msg.what== 5){
+                //网络请求结果
+                if (msg.obj.equals("OK")) {
+                    // 操作成功，返回登录界面
+                    Toast.makeText(PhoneTestActivity.this, "操作成功", Toast.LENGTH_LONG).show();
+                    finish();
+                } else if (msg.obj.equals("")) {
+                    Toast.makeText(PhoneTestActivity.this, "该手机号已被注册了哦", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(PhoneTestActivity.this, "操作失败", Toast.LENGTH_LONG).show();
+                }
+
+            }else {
+                int i = msg.arg1;
+                int i1 = msg.arg2;
+                Object o = msg.obj;
+                if (i1 == SMSSDK.RESULT_COMPLETE) {
+                    // 短信注册成功后，返回LoginActivity,然后提示
+                } else if (i == SMSSDK.EVENT_GET_VOICE_VERIFICATION_CODE) {
+                    Toast.makeText(PhoneTestActivity.this, "正在获取验证码", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onDestroy() {

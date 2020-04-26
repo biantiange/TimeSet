@@ -3,15 +3,39 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.timeset.user.mapper.UserMapper">
-    <select id="selectAllPhone" resultType="com.timeset.user.entity.User">
-        select id,phone from user
-    </select>
-
-    <select id="findByPhone" resultType="com.timeset.user.entity.User">
-        select *from user where phone = #{phone}
-    </select>
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.timeset.user.entity.User">
-        insert into user (phone,password,user_name,head_img) values()
+        insert into user (phone,password,user_name,head_img) values(#{phone},#{password},#{user_name},#{head_img})
     </insert>
+
+    <delete id="deleteUser">
+        delete from user where phone =#{phone}
+    </delete>
+
+    <update id="updateUserNameByPhone">
+        update user
+        set user_name=#{userName}
+        where phone =#{phone}
+    </update>
+
+    <update id="updateUserImgByPhone">
+        update user
+        set head_img=#{headImg}
+        where phone =#{phone}
+    </update>
+
+    <update id="updateUserPasswordByPhone">
+        update user
+        set password=#{password}
+        where phone =#{phone}
+    </update>
+
+    <select id="findAllPhone" resultType="com.timeset.user.entity.User">
+        select * from user
+    </select>
+
+    <select id="findUserByPhone" resultType="com.timeset.user.entity.User">
+        select * from user where phone = #{phone}
+    </select>
+
 </mapper>
