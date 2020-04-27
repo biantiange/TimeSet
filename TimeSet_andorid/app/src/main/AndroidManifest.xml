@@ -28,7 +28,7 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:replace="android:appComponentFactory"
         android:appComponentFactory="任意字符">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Album.InAlbum">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,6 +40,7 @@
         <activity android:name=".Login.PhoneTestActivity" />
         <activity android:name=".Login.RegistryActivity"></activity>
         <activity android:name=".Album.AddAlbum" />
+
     </application>
 
 </manifest>
