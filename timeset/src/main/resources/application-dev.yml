@@ -25,6 +25,8 @@ mybatis:
   type-aliases-package: com.timeset
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    开启驼峰命名
+    map-underscore-to-camel-case: true
     ##showSql
 
 #pagehelper:

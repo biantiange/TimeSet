@@ -199,7 +199,7 @@ public class PhoneTestActivity extends AppCompatActivity {
         }
     }
 
-    //修改数据库，在数据库中加入新用户
+    //修改数据库
     public void MyOkHttp(String url) {
         Request request = new Request.Builder().url(url).build();
         final Call call = okHttpClient.newCall(request);
@@ -216,7 +216,7 @@ public class PhoneTestActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String jsonStr = response.body().string();
-                Log.e("RegisterActivity", "响应：" + jsonStr);
+                Log.e("忘记密码", "响应：" + jsonStr);
                 Message message = new Message();
                 message.what = 5;
                 message.obj = jsonStr;
@@ -245,8 +245,8 @@ public class PhoneTestActivity extends AppCompatActivity {
                     // 操作成功，返回登录界面
                     Toast.makeText(PhoneTestActivity.this, "操作成功", Toast.LENGTH_LONG).show();
                     finish();
-                } else if (msg.obj.equals("")) {
-                    Toast.makeText(PhoneTestActivity.this, "该手机号已被注册了哦", Toast.LENGTH_LONG).show();
+                } else if (msg.obj==null || msg.obj.equals("")) {
+                    Toast.makeText(PhoneTestActivity.this, "无此用户", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(PhoneTestActivity.this, "操作失败", Toast.LENGTH_LONG).show();
                 }

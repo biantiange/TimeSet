@@ -14,7 +14,7 @@ import java.util.List;
 public interface AlbumMapper {
 
     //查找全部相册
-    public List<Album> findAll();
+    public List<Album> findAll(int userId);
 
     //增加相册
     public int addAlbum(int userId,String theme,String albumName);

@@ -1,6 +1,7 @@
 package com.timeset.user.mapper;
 
 import com.timeset.user.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -31,4 +32,7 @@ public interface UserMapper {
 
     //根据id或者phone查询用户
     public User findUserByPhone(String phone);
+
+    //登录
+    public User findByPhoneAndPassword(@Param("phone")String phone,@Param("password")String password);
 }

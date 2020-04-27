@@ -94,6 +94,7 @@
         </GridView>
     </LinearLayout>
     <ImageView
+        android:id="@+id/jiahao"
         android:layout_marginBottom="20dp"
         android:layout_gravity="center"
         android:src="@drawable/jiaohao"
