@@ -48,11 +48,13 @@ public class HomeFragment extends Fragment {
     private GridView gridView;
     private GrideAdapter grideAdapter;
     private ImageView img;
+    private ImageView addAlbum;
     private List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         okHttpClient=new OkHttpClient();
         gridView=root.findViewById(R.id.gride);
+        addAlbum=root.findViewById(R.id.jiahao);
         //头像设置圆形
        /* img=root.findViewById(R.id.img);
         RequestOptions options=new RequestOptions().centerCrop();
@@ -77,18 +79,12 @@ public class HomeFragment extends Fragment {
         //  findAllAlbum();
         grideAdapter=new GrideAdapter(getContext(),list,R.layout.list_gride);
         gridView.setAdapter(grideAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        addAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
                 Intent intent = new Intent(getContext(),AddAlbum.class);
                 startActivity(intent);
-            }
-        });
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                view.findViewById(R.id.album_select).setVisibility(View.VISIBLE);
-                return false;
             }
         });
         return root;

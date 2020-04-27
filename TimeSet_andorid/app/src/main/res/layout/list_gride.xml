@@ -9,10 +9,10 @@
         android:id="@+id/image"
         android:src="@drawable/meishi"
         android:layout_width="match_parent"
-        android:layout_height="300dp"/>
+        android:layout_height="250dp"/>
         <TextView
             android:textSize="23dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:id="@+id/text"
             android:text="111"
             android:layout_width="match_parent"
