@@ -1,12 +1,18 @@
 package com.timeset.user.controller;
 
+import com.timeset.photo.entity.Photo;
 import com.timeset.user.entity.User;
 import com.timeset.user.service.UserServiceImpl;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -21,8 +27,12 @@ public class UserController {
     @Resource
     private UserServiceImpl userService;
 
-    @RequestMapping("/add")
-    public String insertUser(@RequestParam("phone") String phone, @RequestParam(value = "password",required = false) String password, @RequestParam(value = "userName",required = false) String userName,  @RequestParam(value = "headImg",required = false)String headImg) {
+    @RequestMapping("/registry")
+    public String insertUser(@RequestParam("phone") String phone,
+                             @RequestParam(value = "password") String password,
+                             @RequestParam(value = "userName",required = false) String userName,
+                             @RequestParam(value = "file",required = false) MultipartFile file,
+                             HttpServletRequest request) {
         System.out.println("插入用户");
         User user = new User();
         if(userService.findUserByPhone(phone)==null) {
@@ -33,17 +43,32 @@ public class UserController {
             if (userName != null && !userName.equals("")) {
                 user.setUserName(userName);
             }
-            if (headImg != null && !headImg.equals("")) {
-                user.setHeadImg(headImg);
+            if (file != null) {
+                //上传服务器
+                // 生成新的文件名
+                String fileName = System.currentTimeMillis()+file.getOriginalFilename();
+                // 保存路径
+                String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+fileName;
+                // 执行保存操作
+                File destFile = new File(destFileName);
+                if (!destFile.getParentFile().exists()){
+                    destFile.getParentFile().mkdir();
+                }
+                try {
+                    file.transferTo(destFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                user.setHeadImg("headImg"+ File.separator+fileName);
             }
             int result = userService.insertUser(user);
             if (result != 0) {
-                return user.getId()+"";
+                return "OK";
             }else{
-                return "注册失败！";
+                return "NO";
             }
         }else{
-           return "手机号已经被注册！";
+           return "";
         }
     }
 
@@ -77,14 +102,16 @@ public class UserController {
         return -1;
     }
 
-    @RequestMapping("/updateUserPassword")
-    public int updateUserPasswordByPhone(@RequestParam("phone") String phone, @RequestParam("password") String password) {
+    @RequestMapping("/forget")
+    public String updateUserPasswordByPhone(@RequestParam("phone") String phone, @RequestParam("password") String password) {
         System.out.println("修改用户密码");
-        int result = userService.updateUserPasswordByPhone(phone, password);
-        if (result != 0) {
-            return 0;
+        User user = userService.findUserByPhone(phone);
+        if(user==null){  //没有此用户返回null
+            return "";
+        }else{   //有此用户则进行修改
+            int count = userService.updateUserPasswordByPhone(phone,password);
+            return count!=0?"OK":"NO";
         }
-        return -1;
     }
 
 
@@ -100,7 +127,12 @@ public class UserController {
         return userService.findUserByPhone(phone);
     }
 
-    ;
-
+    @RequestMapping("/login")
+    public User login(@RequestParam("phone")String phone,
+                      @RequestParam("password")String password){
+        System.out.println("登录");
+        User user = userService.findByPhoneAndPassword(phone,password);
+       return user;
+    }
 
 }
