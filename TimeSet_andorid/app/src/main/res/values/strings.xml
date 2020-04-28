@@ -1,16 +1,14 @@
 <resources>
     <string name="app_name">TimeSet_andorid</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">光阴荏苒，我呵呵</string>
-    <string name="nav_header_subtitle">吾虽浪迹天涯，但未曾辜负时光。</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+
+
+    <string name="close">close drawer</string>
+    <string name="open">open drawer</string>
 
     <string name="menu_home">记录生活</string>
     <string name="menu_setting">Setting</string>
     <string name="menu_personal">个人中心</string>
 
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+
 </resources>
+
