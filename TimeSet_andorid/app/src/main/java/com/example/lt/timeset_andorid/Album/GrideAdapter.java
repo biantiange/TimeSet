@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.lt.timeset_andorid.Login.Constant;
+
 import com.example.lt.timeset_andorid.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

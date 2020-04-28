@@ -1,19 +1,26 @@
 package com.example.lt.timeset_andorid;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.lt.timeset_andorid.Album.AddAlbum;
-import com.example.lt.timeset_andorid.Album.Album;
+
 import com.example.lt.timeset_andorid.Album.GrideAdapter;
-import com.example.lt.timeset_andorid.Login.Constant;
+
+import com.example.lt.timeset_andorid.Entity.Album;
+import com.example.lt.timeset_andorid.Person.PersonalActivity;
+import com.example.lt.timeset_andorid.util.Constant;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -24,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -42,27 +50,44 @@ public class MainActivity extends AppCompatActivity {
     private ImageView img;
     private ImageView addAlbum;
     private List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
-    private ActionBarDrawerToggle drawerbar;
+
     private DrawerLayout main_drawer_layout;
-    private LinearLayout main_left_layout;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         initView();
-        initEvent();
+        //设置头像
+        View headerView = navigationView.getHeaderView(0);//获取头布局
+        ImageView headImg = headerView.findViewById(R.id.person);
+        headImg.setImageResource(R.drawable.geren);
+        //点击头像划出测边框
         img = findViewById(R.id.img);
-        img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(main_drawer_layout.isDrawerOpen(main_left_layout)){
-                    main_drawer_layout.closeDrawer(main_left_layout);
-                }else{
-                    main_drawer_layout.openDrawer(main_left_layout);
-                }
+        img.setOnClickListener(v -> {
+            if(main_drawer_layout.isDrawerOpen(navigationView)){
+                main_drawer_layout.closeDrawer(navigationView);
+            }else{
+                main_drawer_layout.openDrawer(navigationView);
             }
         });
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.item_geren:
+                    Log.e("MainActivity","ge  ren");
+                    Intent intent = new Intent(MainActivity.this,PersonalActivity.class);
+                    startActivity(intent);
+                    main_drawer_layout.closeDrawer(navigationView);
+                    break;
+                case R.id.item_setting:
+                    main_drawer_layout.closeDrawer(navigationView);
+                    break;
+            }
+            return true;
+        });
+
         okHttpClient=new OkHttpClient();
         gridView=findViewById(R.id.gride);
         addAlbum=findViewById(R.id.jiahao);
@@ -91,24 +116,17 @@ public class MainActivity extends AppCompatActivity {
         grideAdapter=new GrideAdapter(this,list,R.layout.list_gride);
         gridView.setAdapter(grideAdapter);
 
-        addAlbum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddAlbum.class);
-                startActivity(intent);
-            }
+        addAlbum.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddAlbum.class);
+            startActivity(intent);
         });
     }
 
     private void initView(){
         main_drawer_layout=findViewById(R.id.maindrawer_layout);
-        main_drawer_layout.setScrimColor(Color.TRANSPARENT);
-        main_left_layout=findViewById(R.id.main_left_drawer_layout);
+        navigationView = findViewById(R.id.nav);
     }
-    private void initEvent(){
-        drawerbar=new ActionBarDrawerToggle(this,main_drawer_layout,R.string.open,R.string.close);
-        main_drawer_layout.setDrawerListener(drawerbar);
-    }
+
 
     private void findAllAlbum() {
         Request request=new Request.Builder().url(Constant.URL +"album/all").build();
