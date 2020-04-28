@@ -31,4 +31,8 @@ public class UserServiceImpl {
     public List<User> findAllPhone(){return userMapper.findAllPhone();};
 
     public User findUserByPhone(String phone){return userMapper.findUserByPhone(phone);};
+
+    public User findByPhoneAndPassword(String phone,String password){
+        return userMapper.findByPhoneAndPassword(phone,password);
+    }
 }

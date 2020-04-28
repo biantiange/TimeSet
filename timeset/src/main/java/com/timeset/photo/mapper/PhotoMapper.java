@@ -12,22 +12,22 @@ import java.util.List;
  */
 public interface PhotoMapper {
 
-    public int addPhoto(int album_id,String pdescribe,String ptime,String place,String path,String identify);
+    public int addPhoto(Photo photo);
 
     public int deletePhoto(int id);
 
     //查找全部照片
-    public List<Photo> findAll();
+    public List<Photo> findAll(int UserId);
 
     //根据相册查询照片
     public List<Photo> findByAlbum(String albumId);
 
     //根据时间查询照片
-    public List<Photo> findByTime(String ptime);
+    public List<Photo> findByTime(String ptime,int userId);
 
     //根据地点查询照片
-    public List<Photo> findPlace(String place);
+    public List<Photo> findPlace(String place,int userId);
 
     //根据描述查询照片
-    public List<Photo> findDescribe(String pdescribe);
+    public List<Photo> findDescribe(String pdescribe,int userId);
 }
