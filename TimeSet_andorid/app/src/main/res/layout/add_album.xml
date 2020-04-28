@@ -198,15 +198,16 @@
         android:layout_height="35dp"
         android:gravity="center"
         android:layout_margin="40dp">
+
         <Button
             android:id="@+id/to_add_album"
-            android:text="完成创建"
-            android:textSize="18dp"
-            android:textColor="#fff"
             android:layout_width="150dp"
+            android:layout_height="21dp"
             android:layout_gravity="center"
-            android:layout_height="match_parent"
-            android:background="@drawable/toadd"/>
+            android:background="@drawable/toadd"
+            android:text="完成创建"
+            android:textColor="#fff"
+            android:textSize="18dp" />
 
     </LinearLayout>
 

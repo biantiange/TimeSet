@@ -1,5 +1,6 @@
 package com.example.lt.timeset_andorid.Album;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,7 +40,7 @@ public class AddAlbum extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.add_album);
-        getSupportActionBar().hide();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8 );
         }
@@ -83,7 +84,7 @@ public class AddAlbum extends AppCompatActivity {
                     String name=album_name.getText().toString();
                     int userId=1;//从shapernece获取
                     if(name.isEmpty()){
-                        Toast.makeText(AddAlbum.this,"相册名称不能为空",MODE_PRIVATE).show();
+                        Toast.makeText(AddAlbum.this,"相册名称不能为空",Toast.LENGTH_SHORT).show();
                     }else{
                         //与服务器交互，将name，type，userId传入服务器
                         OkHttpClient client=new OkHttpClient();
@@ -96,9 +97,10 @@ public class AddAlbum extends AppCompatActivity {
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                Toast.makeText(AddAlbum.this,"请检查网络",MODE_PRIVATE).show();
+                                Toast.makeText(AddAlbum.this, "请检查网络", Toast.LENGTH_SHORT).show();
                             }
 
+                            @SuppressLint("WrongConstant")
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
                                 String string=response.body().string();//添加成功返回1，否则返回0
@@ -107,7 +109,7 @@ public class AddAlbum extends AppCompatActivity {
                                     finish();
                                 }
                                 else{
-                                    Toast.makeText(AddAlbum.this,"请检查网络111",MODE_PRIVATE).show();
+                                    Toast.makeText(AddAlbum.this,"请检查网络111",Toast.LENGTH_SHORT).show();
                                 }
 
                             }
