@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.lt.timeset_andorid.util.Constant;
+import com.example.lt.timeset_andorid.util.MobUtil;
 import com.example.lt.timeset_andorid.R;
 import com.mob.MobSDK;
 
@@ -32,9 +34,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static com.example.lt.timeset_andorid.Login.MobUtil.APPKEY;
-import static com.example.lt.timeset_andorid.Login.MobUtil.APPSECRET;
-import static com.example.lt.timeset_andorid.Login.MobUtil.isSpecialChar;
+import static com.example.lt.timeset_andorid.util.MobUtil.APPKEY;
+import static com.example.lt.timeset_andorid.util.MobUtil.APPSECRET;
+import static com.example.lt.timeset_andorid.util.MobUtil.isSpecialChar;
 
 /**
  * 卢朋娇

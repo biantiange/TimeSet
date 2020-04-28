@@ -1,12 +1,9 @@
-package com.example.lt.timeset_andorid.Login;
+package com.example.lt.timeset_andorid.util;
 
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import cn.smssdk.SMSSDK;
 
 public class MobUtil {
 

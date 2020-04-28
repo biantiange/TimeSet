@@ -4,25 +4,19 @@ package com.example.lt.timeset_andorid.Person;
  * 首页
  */
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.lt.timeset_andorid.Album.AddAlbum;
-import com.example.lt.timeset_andorid.Album.Album;
+import com.example.lt.timeset_andorid.Entity.Album;
 import com.example.lt.timeset_andorid.Album.GrideAdapter;
-import com.example.lt.timeset_andorid.Login.Constant;
+import com.example.lt.timeset_andorid.util.Constant;
 import com.example.lt.timeset_andorid.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
