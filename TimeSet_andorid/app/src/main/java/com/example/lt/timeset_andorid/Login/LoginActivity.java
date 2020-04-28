@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
+import com.example.lt.timeset_andorid.Entity.User;
+import com.example.lt.timeset_andorid.util.Constant;
 
 import com.example.lt.timeset_andorid.MainActivity;
 import com.example.lt.timeset_andorid.R;
@@ -24,7 +26,7 @@ import java.io.IOException;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import cn.smssdk.SMSSDK;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -33,10 +35,6 @@ import okhttp3.Response;
 
 /**
  * 卢朋娇
- *
- *
- *
- * 
  */
 
 

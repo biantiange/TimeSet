@@ -1,37 +1,45 @@
 package com.example.lt.timeset_andorid.Login;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.lt.timeset_andorid.util.Constant;
+import com.example.lt.timeset_andorid.util.MobUtil;
 import com.example.lt.timeset_andorid.R;
 import com.mob.MobSDK;
+import com.yuyh.library.imgsel.ISNav;
+import com.yuyh.library.imgsel.common.ImageLoader;
+import com.yuyh.library.imgsel.config.ISCameraConfig;
+import com.yuyh.library.imgsel.config.ISListConfig;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -50,9 +58,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.example.lt.timeset_andorid.Login.MobUtil.APPKEY;
-import static com.example.lt.timeset_andorid.Login.MobUtil.APPSECRET;
-import static com.example.lt.timeset_andorid.Login.MobUtil.isSpecialChar;
+import static com.example.lt.timeset_andorid.util.MobUtil.APPKEY;
+import static com.example.lt.timeset_andorid.util.MobUtil.APPSECRET;
+import static com.example.lt.timeset_andorid.util.MobUtil.isSpecialChar;
 
 /**
  * 卢朋娇
@@ -68,22 +76,22 @@ public class RegistryActivity extends AppCompatActivity {
     private boolean flag=false;   //是否更新了头像
     private String headImgPath = "";
 
-    // alertDialog
-    private AlertDialog.Builder builder;
-    private AlertDialog dialog;
-    private LayoutInflater inflater;
-    private View layout;
+    private Dialog dialog;
     private TextView takePhotoTV;
     private TextView choosePhotoTV;
     private TextView cancelTV;
 
     /* 请求识别码 */
-    private static final int CODE_GALLERY_REQUEST = 0xa0;
-    private static final int CODE_CAMERA_REQUEST = 0xa1;
-    private static final int CODE_RESULT_REQUEST = 0xa2;
-    private static final int REQUEST_TAKEPHOTO = 1;   //拍照
-    private static final int REQUEST_GALLERY = 2;    //从相册选择
+//    private static final int CODE_GALLERY_REQUEST = 0xa0;
+//    private static final int CODE_CAMERA_REQUEST = 0xa1;
+//    private static final int CODE_RESULT_REQUEST = 0xa2;
+//    private static final int REQUEST_TAKEPHOTO = 1;   //拍照
+//    private static final int REQUEST_GALLERY = 2;    //从相册选择
 
+    private static final int REQUEAT_SELECT_CODE = 100;
+    private static final int REQUEST_CAMERA_CODE = 120;
+    private static final int CAMERA_OK = 140;
+    private static final int READ_OK = 160;
     // 裁剪后图片的宽(X)和高(Y),80 X 80的正方形。
     private static int output_X = 80;
     private static int output_Y = 80;
@@ -97,6 +105,12 @@ public class RegistryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registry);
+        ISNav.getInstance().init(new ImageLoader() {
+            @Override
+            public void displayImage(Context context, String path, ImageView imageView) {
+                Glide.with(context).load(path).into(imageView);
+            }
+        });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
         }
@@ -184,24 +198,32 @@ public class RegistryActivity extends AppCompatActivity {
         );
     }
 
-    /*
-    初始化控件方法
+    /**
+     * 初始化dialog
      */
-    public void viewInit() {
-        builder = new AlertDialog.Builder(this);//创建对话框
-        inflater = getLayoutInflater();
-        layout = inflater.inflate(R.layout.dialog_select_photo, null);//获取自定义布局
-        builder.setView(layout);//设置对话框的布局
-        dialog = builder.create();//生成最终的对话框
-        dialog.show();//显示对话框
+    private void showBottomDialog() {
+        //1、使用Dialog、设置style
+        dialog = new Dialog(this, R.style.DialogTheme);
+        //2、设置布局
+        View view = View.inflate(this, R.layout.custom_dialog_choose_img, null);
+        dialog.setContentView(view);
 
-        takePhotoTV = layout.findViewById(R.id.photograph);
-        choosePhotoTV = layout.findViewById(R.id.photo);
-        cancelTV = layout.findViewById(R.id.cancel);
+        Window window = dialog.getWindow();
+        //设置弹出位置
+        window.setGravity(Gravity.BOTTOM);
+        //设置弹出动画
+        window.setWindowAnimations(R.style.main_menu_animStyle);
+        //设置对话框大小
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        takePhotoTV = dialog.findViewById(R.id.photograph);
+        choosePhotoTV = dialog.findViewById(R.id.photo);
+        cancelTV = dialog.findViewById(R.id.cancel);
         //设置监听
         takePhotoTV.setOnClickListener(myListener);
         choosePhotoTV.setOnClickListener(myListener);
         cancelTV.setOnClickListener(myListener);
+        dialog.show();
     }
 
     Handler handler = new Handler() {
@@ -241,41 +263,84 @@ public class RegistryActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * 拍照
+     */
+    private void getPhoto() {
+        if (ContextCompat.checkSelfPermission(RegistryActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(RegistryActivity.this,
+                    new String[]{android.Manifest.permission.CAMERA}, CAMERA_OK);
+        } else {
+            ISCameraConfig config1 = new ISCameraConfig.Builder()
+                    .needCrop(true) // 裁剪
+                    .cropSize(1, 1, 200, 200)
+                    .build();
+            ISNav.getInstance().toCameraActivity(this, config1, REQUEST_CAMERA_CODE);
+        }
+    }
+
+    /**
+     * 获取图片
+     */
+    private void selectPhoto() {
+        if (ContextCompat.checkSelfPermission(RegistryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(RegistryActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(RegistryActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(RegistryActivity.this,
+                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            android.Manifest.permission.CAMERA}, READ_OK);
+        } else {
+            ISListConfig config = new ISListConfig.Builder()
+                    // 是否多选, 默认true
+                    .multiSelect(false)
+                    // 是否记住上次选中记录, 仅当multiSelect为true的时候配置，默认为true
+                    .rememberSelected(true)
+                    // “确定”按钮背景色
+                    .btnBgColor(Color.GRAY)
+                    // “确定”按钮文字颜色
+                    .btnTextColor(Color.BLUE)
+                    // 使用沉浸式状态栏
+                    .statusBarColor(Color.parseColor("#3F51B5"))
+                    // 返回图标ResId
+                    .backResId(R.drawable.abc_action_bar_item_background_material)
+                    // 标题
+                    .title("选择图片")
+                    // 标题文字颜色
+                    .titleColor(Color.WHITE)
+                    // TitleBar背景色
+                    .titleBgColor(Color.parseColor("#3F51B5"))
+                    // 裁剪大小。needCrop为true的时候配置
+                    .cropSize(1, 1, 200, 200)
+                    .needCrop(true)
+                    // 第一个是否显示相机，默认true
+                    .needCamera(false)
+                    // 最大选择图片数量，默认9
+                    .maxNum(1)
+                    .build();
+            // 跳转到图片选择器
+            ISNav.getInstance().toListActivity(this, config, REQUEAT_SELECT_CODE);
+        }
+
+    }
+
     private class MyListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 //上传头像
                 case R.id.iv_headImg:
-                    viewInit();
+                    showBottomDialog();
                     break;
                     // 照相
                 case R.id.photograph:
                     dialog.dismiss();
-                    if (ContextCompat.checkSelfPermission(RegistryActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                            && ContextCompat.checkSelfPermission(RegistryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        //申请权限，REQUEST_TAKE_PHOTO_PERMISSION是自定义的常量
-                        ActivityCompat.requestPermissions(RegistryActivity.this,
-                                new String[]{Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE},
-                                REQUEST_TAKEPHOTO);
-
-                    } else {
-                        choseHeadImageFromCameraCapture();
-                    }
-
+                    getPhoto();
                     break;
                 //从相册选择
                 case R.id.photo:
                     dialog.dismiss();
-                    //加载相册
-                    if (ContextCompat.checkSelfPermission(RegistryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(RegistryActivity.this,
-                                new String[]{Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE},
-                                REQUEST_GALLERY);
-
-                    } else {
-                        choseHeadImageFromGallery();
-                    }
+                    selectPhoto();
                     break;
                 case R.id.cancel:
                     dialog.dismiss();
@@ -336,6 +401,71 @@ public class RegistryActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_OK) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
+                ISCameraConfig config1 = new ISCameraConfig.Builder()
+                        .needCrop(true) // 裁剪
+                        .cropSize(1, 1, 200, 200)
+                        .build();
+                ISNav.getInstance().toCameraActivity(this, config1, REQUEST_CAMERA_CODE);
+            } else{
+                //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
+                Toast.makeText(RegistryActivity.this, "请手动打开权限", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if(requestCode == READ_OK){
+            ISListConfig config = new ISListConfig.Builder()
+                    // 是否多选, 默认true
+                    .multiSelect(false)
+                    // 是否记住上次选中记录, 仅当multiSelect为true的时候配置，默认为true
+                    .rememberSelected(true)
+                    // “确定”按钮背景色
+                    .btnBgColor(Color.GRAY)
+                    // “确定”按钮文字颜色
+                    .btnTextColor(Color.BLUE)
+                    // 使用沉浸式状态栏
+                    .statusBarColor(Color.parseColor("#3F51B5"))
+                    // 返回图标ResId
+                    .backResId(R.drawable.abc_action_bar_item_background_material)
+                    // 标题
+                    .title("选择图片")
+                    // 标题文字颜色
+                    .titleColor(Color.WHITE)
+                    // TitleBar背景色
+                    .titleBgColor(Color.parseColor("#3F51B5"))
+                    // 裁剪大小。needCrop为true的时候配置
+                    .cropSize(1, 1, 200, 200)
+                    .needCrop(true)
+                    // 第一个是否显示相机，默认true
+                    .needCamera(false)
+                    // 最大选择图片数量，默认9
+                    .maxNum(1)
+                    .build();
+            // 跳转到图片选择器
+            ISNav.getInstance().toListActivity(this, config, REQUEAT_SELECT_CODE);
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CAMERA_CODE && resultCode == RESULT_OK && data != null) {
+            String path = data.getStringExtra("result"); // 图片地址
+            RequestOptions ro = new RequestOptions().circleCrop();
+            Glide.with(this).load(path).apply(ro).into(headImg);
+            headImgPath = path;
+        } else if (requestCode == REQUEAT_SELECT_CODE) {
+            if (data != null) {
+                ArrayList<String> mSelectPath = data.getStringArrayListExtra("result");
+                RequestOptions ro = new RequestOptions().circleCrop();
+                Glide.with(this).load(mSelectPath.get(0)).apply(ro).into(headImg);
+                headImgPath = mSelectPath.get(0);
+            }
+        }
+    }
 
     //修改数据库，在数据库中加入新用户
     public void MyOkHttp(String url) {
@@ -345,13 +475,22 @@ public class RegistryActivity extends AppCompatActivity {
             Log.e("注册","用户改变了头像");
             File file = new File(headImgPath);
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);//把文件与类型放入请求体
-            MultipartBody multipartBody = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
+            MultipartBody.Builder builder = new MultipartBody.Builder();
+            builder.setType(MultipartBody.FORM)
                     .addFormDataPart("phone", etPhone.getText().toString())//添加表单数据
                     .addFormDataPart("password", etPwd.getText().toString())
-                    .addFormDataPart("username", etUserName.getText()==null?etPhone.getText().toString():etUserName.getText().toString())  //如果用户没填昵称，就是手机号
-                    .addFormDataPart("file", file.getName(), requestBody)//文件名,请求体里的文件
-                    .build();
+                    .addFormDataPart("username", etUserName.getText()==null?etPhone.getText().toString():etUserName.getText().toString());  //如果用户没填昵称，就是手机号
+            if (file.exists()){
+                builder.addFormDataPart("file", file.getName(), requestBody);//文件名,请求体里的文件
+            }
+            MultipartBody multipartBody = builder.build();
+//            MultipartBody multipartBody = new MultipartBody.Builder()
+//                    .setType(MultipartBody.FORM)
+//                    .addFormDataPart("phone", etPhone.getText().toString())//添加表单数据
+//                    .addFormDataPart("password", etPwd.getText().toString())
+//                    .addFormDataPart("username", etUserName.getText()==null?etPhone.getText().toString():etUserName.getText().toString())  //如果用户没填昵称，就是手机号
+//                    .addFormDataPart("file", file.getName(), requestBody)//文件名,请求体里的文件
+//                    .build();
             request = new Request.Builder()
 //                    .header("Authorization", "Bearer d3e63518-1ba7-4342-b94c-63c8b9b9046b")//添加请求头的身份认证Token
                     .url(url)
@@ -390,98 +529,98 @@ public class RegistryActivity extends AppCompatActivity {
         });
     }
 
-    // 从本地相册选取图片作为头像
-    private void choseHeadImageFromGallery() {
-        Intent intentFromGallery = new Intent();
-        // 设置文件类型
-        intentFromGallery.setType("image/*");
-        intentFromGallery.setAction(Intent.ACTION_PICK);
-        startActivityForResult(intentFromGallery, CODE_GALLERY_REQUEST);
-    }
+//    // 从本地相册选取图片作为头像
+//    private void choseHeadImageFromGallery() {
+//        Intent intentFromGallery = new Intent();
+//        // 设置文件类型
+//        intentFromGallery.setType("image/*");
+//        intentFromGallery.setAction(Intent.ACTION_PICK);
+//        startActivityForResult(intentFromGallery, CODE_GALLERY_REQUEST);
+//    }
 
-    // 启动手机相机拍摄照片作为头像
-    private void choseHeadImageFromCameraCapture() {
-        Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intentFromCapture, CODE_CAMERA_REQUEST);
-    }
+//    // 启动手机相机拍摄照片作为头像
+//    private void choseHeadImageFromCameraCapture() {
+//        Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(intentFromCapture, CODE_CAMERA_REQUEST);
+//    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent intent) {
-        switch (requestCode) {
-            case CODE_GALLERY_REQUEST:
-                cropRawPhoto(intent.getData());
-                break;
-
-            case CODE_CAMERA_REQUEST:
-                if(intent!=null) {
-                    Bundle bundle = intent.getExtras();
-                    if (bundle != null) {
-                        //显示到imageView
-                        Bitmap bitmap = (Bitmap) bundle.get("data");
-                        headImg.setImageBitmap(bitmap);
-                        flag = true;
-                    }
-                }
-                break;
-
-            case CODE_RESULT_REQUEST:
-                if (intent != null) {
-                    setImageToHeadView(intent);
-                }
-
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, intent);
-    }
-
-
-    /**
-     * 裁剪原始的图片
-     */
-    public void cropRawPhoto(Uri uri) {
-
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-
-        // 设置裁剪
-        intent.putExtra("crop", "true");
-
-        // aspectX , aspectY :宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-
-        // outputX , outputY : 裁剪图片宽高
-        intent.putExtra("outputX", output_X);
-        intent.putExtra("outputY", output_Y);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, CODE_RESULT_REQUEST);
-    }
-
-    /**
-     * 提取保存裁剪之后的图片数据，并设置头像部分的View
-     */
-    private void setImageToHeadView(Intent intent) {
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            Bitmap photo = extras.getParcelable("data");
-            headImg.setImageBitmap(photo);
-            flag = true;
-        }
-    }
-
-    /**
-     * 检查设备是否存在SDCard的工具方法
-     */
-    public static boolean hasSdcard() {
-        String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            // 有存储的SDCard
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode,
+//                                    Intent intent) {
+//        switch (requestCode) {
+//            case CODE_GALLERY_REQUEST:
+//                cropRawPhoto(intent.getData());
+//                break;
+//
+//            case CODE_CAMERA_REQUEST:
+//                if(intent!=null) {
+//                    Bundle bundle = intent.getExtras();
+//                    if (bundle != null) {
+//                        //显示到imageView
+//                        Bitmap bitmap = (Bitmap) bundle.get("data");
+//                        headImg.setImageBitmap(bitmap);
+//                        flag = true;
+//                    }
+//                }
+//                break;
+//
+//            case CODE_RESULT_REQUEST:
+//                if (intent != null) {
+//                    setImageToHeadView(intent);
+//                }
+//
+//                break;
+//        }
+//        super.onActivityResult(requestCode, resultCode, intent);
+//    }
+//
+//
+//    /**
+//     * 裁剪原始的图片
+//     */
+//    public void cropRawPhoto(Uri uri) {
+//
+//        Intent intent = new Intent("com.android.camera.action.CROP");
+//        intent.setDataAndType(uri, "image/*");
+//
+//        // 设置裁剪
+//        intent.putExtra("crop", "true");
+//
+//        // aspectX , aspectY :宽高的比例
+//        intent.putExtra("aspectX", 1);
+//        intent.putExtra("aspectY", 1);
+//
+//        // outputX , outputY : 裁剪图片宽高
+//        intent.putExtra("outputX", output_X);
+//        intent.putExtra("outputY", output_Y);
+//        intent.putExtra("return-data", true);
+//        startActivityForResult(intent, CODE_RESULT_REQUEST);
+//    }
+//
+//    /**
+//     * 提取保存裁剪之后的图片数据，并设置头像部分的View
+//     */
+//    private void setImageToHeadView(Intent intent) {
+//        Bundle extras = intent.getExtras();
+//        if (extras != null) {
+//            Bitmap photo = extras.getParcelable("data");
+//            headImg.setImageBitmap(photo);
+//            flag = true;
+//        }
+//    }
+//
+//    /**
+//     * 检查设备是否存在SDCard的工具方法
+//     */
+//    public static boolean hasSdcard() {
+//        String state = Environment.getExternalStorageState();
+//        if (state.equals(Environment.MEDIA_MOUNTED)) {
+//            // 有存储的SDCard
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     @Override
     protected void onDestroy() {
@@ -490,32 +629,32 @@ public class RegistryActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    /**
-     * 权限回调
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case REQUEST_GALLERY:
-                if (grantResults[0]==PackageManager.PERMISSION_GRANTED)            {
-                    Toast.makeText(this, "权限申请成功",Toast.LENGTH_SHORT).show();
-                    choseHeadImageFromGallery();
-                }else if (grantResults[0]== PackageManager.PERMISSION_DENIED)            {
-                    Toast.makeText(this, "权限申请失败，用户拒绝权限", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case REQUEST_TAKEPHOTO:   //照相
-                if (grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED)            {
-                    Toast.makeText(this, "权限申请成功",Toast.LENGTH_SHORT).show();
-                    choseHeadImageFromCameraCapture();
-                }else{
-                    Toast.makeText(this, "权限申请失败，用户拒绝权限", Toast.LENGTH_SHORT).show();
-                }
-                break;
-        }
+//    /**
+//     * 权限回调
+//     */
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        switch (requestCode){
+//            case REQUEST_GALLERY:
+//                if (grantResults[0]==PackageManager.PERMISSION_GRANTED)            {
+//                    Toast.makeText(this, "权限申请成功",Toast.LENGTH_SHORT).show();
+//                    choseHeadImageFromGallery();
+//                }else if (grantResults[0]== PackageManager.PERMISSION_DENIED)            {
+//                    Toast.makeText(this, "权限申请失败，用户拒绝权限", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//            case REQUEST_TAKEPHOTO:   //照相
+//                if (grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED)            {
+//                    Toast.makeText(this, "权限申请成功",Toast.LENGTH_SHORT).show();
+//                    choseHeadImageFromCameraCapture();
+//                }else{
+//                    Toast.makeText(this, "权限申请失败，用户拒绝权限", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//        }
 
-    }
+//    }
 
 
     @Override

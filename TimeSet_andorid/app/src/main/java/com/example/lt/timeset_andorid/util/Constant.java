@@ -1,4 +1,4 @@
-package com.example.lt.timeset_andorid.Login;
+package com.example.lt.timeset_andorid.util;
 
 public class Constant {
     public static final String IP ="";

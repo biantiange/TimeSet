@@ -1,4 +1,4 @@
-package com.example.lt.timeset_andorid.Album;
+package com.example.lt.timeset_andorid.Entity;
 
 /**
  * 王天
