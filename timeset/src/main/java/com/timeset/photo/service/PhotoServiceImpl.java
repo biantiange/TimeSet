@@ -56,7 +56,8 @@ public class PhotoServiceImpl {
         List<String> listDec = new Gson().fromJson(new String(des),List.class);
         System.out.println("生成链表"+listDec.toString());
         System.out.println("生成字符串"+new String(des));
-        image.setPdescribe(new String(tex)+new String(des));
+        image.setIdentify(new String(tex)+new String(des));
+        //image.setPdescribe(new String(tex)+new String(des));
         System.out.println("图片信息:"+image.toString());
         int result=photoMapper.addPhoto(image);
         if(result!=0){
