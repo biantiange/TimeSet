@@ -19,6 +19,7 @@ import com.example.lt.timeset_andorid.Album.GrideAdapter;
 
 import com.example.lt.timeset_andorid.Entity.Album;
 import com.example.lt.timeset_andorid.Person.PersonalActivity;
+import com.example.lt.timeset_andorid.Person.SettingActivity;
 import com.example.lt.timeset_andorid.util.Constant;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
@@ -75,13 +76,15 @@ public class MainActivity extends AppCompatActivity {
         });
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()){
-                case R.id.item_geren:
+                case R.id.item_geren://跳转个人
                     Log.e("MainActivity","ge  ren");
                     Intent intent = new Intent(MainActivity.this,PersonalActivity.class);
                     startActivity(intent);
                     main_drawer_layout.closeDrawer(navigationView);
                     break;
-                case R.id.item_setting:
+                case R.id.item_setting://跳转设置
+                    Intent intent1 = new Intent(MainActivity.this, SettingActivity.class);
+                    startActivity(intent1);
                     main_drawer_layout.closeDrawer(navigationView);
                     break;
             }

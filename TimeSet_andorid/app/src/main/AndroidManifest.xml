@@ -24,14 +24,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".Person.PersonalActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".Person.SettingActivity"></activity>
+        <activity android:name=".Person.PersonalActivity" />
+        <activity android:name=".Album.InAlbum">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".Login.LoginActivity" />
         <activity android:name=".Login.PhoneTestActivity" />
         <activity android:name=".Login.RegistryActivity" />
