@@ -10,9 +10,9 @@ import android.view.View;
 import com.example.lt.timeset_andorid.Login.LoginActivity;
 import com.example.lt.timeset_andorid.R;
 
-/*
-* 边天歌 SkySong
-* */
+/**
+ * SkySong
+ */
 public class SettingActivity extends AppCompatActivity {
 
     @Override

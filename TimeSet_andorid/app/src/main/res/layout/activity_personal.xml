@@ -10,20 +10,21 @@
         android:background="#7adfb8">
 
         <Button
-            android:id="@+id/btn_return"
+            android:id="@+id/btn_return_personal"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="0.1"
-            android:background="@drawable/fanhui32" />
+            android:layout_weight="0.15"
+            android:background="@drawable/fanhui32"
+            android:onClick="modifyClick" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="120dp"
+            android:layout_marginLeft="110dp"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:text="个人信息"
@@ -32,12 +33,13 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/iv_headImg"
-        android:src="@drawable/moren_img"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal"
+        android:id="@+id/personal_iv_headImg"
         android:layout_width="100dp"
-        android:layout_height="80dp" />
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/moren_img" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,23 +60,27 @@
                 android:layout_height="50dp"
                 android:src="@drawable/nicheng" />
 
-            <EditText
-                android:layout_weight="1"
-                android:id="@+id/et_name"
+            <TextView
+                android:id="@+id/personal_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
+                android:layout_weight="1"
                 android:background="#00000000"
+                android:gravity="center"
                 android:hint="昵称"
                 android:padding="5dip"
                 android:textSize="16sp" />
+
             <ImageView
+                android:id="@+id/modify_nickname"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/bianji"
                 android:layout_weight="0.10"
-                android:layout_width="0dp"
-                android:layout_height="30dp" />
+                android:background="@drawable/bianji"
+                android:onClick="modifyClick" />
         </LinearLayout>
 
         <!--手机号-->
@@ -90,30 +96,34 @@
                 android:layout_height="50dp"
                 android:src="@drawable/phone" />
 
-            <EditText
-                android:layout_weight="1"
-                android:id="@+id/et_phone"
+            <TextView
+                android:id="@+id/personal_phone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
+                android:layout_weight="1"
                 android:background="#00000000"
+                android:gravity="center"
                 android:hint="手机号"
                 android:padding="5dip"
                 android:textSize="16sp" />
+
             <ImageView
+                android:id="@+id/modify_phoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/bianji"
                 android:layout_weight="0.10"
-                android:layout_width="0dp"
-                android:layout_height="30dp" />
+                android:background="@drawable/bianji"
+                android:onClick="modifyClick" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginBottom="5dip"
             android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
             android:background="#eeeeee" />
         <!--密码-->
         <LinearLayout
@@ -127,24 +137,28 @@
                 android:layout_height="50dp"
                 android:src="@drawable/mima" />
 
-            <EditText
-                android:id="@+id/et_password"
-                android:layout_weight="1"
+            <TextView
+                android:id="@+id/personal_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
+                android:layout_weight="1"
                 android:background="#00000000"
-                android:hint="密码"
+                android:gravity="center"
                 android:inputType="textPassword"
                 android:padding="5dip"
+                android:text="12345678"
                 android:textSize="16sp" />
+
             <ImageView
+                android:id="@+id/modify_password"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/bianji"
                 android:layout_weight="0.10"
-                android:layout_width="0dp"
-                android:layout_height="30dp" />
+                android:background="@drawable/bianji"
+                android:onClick="modifyClick" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

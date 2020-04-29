@@ -1,17 +1,17 @@
 package com.example.lt.timeset_andorid;
 
 import android.content.Intent;
-import android.graphics.Color;
+
 import android.os.Bundle;
 import android.util.Log;
 
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
+
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
 
 import com.example.lt.timeset_andorid.Album.AddAlbum;
 
@@ -32,8 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -42,6 +40,11 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+/**
+ * SkySong：抽屉、输入框
+ * Sky：主页布局
+ */
 
 public class MainActivity extends AppCompatActivity {
 
