@@ -28,7 +28,7 @@ public class PhotoController {
 
     @RequestMapping("/add")
     public int addPhoto(@RequestParam("file") MultipartFile file, HttpServletRequest request, @RequestParam("userId")  int userId, @RequestParam("albumId")  int albumId, @RequestParam("ptime") String ptime,
-                        @RequestParam("place")  String place,@RequestParam("identify")  String identify){
+                        @RequestParam("place")  String place,@RequestParam("describe")  String describe){
         System.out.println("插入图片");
         // 生成新的文件名
         String fileName = System.currentTimeMillis()+file.getOriginalFilename();
@@ -48,8 +48,8 @@ public class PhotoController {
         photo.setUserId(userId);
         photo.setAlbumId(albumId);
         photo.setPtime(ptime);
-        photo.setIdentify(identify);
-        photo.setPath(destFileName);
+        photo.setPdescribe(describe);
+        photo.setPath(File.separator+fileName);
         int result=photoService.addPhoto(photo);
         if(result!=0){
             return 0;
