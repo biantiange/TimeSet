@@ -24,7 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".Person.ModifyPasswordActivity"></activity>
+        <activity android:name=".Person.ModifyPasswordByPhoneActivity"></activity>
+        <activity android:name=".Person.ModifyPhoneNumberActivity" />
+        <activity android:name=".Person.ModifyPasswordActivity" />
         <activity android:name=".Person.SettingActivity" />
         <activity android:name=".Person.PersonalActivity" />
         <activity android:name=".MainActivity">

@@ -48,7 +48,11 @@ public class PersonalActivity extends AppCompatActivity {
                 inputTextDialog.setHint("请输入新的昵称");
                 inputTextDialog.setMaxNumber(10);//最长十个字
                 inputTextDialog.show();
-                inputTextDialog.setmOnTextSendListener(msg -> nickName.setText(msg));
+                inputTextDialog.setmOnTextSendListener(msg -> {
+                    nickName.setText(msg);
+                    //数据库修改
+
+                });
 
                 break;
             case R.id.modify_password://修改密码
@@ -57,7 +61,8 @@ public class PersonalActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.modify_phoneNumber://修改手机号
-
+                Intent intent1 = new Intent(PersonalActivity.this,ModifyPhoneNumberActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.btn_return_personal://退出（😂偷懒了，就写这吧）
                 finish();
