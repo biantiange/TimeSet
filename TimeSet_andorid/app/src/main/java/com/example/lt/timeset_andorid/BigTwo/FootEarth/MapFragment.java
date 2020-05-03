@@ -1,4 +1,4 @@
-package com.example.lt.timeset_andorid.Album;
+package com.example.lt.timeset_andorid.BigTwo.FootEarth;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.lt.timeset_andorid.R;
 
-
+/**
+ * 赵宁：足迹地球
+ */
 public class MapFragment extends Fragment {
     @Nullable
     @Override

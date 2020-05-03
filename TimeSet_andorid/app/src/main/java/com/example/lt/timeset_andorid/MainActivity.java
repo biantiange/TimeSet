@@ -13,8 +13,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 
-import com.example.lt.timeset_andorid.Album.AddAlbum;
-
+import com.example.lt.timeset_andorid.Album.AddAlbumActivity;
 import com.example.lt.timeset_andorid.Album.GrideAdapter;
 
 import com.example.lt.timeset_andorid.Entity.Album;
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         gridView.setAdapter(grideAdapter);
 
         addAlbum.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddAlbum.class);
+            Intent intent = new Intent(MainActivity.this, AddAlbumActivity.class);
             startActivity(intent);
         });
     }

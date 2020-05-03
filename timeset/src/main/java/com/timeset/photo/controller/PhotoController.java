@@ -1,6 +1,9 @@
 package com.timeset.photo.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.timeset.photo.entity.Photo;
+import com.timeset.photo.entity.PhotoList;
 import com.timeset.photo.service.PhotoServiceImpl;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -76,12 +79,17 @@ public class PhotoController {
     }
 
     @RequestMapping("/findByAlbum")
-    public List<Photo> findByAlbum(@RequestParam("albumId") String albumId) {
+    public String findByAlbum(@RequestParam("albumId") String albumId) {
         System.out.println("根据相册查询图片");
+        List<PhotoList> lists=null;
+        Gson gson=new GsonBuilder().serializeNulls().create();
         if (albumId != null && !albumId.equals("")) {
-            return photoService.findByAlbum(albumId);
+            lists=photoService.findByAlbum(albumId);
         }
-        return photosList;
+        String gsonString=gson.toJson(lists);
+        System.out.println(gsonString);
+        return gsonString;
+
 
     }
 

@@ -29,18 +29,17 @@
         <activity android:name=".Person.ModifyPasswordActivity" />
         <activity android:name=".Person.SettingActivity" />
         <activity android:name=".Person.PersonalActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".BigTwo.InAlbumActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Album.InAlbum" />
         <activity android:name=".Login.LoginActivity" />
         <activity android:name=".Login.PhoneTestActivity" />
         <activity android:name=".Login.RegistryActivity" />
-        <activity android:name=".Album.AddAlbum" />
+        <activity android:name=".MainActivity"/>
     </application>
 
 </manifest>

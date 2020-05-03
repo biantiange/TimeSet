@@ -1,6 +1,7 @@
 package com.timeset.photo.mapper;
 
 import com.timeset.photo.entity.Photo;
+import com.timeset.photo.entity.PhotoList;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface PhotoMapper {
     public List<Photo> findAll(int UserId);
 
     //根据相册查询照片
-    public List<Photo> findByAlbum(String albumId);
+    public List<PhotoList> findByAlbum(String albumId);
 
     //根据时间查询照片
     public List<Photo> findByTime(String ptime,int userId);
