@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,13 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.lt.timeset_andorid.R;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.appcompat.app.AppCompatActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -29,7 +29,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class AddAlbum extends AppCompatActivity {
+/**
+ * 赵宁w
+ */
+public class AddAlbumActivity extends AppCompatActivity {
     private String type="普通";//相册类型
     private ImageButton return0;
     private Button toadd;
@@ -84,7 +87,7 @@ public class AddAlbum extends AppCompatActivity {
                     String name=album_name.getText().toString();
                     int userId=1;//从shapernece获取
                     if(name.isEmpty()){
-                        Toast.makeText(AddAlbum.this,"相册名称不能为空",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddAlbumActivity.this,"相册名称不能为空",Toast.LENGTH_SHORT).show();
                     }else{
                         //与服务器交互，将name，type，userId传入服务器
                         OkHttpClient client=new OkHttpClient();
@@ -97,7 +100,7 @@ public class AddAlbum extends AppCompatActivity {
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                Toast.makeText(AddAlbum.this, "请检查网络", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddAlbumActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
                             }
 
                             @SuppressLint("WrongConstant")
@@ -109,7 +112,7 @@ public class AddAlbum extends AppCompatActivity {
                                     finish();
                                 }
                                 else{
-                                    Toast.makeText(AddAlbum.this,"请检查网络111",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddAlbumActivity.this,"请检查网络111",Toast.LENGTH_SHORT).show();
                                 }
 
                             }
