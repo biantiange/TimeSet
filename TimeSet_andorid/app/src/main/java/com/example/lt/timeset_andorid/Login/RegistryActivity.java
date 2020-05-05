@@ -452,12 +452,14 @@ public class RegistryActivity extends AppCompatActivity {
             RequestOptions ro = new RequestOptions().circleCrop();
             Glide.with(this).load(path).apply(ro).into(headImg);
             headImgPath = path;
+            flag=true;
         } else if (requestCode == REQUEAT_SELECT_CODE) {
             if (data != null) {
                 ArrayList<String> mSelectPath = data.getStringArrayListExtra("result");
                 RequestOptions ro = new RequestOptions().circleCrop();
                 Glide.with(this).load(mSelectPath.get(0)).apply(ro).into(headImg);
                 headImgPath = mSelectPath.get(0);
+                flag=true;
             }
         }
     }
@@ -474,7 +476,7 @@ public class RegistryActivity extends AppCompatActivity {
             builder.setType(MultipartBody.FORM)
                     .addFormDataPart("phone", etPhone.getText().toString())//添加表单数据
                     .addFormDataPart("password", etPwd.getText().toString())
-                    .addFormDataPart("username", etUserName.getText()==null?etPhone.getText().toString():etUserName.getText().toString());  //如果用户没填昵称，就是手机号
+                    .addFormDataPart("username", (etUserName.getText()==null||etUserName.getText().equals(""))?etPhone.getText().toString():etUserName.getText().toString());  //如果用户没填昵称，就是手机号
             if (file.exists()){
                 builder.addFormDataPart("file", file.getName(), requestBody);//文件名,请求体里的文件
             }

@@ -61,6 +61,7 @@ public class UserController {
                 }
                 user.setHeadImg("headImg"+ File.separator+fileName);
             }
+//            System.out.println(user.toString());
             int result = userService.insertUser(user);
             if (result != 0) {
                 return "OK";
