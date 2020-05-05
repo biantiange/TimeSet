@@ -2,6 +2,7 @@ package com.example.lt.timeset_andorid;
 
 import android.content.Intent;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -63,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(0xff7adfb8);
+        }
+
         initView();
         //设置头像
         View headerView = navigationView.getHeaderView(0);//获取头布局

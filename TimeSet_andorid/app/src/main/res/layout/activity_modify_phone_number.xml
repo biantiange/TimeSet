@@ -65,32 +65,32 @@
                     android:src="@drawable/phone" />
 
                 <EditText
-                    android:layout_weight="1"
                     android:id="@+id/modify_et_phone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dip"
+                    android:layout_weight="1"
                     android:background="#00000000"
                     android:hint="手机号"
                     android:inputType="number"
                     android:padding="5dip"
                     android:textSize="16sp" />
+
                 <ImageView
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
                     android:id="@+id/modify_iv_phone"
-                    android:background="@drawable/error"
-                    android:layout_weight="0.15"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:onClick="phoneNumberClick"/>
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="0.15"
+                    android:background="@drawable/error" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_marginBottom="5dip"
                 android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"
                 android:background="#eeeeee" />
             <!--验证码-->
             <LinearLayout
@@ -123,6 +123,7 @@
                     android:layout_height="40dp"
                     android:layout_weight="0.38"
                     android:background="@drawable/button_radius"
+                    android:onClick="phoneNumberClick"
                     android:text="获取验证码"
                     android:textColor="#7adfb8" />
             </LinearLayout>
