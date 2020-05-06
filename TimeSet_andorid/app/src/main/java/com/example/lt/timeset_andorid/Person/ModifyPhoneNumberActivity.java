@@ -2,6 +2,8 @@ package com.example.lt.timeset_andorid.Person;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import okhttp3.Call;
@@ -14,24 +16,28 @@ import okhttp3.Response;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.lt.timeset_andorid.R;
+
 import com.example.lt.timeset_andorid.util.MobUtil;
 import com.mob.MobSDK;
+
 
 import java.io.IOException;
 
 import static com.example.lt.timeset_andorid.util.MobUtil.APPKEY;
 import static com.example.lt.timeset_andorid.util.MobUtil.APPSECRET;
+
 
 /**
  * SkySong
@@ -46,16 +52,18 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
     private EditText testNumber;
     private Button getTestNumber;
     private ImageView phoneImg;
-    private int i = 30;//计时器
+    private int i = 30;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_phone_number);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
         }
         SharedPreferences share = getSharedPreferences("user",MODE_PRIVATE);
         userId = share.getInt("id",0);
+
         findViews();
         // 启动短信验证sdk
         MobSDK.init(this, APPKEY, APPSECRET);
@@ -86,15 +94,15 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
         phoneImg = findViewById(R.id.modify_iv_phone);
         //EditText 内容判断—— when edit text lose focus
         phone.setOnFocusChangeListener((View v,boolean hasFocus)->{
-            if(!hasFocus){
-                if (!MobUtil.judgePhoneNums(phone.getText().toString())) {
+            if (!hasFocus) {
+                String phoneStr = phone.getText().toString();
+                if (!MobUtil.judgePhoneNums(phoneStr)){
                     phoneImg.setBackgroundResource(R.drawable.error);
-                }else{
+                }else {
                     phoneImg.setBackgroundResource(R.drawable.right);
                 }
             }
         });
-
     }
 
     public void phoneNumberClick(View view) {
@@ -102,6 +110,7 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
             case R.id.btn_return_modify_phone://返回
                 finish();
                 break;
+
             case R.id.modify_btn_yanzhengma://验证码
                 String phoneNum = phone.getText().toString();
                 // 1. 判断手机号是不是11位并且看格式是否合理
@@ -142,6 +151,7 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
                 break;
         }
     }
+
 
     private void phoneOkHttp(String url) {
         FormBody.Builder builder = new FormBody.Builder();
@@ -205,4 +215,5 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
             }
         }
     };
+
 }

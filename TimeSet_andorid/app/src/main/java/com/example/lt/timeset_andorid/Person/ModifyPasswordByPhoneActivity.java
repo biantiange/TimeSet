@@ -11,26 +11,32 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import android.widget.ImageView;
 import android.widget.Toast;
 
+
 import com.example.lt.timeset_andorid.R;
 import com.mob.MobSDK;
+
 
 import java.io.IOException;
 
 import static com.example.lt.timeset_andorid.util.MobUtil.APPKEY;
 import static com.example.lt.timeset_andorid.util.MobUtil.APPSECRET;
 import static com.example.lt.timeset_andorid.util.MobUtil.isSpecialChar;
+
 
 /**
  * SkySong
@@ -42,20 +48,25 @@ public class ModifyPasswordByPhoneActivity extends AppCompatActivity {
     private String phone;
 
     private EditText newPassword,surePassword;
+
     private EditText testNumber;
     private Button getTestNumber;
+
     private ImageView newPasswordImg,surePasswordImg;
     private int i = 30;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_password_by_phone);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
         }
         SharedPreferences share  = getSharedPreferences("user",MODE_PRIVATE);
         phone = share.getString("phone","errorGetPhone");
+
         findViews();
         // 启动短信验证sdk
         MobSDK.init(this, APPKEY, APPSECRET);
@@ -86,7 +97,7 @@ public class ModifyPasswordByPhoneActivity extends AppCompatActivity {
         //ImageView
         newPasswordImg = findViewById(R.id.modify_iv_pwd2phone);
         surePasswordImg = findViewById(R.id.modify_iv_pwd2phone2);
-        //when edit text changed
+        //EditText 内容判断—— when edit text lose focus
         newPassword.setOnFocusChangeListener((View v,boolean hasFocus)->{
             if (!hasFocus){
                 String str = newPassword.getText().toString();
@@ -111,6 +122,7 @@ public class ModifyPasswordByPhoneActivity extends AppCompatActivity {
         });
     }
 
+
     public void phonePasswordClick(View view) {
         switch (view.getId()){
             case R.id.btn_return_modify_password2phone:// come back
@@ -127,6 +139,7 @@ public class ModifyPasswordByPhoneActivity extends AppCompatActivity {
                     Toast.makeText(ModifyPasswordByPhoneActivity.this,"检查错误项",Toast.LENGTH_SHORT).show();
                 }
                 break;
+
             case R.id.modify_btn_yanzhengma2phone:// 点击获取验证码
                 // 1. 通过sdk发送短信验证
                 SMSSDK.getVerificationCode("86", phone);
@@ -148,6 +161,7 @@ public class ModifyPasswordByPhoneActivity extends AppCompatActivity {
                     handler.sendEmptyMessage(-8);
                 }).start();
                 break;
+
         }
     }
 

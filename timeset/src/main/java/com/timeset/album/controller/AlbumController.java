@@ -40,10 +40,10 @@ public class AlbumController {
     }
 
     @RequestMapping("/delete")
-    public int deleteAlbum(@RequestParam("userId") int userId,@RequestParam("id")int id){
+    public int deleteAlbum(@RequestParam("id")int id){
         System.out.println("删除相册");
-        if(userId!=0 && id!=0){
-            int result=albumService.deleteAlbum(userId,id);
+        if(id!=0){
+            int result=albumService.deleteAlbum(id);
             if(result!=0){
                 return 0;
             }

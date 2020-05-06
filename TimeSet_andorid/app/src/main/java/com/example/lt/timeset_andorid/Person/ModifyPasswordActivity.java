@@ -38,7 +38,7 @@ public class ModifyPasswordActivity extends AppCompatActivity {
 
     private OkHttpClient okHttpClient;
 
-    private String userPhone;
+    private String phone;
 
     private EditText oldPassword;
     private EditText newPassword;
@@ -52,16 +52,16 @@ public class ModifyPasswordActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
         }
-        SharedPreferences share = getSharedPreferences("user",MODE_PRIVATE);
-        //user share phone
-        userPhone = share.getString("phone","errorGetPhone");
+        SharedPreferences share  = getSharedPreferences("user",MODE_PRIVATE);
+        phone = share.getString("phone","errorGetPhone");
+
         findViews();
+
     }
 
     private void findViews() {
         //OkHttpClient
         okHttpClient = new OkHttpClient();
-
         //EditText
         oldPassword = findViewById(R.id.modify_et_password0);
         newPassword = findViewById(R.id.modify_et_password1);
@@ -120,7 +120,9 @@ public class ModifyPasswordActivity extends AppCompatActivity {
                         && surePasswordImg.getBackground().getConstantState().equals(drawableCs)
                         && oldPasswordImg.getBackground().getConstantState().equals(drawableCs)){
                     //过审,->数据库操作
+
                     passwordOkHttp("");//根据phone修改password
+
                 }else {
                     Toast.makeText(ModifyPasswordActivity.this,"请检查是否有错误项",Toast.LENGTH_SHORT).show();
                 }
@@ -155,7 +157,7 @@ public class ModifyPasswordActivity extends AppCompatActivity {
         FormBody.Builder builder = new FormBody.Builder();
         FormBody body = builder
                 .add("password",surePassword.getText().toString())
-                .add("phone",userPhone)
+                .add("phone",phone)
                 .build();
         Request request = new Request.Builder()
                 .post(body)
@@ -186,19 +188,18 @@ public class ModifyPasswordActivity extends AppCompatActivity {
     Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
+
             if (msg.what == 4) {
                 //网络请求失败
                 Toast.makeText(ModifyPasswordActivity.this,"因网络原因请求失败", Toast.LENGTH_SHORT).show();
 
             } else if(msg.what== 5){
                 //网络请求结果
-                if (msg.obj.equals("OK")) {//return String of 'OK'
-                    // 操作成功，返回登录界面
+                if (msg.obj.equals("OK")) {
+                    // 操作成功，返回个人界面
                     Toast.makeText(ModifyPasswordActivity.this, "操作成功", Toast.LENGTH_LONG).show();
                     finish();
-                } else if (msg.obj.equals("")) {//return String of ''
-                    Toast.makeText(ModifyPasswordActivity.this, "该手机号已被注册了哦", Toast.LENGTH_LONG).show();
-                } else {
+                }  else {
                     Toast.makeText(ModifyPasswordActivity.this, "操作失败", Toast.LENGTH_LONG).show();
                 }
             }

@@ -3,7 +3,6 @@ package com.example.lt.timeset_andorid.Person;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,9 +26,6 @@ public class PersonalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(0xff7adfb8);
-        }
         //实例化输入框
         inputTextDialog = new InputTextDialog(PersonalActivity.this,R.style.dialog_center);
         //findViews
