@@ -169,12 +169,18 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 //请求失败
+                e.printStackTrace();
+                handler.sendEmptyMessage(4);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 //请求成功，获取返回数据
-
+                String jsonStr = response.body().string();
+                Message message = new Message();
+                message.what = 5;
+                message.obj = jsonStr;
+                handler.sendMessage(message);
             }
         });
     }
