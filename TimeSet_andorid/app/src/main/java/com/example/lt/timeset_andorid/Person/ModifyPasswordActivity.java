@@ -120,7 +120,7 @@ public class ModifyPasswordActivity extends AppCompatActivity {
                         && surePasswordImg.getBackground().getConstantState().equals(drawableCs)
                         && oldPasswordImg.getBackground().getConstantState().equals(drawableCs)){
                     //过审,->数据库操作
-                    passwordOkHttp("");
+                    passwordOkHttp("");//根据phone修改password
                 }else {
                     Toast.makeText(ModifyPasswordActivity.this,"请检查是否有错误项",Toast.LENGTH_SHORT).show();
                 }

@@ -169,6 +169,7 @@ public class LoginActivity extends AppCompatActivity {
         User user = new Gson().fromJson(jsonStr,User.class);
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("id",user.getId());
         editor.putString("phone", user.getPhone());
         editor.putString("headImg", user.getHeadImg());
         editor.putString("userName", user.getUserName());

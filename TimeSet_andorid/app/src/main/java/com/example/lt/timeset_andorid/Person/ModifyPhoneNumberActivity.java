@@ -4,7 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +28,8 @@ import com.example.lt.timeset_andorid.R;
 import com.example.lt.timeset_andorid.util.MobUtil;
 import com.mob.MobSDK;
 
+import java.io.IOException;
+
 import static com.example.lt.timeset_andorid.util.MobUtil.APPKEY;
 import static com.example.lt.timeset_andorid.util.MobUtil.APPSECRET;
 
@@ -27,6 +37,11 @@ import static com.example.lt.timeset_andorid.util.MobUtil.APPSECRET;
  * SkySong
  */
 public class ModifyPhoneNumberActivity extends AppCompatActivity {
+
+    private OkHttpClient okHttpClient;
+
+    private int userId;
+
     private EditText phone;
     private EditText testNumber;
     private Button getTestNumber;
@@ -39,6 +54,8 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
         }
+        SharedPreferences share = getSharedPreferences("user",MODE_PRIVATE);
+        userId = share.getInt("id",0);
         findViews();
         // 启动短信验证sdk
         MobSDK.init(this, APPKEY, APPSECRET);
@@ -58,6 +75,8 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
     }
 
     private void findViews() {
+        //OkHttpClient
+        okHttpClient = new OkHttpClient();
         //EditText
         phone = findViewById(R.id.modify_et_phone);
         testNumber = findViewById(R.id.modify_et_yanzhengma);
@@ -82,9 +101,6 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
         switch (view.getId()){
             case R.id.btn_return_modify_phone://返回
                 finish();
-                break;
-            case R.id.phoneNum_sure://确认
-
                 break;
             case R.id.modify_btn_yanzhengma://验证码
                 String phoneNum = phone.getText().toString();
@@ -113,7 +129,44 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
                     handler.sendEmptyMessage(-8);
                 }).start();
                 break;
+            case R.id.phoneNum_sure://确认
+                phoneNum = phone.getText().toString();
+                Drawable.ConstantState drawableCs = getResources().getDrawable(R.drawable.right).getConstantState();
+                //将收到的验证码和手机号提交再次核对
+                SMSSDK.submitVerificationCode("86", phoneNum, testNumber.getText().toString());
+                if(phoneImg.getBackground().getConstantState().equals(drawableCs)){
+                    phoneOkHttp("");//根据id修改phone
+                }else {
+                    Toast.makeText(ModifyPhoneNumberActivity.this,"有错误项",Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
+    }
+
+    private void phoneOkHttp(String url) {
+        FormBody.Builder builder = new FormBody.Builder();
+        FormBody body = builder
+                .add("id", String.valueOf(userId))
+                .add("newPhone",phone.getText().toString())
+                .build();
+        Request request = new Request.Builder()
+                .post(body)
+                .url(url)
+                .build();
+        final Call call = okHttpClient.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                //请求失败
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                //请求成功，获取返回数据
+
+            }
+        });
     }
 
     Handler handler = new Handler() {
