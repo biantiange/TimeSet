@@ -8,6 +8,15 @@ public class Album {
     private int useId;
     private String theme;
     private String albumName;
+    private String albumPic;
+
+    public String getAlbumPic() {
+        return albumPic;
+    }
+
+    public void setAlbumPic(String albumPic) {
+        this.albumPic = albumPic;
+    }
 
     public int getId() {
         return id;

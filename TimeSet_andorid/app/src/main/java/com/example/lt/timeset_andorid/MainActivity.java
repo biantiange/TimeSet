@@ -2,6 +2,7 @@ package com.example.lt.timeset_andorid;
 
 import android.content.Intent;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -9,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 
@@ -16,6 +19,7 @@ import android.widget.ImageView;
 import com.example.lt.timeset_andorid.Album.AddAlbumActivity;
 import com.example.lt.timeset_andorid.Album.GrideAdapter;
 
+import com.example.lt.timeset_andorid.BigTwo.InAlbumActivity;
 import com.example.lt.timeset_andorid.Entity.Album;
 import com.example.lt.timeset_andorid.Person.PersonalActivity;
 import com.example.lt.timeset_andorid.Person.SettingActivity;
@@ -42,7 +46,7 @@ import okhttp3.Response;
 
 /**
  * SkySong：抽屉、输入框
- * Sky：主页布局
+ * Sky：主页
  */
 
 public class MainActivity extends AppCompatActivity {
@@ -60,8 +64,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+      //  SDKInitializer.initialize(getApplicationContext());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(0xff7adfb8 );
+        }*/
         initView();
         //设置头像
         View headerView = navigationView.getHeaderView(0);//获取头布局
@@ -100,27 +108,10 @@ public class MainActivity extends AppCompatActivity {
        /* img=root.findViewById(R.id.img);
         RequestOptions options=new RequestOptions().centerCrop();
         Glide.with(this).load(R.drawable.touxiang).apply(options).into(img);*/
-        //相册的排列
-        Map<String, Object> map1 = new HashMap<String, Object>();
-        map1.put("image", R.drawable.meishi );
-        map1.put("text", "美食");
-        Map<String, Object> map2 = new HashMap<String, Object>();
-        map2.put("image", R.drawable.jiaoche);
-        map2.put("text", "兴趣");
-        Map<String, Object> map3 = new HashMap<String, Object>();
-        map3.put("image", R.drawable.fengjing);
-        map3.put("text", "风景");
-        Map<String, Object> map4 = new HashMap<String, Object>();
-        map4.put("image", R.drawable.pengyou);
-        map4.put("text", "朋友");
-        list.add(map1);
-        list.add(map2);
-        list.add(map3);
-        list.add(map4);
-        //  findAllAlbum();
+        findDefaultAlbum();
+        findAllAlbum();
         grideAdapter=new GrideAdapter(this,list,R.layout.list_gride);
         gridView.setAdapter(grideAdapter);
-
         addAlbum.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddAlbumActivity.class);
             startActivity(intent);
@@ -132,9 +123,9 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav);
     }
 
-
-    private void findAllAlbum() {
-        Request request=new Request.Builder().url(Constant.URL +"album/all").build();
+    private void findDefaultAlbum() {
+        Log.e("111","111111");
+        Request request=new Request.Builder().url(Constant.URL +"album/all?userId=0").build();
         Call call=okHttpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -146,21 +137,42 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String album= response.body().string();
                 Log.e("111",album);
-                if(!album.equals("")){
-                    Gson gson=new Gson();
-                    Type listType=new TypeToken<List<Album>>(){}.getType();
-                    List<Album> albumList= gson.fromJson(album,listType);
-                    inData(albumList);
-                }
+                Gson gson=new Gson();
+                Type listType=new TypeToken<List<Album>>(){}.getType();
+                List<Album> albumList= gson.fromJson(album,listType);
+                inData(albumList);
+            }
+        });
+    }
+    private void findAllAlbum() {
+        Log.e("111","111111");
+        Request request=new Request.Builder().url(Constant.URL +"album/all?userId=1").build();
+        Call call=okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String album= response.body().string();
+                Log.e("111",album);
+                Gson gson=new Gson();
+                Type listType=new TypeToken<List<Album>>(){}.getType();
+                List<Album> albumList= gson.fromJson(album,listType);
+                inData(albumList);
             }
         });
     }
 
     public void inData(List<Album> albumList){
+        Integer [] images={R.drawable.meishi ,R.drawable.jiaoche,R.drawable.fengjing,R.drawable.pengyou };
         for(int i=0;i<albumList.size();i++){
             Map<String, Object> map1 = new HashMap<String, Object>();
-            map1.put("image", R.drawable.touxiang);
+            map1.put("image", images[i%4] );
             map1.put("text", albumList.get(i).getAlbumName());
+            map1.put("id",albumList.get(i).getId());
             list.add(map1);
         }
     }

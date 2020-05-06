@@ -28,7 +28,7 @@ public class AlbumServiceImpl {
     public int addAlbum(int userId,String theme,String albumName){return albumMapper.addAlbum(userId,theme,albumName);};
 
     //删除相册
-    public int deleteAlbum(int userId,int id){return albumMapper.deleteAlbum(id,userId);};
+    public int deleteAlbum(int id){return albumMapper.deleteAlbum(id);};
 
     //根据ID修改相册名称
     public int updateNameAlbum(int userId,int id, String albumName){return albumMapper.updateNameAlbum(id,userId,albumName);};

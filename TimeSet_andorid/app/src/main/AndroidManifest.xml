@@ -16,6 +16,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:usesCleartextTraffic="true"
+
         android:allowBackup="true"
         android:appComponentFactory="任意字符"
         android:icon="@mipmap/ic_launcher"
@@ -29,7 +33,7 @@
         <activity android:name=".Person.ModifyPasswordActivity" />
         <activity android:name=".Person.SettingActivity" />
         <activity android:name=".Person.PersonalActivity" />
-        <activity android:name=".BigTwo.InAlbumActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,7 +43,8 @@
         <activity android:name=".Login.LoginActivity" />
         <activity android:name=".Login.PhoneTestActivity" />
         <activity android:name=".Login.RegistryActivity" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".Album.AddAlbumActivity" />
+        <activity android:name=".BigTwo.InAlbumActivity"/>
     </application>
 
 </manifest>
