@@ -45,6 +45,7 @@
         <activity android:name=".Login.RegistryActivity" />
         <activity android:name=".Album.AddAlbumActivity" />
         <activity android:name=".BigTwo.InAlbumActivity"/>
+        <activity android:name=".Search.SearchActivity"/>
     </application>
 
 </manifest>
