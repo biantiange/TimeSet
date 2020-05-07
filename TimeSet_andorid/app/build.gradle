@@ -10,6 +10,14 @@ MobSDK {
     SMSSDK {}
 }
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key'
+            keyPassword '123456'
+            storeFile file('D:/android/project/keystore.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.lt.timeset_andorid"
