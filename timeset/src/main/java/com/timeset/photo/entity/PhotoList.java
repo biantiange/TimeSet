@@ -17,6 +17,7 @@ public class PhotoList {
     public void setPtime(String ptime) {
         this.ptime = ptime;
     }
+    public List<Photo> getPhotoList() {
         return photoLists;
     }
     public void setPhotoList(List<Photo> photoList) {
