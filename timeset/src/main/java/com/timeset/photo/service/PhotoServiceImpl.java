@@ -4,6 +4,7 @@ import com.baidu.aip.imageclassify.AipImageClassify;
 import com.baidu.aip.ocr.AipOcr;
 import com.google.gson.Gson;
 import com.timeset.photo.entity.Photo;
+import com.timeset.photo.entity.PhotoList;
 import com.timeset.photo.mapper.PhotoMapper;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -70,7 +71,7 @@ public class PhotoServiceImpl {
 
     public List<Photo> findAll(int userId){return photoMapper.findAll(userId);};
 
-    public List<Photo> findByAlbum(String albumId){return photoMapper.findByAlbum(albumId);};
+    public List<PhotoList> findByAlbum(int albumId, int userId){return photoMapper.findByAlbum(albumId,userId);};
 
     public List<Photo> findByTime(String date,int userId){return photoMapper.findByTime(date,userId);};
 

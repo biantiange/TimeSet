@@ -125,8 +125,7 @@ public class MainActivity extends AppCompatActivity {
         findUserPic();
         findDefaultAlbum();
         findAllAlbum();
-        grideAdapter=new GrideAdapter(this,list,R.layout.list_gride);
-        gridView.setAdapter(grideAdapter);
+
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,10 +157,11 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String album= response.body().string();
                 Log.e("111",album);
-                Gson gson=new Gson();
-                Type listType=new TypeToken<List<Album>>(){}.getType();
-                List<Album> albumList= gson.fromJson(album,listType);
-                inData(albumList);
+                Message message=new Message();
+                message.what=1;
+                message.obj=album;
+                handler.sendMessage(message);
+
             }
         });
     }
@@ -183,10 +183,11 @@ public class MainActivity extends AppCompatActivity {
                    Log.e("无相册","无相册");
                 }
                 else{
-                    Gson gson=new Gson();
-                    Type listType=new TypeToken<List<Album>>(){}.getType();
-                    List<Album> albumList= gson.fromJson(album,listType);
-                    inData(albumList);
+                    Message message=new Message();
+                    message.what=2;
+                    message.obj=album;
+                    handler.sendMessage(message);
+
                 }
             }
         });
@@ -200,9 +201,31 @@ public class MainActivity extends AppCompatActivity {
             map1.put("id",albumList.get(i).getId());
             list.add(map1);
         }
+        grideAdapter=new GrideAdapter(MainActivity.this,list,R.layout.list_gride);
+        gridView.setAdapter(grideAdapter);
+
+
     }
     private void initView(){
         main_drawer_layout=findViewById(R.id.maindrawer_layout);
         navigationView = findViewById(R.id.nav);
     }
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                Gson gson=new Gson();
+                Type listType=new TypeToken<List<Album>>(){}.getType();
+                List<Album> albumList= gson.fromJson((String) msg.obj,listType);
+                inData(albumList);
+            }
+            if(msg.what==2){
+                Gson gson=new Gson();
+                Type listType=new TypeToken<List<Album>>(){}.getType();
+                List<Album> albumList= gson.fromJson((String) msg.obj,listType);
+                inData(albumList);
+            }
+        }
+    };
+
 }

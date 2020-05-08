@@ -17,6 +17,7 @@ import com.example.lt.timeset_andorid.BigTwo.FootEarth.MapFragment;
 import com.example.lt.timeset_andorid.BigTwo.TimePhoto.CalendarFragment;
 import com.example.lt.timeset_andorid.MainActivity;
 import com.example.lt.timeset_andorid.R;
+import com.example.lt.timeset_andorid.Search.SearchActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class InAlbumActivity extends AppCompatActivity {
     private ImageButton btn_search;
     private LinearLayout layout1;
     private LinearLayout layout2;
+    private int albumId;
     private Map<String, MyTabSpec> map = new HashMap<>();
     private String [] tabStrId = {"时间相册", "足迹地球"};
     private Fragment curFragment = null;
@@ -97,7 +99,6 @@ public class InAlbumActivity extends AppCompatActivity {
         transaction.commit();
     }
     private class MyListener implements View.OnClickListener{
-
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -109,10 +110,20 @@ public class InAlbumActivity extends AppCompatActivity {
                     changeFragment(tabStrId[1]);
                     break;
                 case R.id.add_img:
-                  /* Intent intent=new Intent(InAlbumActivity.this, );
+                    albumId=getIntent().getIntExtra("albumId",-1);
+                   Intent intent=new Intent(InAlbumActivity.this,AddPictureActivity.class ).putExtra("albumId",albumId);
                    startActivity(intent);
-                   finish();*/
+                   finish();
+                   break;
 
+                case R.id.btn_return1:
+                    finish();
+                    break;
+                case R.id.btn_search:
+                    Intent intent1=new Intent(InAlbumActivity.this, SearchActivity.class);
+                    startActivity(intent1);
+
+                    break;
             }
         }
     }
