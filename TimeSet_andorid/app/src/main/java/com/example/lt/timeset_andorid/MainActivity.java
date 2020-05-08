@@ -1,7 +1,9 @@
 package com.example.lt.timeset_andorid;
 
+import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,13 +18,17 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.lt.timeset_andorid.Album.AddAlbumActivity;
 import com.example.lt.timeset_andorid.Album.GrideAdapter;
 
 import com.example.lt.timeset_andorid.BigTwo.InAlbumActivity;
 import com.example.lt.timeset_andorid.Entity.Album;
+import com.example.lt.timeset_andorid.Entity.User;
 import com.example.lt.timeset_andorid.Person.PersonalActivity;
 import com.example.lt.timeset_andorid.Person.SettingActivity;
+import com.example.lt.timeset_andorid.Search.SearchActivity;
 import com.example.lt.timeset_andorid.util.Constant;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
@@ -55,8 +61,11 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridView;
     private GrideAdapter grideAdapter;
     private ImageView img;
+    private ImageView search;
     private ImageView addAlbum;
     private List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+    int userId;
+    SharedPreferences sharedPreferences;
 
     private DrawerLayout main_drawer_layout;
     private NavigationView navigationView;
@@ -65,11 +74,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
       //  SDKInitializer.initialize(getApplicationContext());
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
-        }
+        }*/
+        sharedPreferences=getSharedPreferences("parent", Context.MODE_PRIVATE);
+        userId=sharedPreferences.getInt("userId",1);
+        //个人设置
         initView();
         //设置头像
         View headerView = navigationView.getHeaderView(0);//获取头布局
@@ -100,27 +112,51 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-
+        //主界面
         okHttpClient=new OkHttpClient();
         gridView=findViewById(R.id.gride);
         addAlbum=findViewById(R.id.jiahao);
-        //头像设置圆形
-       /* img=root.findViewById(R.id.img);
-        RequestOptions options=new RequestOptions().centerCrop();
-        Glide.with(this).load(R.drawable.touxiang).apply(options).into(img);*/
+        img=findViewById(R.id.img);
+        search=findViewById(R.id.sousuo);
+        findUserPic();
         findDefaultAlbum();
         findAllAlbum();
         grideAdapter=new GrideAdapter(this,list,R.layout.list_gride);
         gridView.setAdapter(grideAdapter);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
         addAlbum.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddAlbumActivity.class);
             startActivity(intent);
         });
     }
+    private void findUserPic() {
+        RequestOptions options=new RequestOptions().circleCrop();
+        Glide.with(this).load(R.drawable.touxiang).apply(options).into(img);
+       /* Glide.with(this).load(Constant.URL+""+sharedPreferences.getString("head_img","")).apply(options).into(img);*/
+        /*Request request=new Request.Builder().url(Constant.URL +"user/all?userId=1").build();
+        Call call=okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
 
-    private void initView(){
-        main_drawer_layout=findViewById(R.id.maindrawer_layout);
-        navigationView = findViewById(R.id.nav);
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String u= response.body().string();
+                Log.e("uuu",u);
+                Gson gson=new Gson();
+                User user= gson.fromJson(u,User.class);
+                RequestOptions options=new RequestOptions().circleCrop();
+                Glide.with(this).load(Constant.URL+""+sharedPreferences.getString("head_img","")).apply(options).into(img);
+            }
+        });*/
     }
 
     private void findDefaultAlbum() {
@@ -158,10 +194,15 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String album= response.body().string();
                 Log.e("111",album);
-                Gson gson=new Gson();
-                Type listType=new TypeToken<List<Album>>(){}.getType();
-                List<Album> albumList= gson.fromJson(album,listType);
-                inData(albumList);
+                if(album.equals("")){
+                   Log.e("无相册","无相册");
+                }
+                else{
+                    Gson gson=new Gson();
+                    Type listType=new TypeToken<List<Album>>(){}.getType();
+                    List<Album> albumList= gson.fromJson(album,listType);
+                    inData(albumList);
+                }
             }
         });
     }
@@ -176,5 +217,8 @@ public class MainActivity extends AppCompatActivity {
             list.add(map1);
         }
     }
-
+    private void initView(){
+        main_drawer_layout=findViewById(R.id.maindrawer_layout);
+        navigationView = findViewById(R.id.nav);
+    }
 }

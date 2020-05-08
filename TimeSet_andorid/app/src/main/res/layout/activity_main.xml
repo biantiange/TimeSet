@@ -56,7 +56,7 @@
             android:background="#ffffff"
             android:orientation="horizontal" />
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="320dp"
             android:layout_height="0dp"
             android:layout_gravity="center"
@@ -88,7 +88,7 @@
                 android:padding="10dp"
                 android:src="@drawable/sousuo" />
 
-        </LinearLayout>
+        </LinearLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -105,15 +105,26 @@
                 android:numColumns="2"
                 android:verticalSpacing="10dp"></GridView>
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/jiahao"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
             android:layout_weight="8"
-            android:src="@drawable/jiaohao" />
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/jiahao"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:src="@drawable/jiaohao" />
+            <ImageView
+                android:layout_marginLeft="50dp"
+                android:id="@+id/sousuo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/sousuo" />
+        </LinearLayout>
+
     </LinearLayout>
     <!--左滑栏-->
     <com.google.android.material.navigation.NavigationView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -124,4 +135,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/head"
         app:menu="@menu/new_menu" />
+
 </androidx.drawerlayout.widget.DrawerLayout>
+

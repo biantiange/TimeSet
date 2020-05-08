@@ -89,18 +89,18 @@ public class GrideAdapter extends BaseAdapter {
             }
         });
         //相册的编辑与删除功能
-        final  EditText edtext =convertView.findViewById(R.id.text);
+       /* final  EditText edtext =convertView.findViewById(R.id.text);
         holder.textView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    Log.e("得到焦点","的叫");
+                    Log.e("得到焦点",edtext.getText().toString());
                 } else {
-                   Log.e("视角",edtext.getText().toString());
+                   Log.e("失去焦点",edtext.getText().toString());
                    edtext.setText(edtext.getText());
                 }
             }
-        });
+        });*/
           holder.shanchu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
