@@ -93,9 +93,51 @@ public class UserController {
     }
 
     @RequestMapping("/updateUserImg")
-    public int updateUserImgByPhone(@RequestParam("phone") String phone, @RequestParam("headImg") String headImg) {
+    public int updateUserImgByPhone(@RequestParam("phone") String phone
+            ,  @RequestParam(value = "file",required = false) MultipartFile file
+            ,HttpServletRequest request) {
         System.out.println("修改用户头像");
-        int result = userService.updateUserImgByPhone(phone, headImg);
+        if (file != null) {
+            //上传服务器
+            // 生成新的文件名
+            String headImg = System.currentTimeMillis()+file.getOriginalFilename();
+            // 保存路径
+            String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+headImg;
+            // 执行保存操作
+            File destFile = new File(destFileName);
+            if (!destFile.getParentFile().exists()){
+                destFile.getParentFile().mkdir();
+            }
+            try {
+                file.transferTo(destFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int result = userService.updateUserImgByPhone(phone,headImg);
+            if (result != 0) {
+                return 0;
+            }
+        }
+        return -1;
+    }
+
+    @RequestMapping("updateUserPassword")
+    public int updatePasswordByPhone(@RequestParam("phone") String phone,@RequestParam("password") String password){
+        System.out.println("个人——修改用户密码");
+        int result = userService.updateUserPasswordByPhone(phone, password);
+        if (result != 0) {
+            return 0;
+        }
+        return -1;
+    }
+
+    @RequestMapping("updateUserPhone")
+    public int updateUserPhoneByUserId(@RequestParam("phone") String phone,@RequestParam("id") String id){
+        System.out.println("个人——修改用户手机号");
+        if (userService.findUserByPhone(phone) != null){
+            return -2;
+        }
+        int result = userService.updateUserPhoneByUserId(phone, id);
         if (result != 0) {
             return 0;
         }
@@ -113,7 +155,6 @@ public class UserController {
             return count!=0?"OK":"NO";
         }
     }
-
 
     @RequestMapping("/all")
     public List<User> findAll() {

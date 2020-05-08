@@ -28,6 +28,8 @@ public class UserServiceImpl {
 
     public  int updateUserPasswordByPhone(String phone,String password){return userMapper.updateUserPasswordByPhone(phone,password);};
 
+    public int updateUserPhoneByUserId(String phone,String id){return userMapper.updateUserPhoneByUserId(phone, id);}
+
     public List<User> findAllPhone(){return userMapper.findAllPhone();};
 
     public User findUserByPhone(String phone){return userMapper.findUserByPhone(phone);};

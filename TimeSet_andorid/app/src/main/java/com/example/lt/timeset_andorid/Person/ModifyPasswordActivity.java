@@ -25,12 +25,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.lt.timeset_andorid.R;
+import com.example.lt.timeset_andorid.util.Constant;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.example.lt.timeset_andorid.util.MobUtil.isSpecialChar;
-
 
 /**
  * SkySong
@@ -97,8 +97,7 @@ public class ModifyPasswordActivity extends AppCompatActivity {
         surePassword.setOnFocusChangeListener((View v,boolean hasFocus) -> {
             if (!hasFocus){
                 String str = surePassword.getText().toString();
-                if (isSpecialChar(str)|| str.length()<8 || str.length()>12 ||
-                 !surePassword.getText().toString().equals(newPassword.getText().toString()))
+                if (isSpecialChar(str)|| str.length()<8 || str.length()>12)
                 {   //含有非法字符 or different from the previous
                     surePasswordImg.setBackgroundResource(R.drawable.error);
                 }else{
@@ -118,11 +117,14 @@ public class ModifyPasswordActivity extends AppCompatActivity {
             case R.id.password_sure://确认修改
                 Drawable.ConstantState drawableCs = getResources().getDrawable(R.drawable.right).getConstantState();
                 if (newPasswordImg.getBackground().getConstantState().equals(drawableCs)
-                        && surePasswordImg.getBackground().getConstantState().equals(drawableCs)
                         && oldPasswordImg.getBackground().getConstantState().equals(drawableCs)){
-                    //过审,->数据库操作
+                    if (surePassword.getText().toString().equals(newPassword.getText().toString())){
+                        //过审,->数据库操作
+                        passwordOkHttp(Constant.IP + "user/updateUserPassword?phone=" + phone + "&&password="+surePassword.getText().toString());//根据phone修改password
+                    }else {
+                        Toast.makeText(ModifyPasswordActivity.this,"两次密码不一致",Toast.LENGTH_SHORT).show();
+                    }
 
-                    passwordOkHttp("");//根据phone修改password
 
                 }else {
                     Toast.makeText(ModifyPasswordActivity.this,"请检查是否有错误项",Toast.LENGTH_SHORT).show();
@@ -157,8 +159,6 @@ public class ModifyPasswordActivity extends AppCompatActivity {
 
         FormBody.Builder builder = new FormBody.Builder();
         FormBody body = builder
-                .add("password",surePassword.getText().toString())
-                .add("phone",phone)
                 .build();
         Request request = new Request.Builder()
                 .post(body)
@@ -196,9 +196,13 @@ public class ModifyPasswordActivity extends AppCompatActivity {
 
             } else if(msg.what== 5){
                 //网络请求结果
-                if (msg.obj.equals("OK")) {
+                if (msg.obj.equals("0")) {
                     // 操作成功，返回个人界面
                     Toast.makeText(ModifyPasswordActivity.this, "操作成功", Toast.LENGTH_LONG).show();
+                    SharedPreferences share = getSharedPreferences("user",MODE_PRIVATE);
+                    SharedPreferences.Editor editor= share.edit();
+                    editor.putString("password",surePassword.getText().toString());
+                    editor.commit();
                     finish();
                 }  else {
                     Toast.makeText(ModifyPasswordActivity.this, "操作失败", Toast.LENGTH_LONG).show();

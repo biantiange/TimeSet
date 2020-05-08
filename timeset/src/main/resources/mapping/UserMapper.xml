@@ -34,6 +34,12 @@
         where phone =#{phone}
     </update>
 
+    <update id="updateUserPhoneByUserId">
+        update user
+        set phone=#{phone}
+        where id=#{id}
+    </update>
+
     <select id="findAllPhone" resultType="com.timeset.user.entity.User">
         select * from user
     </select>

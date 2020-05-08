@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.lt.timeset_andorid.R;
 
+import com.example.lt.timeset_andorid.util.Constant;
 import com.example.lt.timeset_andorid.util.MobUtil;
 import com.mob.MobSDK;
 
@@ -144,7 +145,7 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
                 //将收到的验证码和手机号提交再次核对
                 SMSSDK.submitVerificationCode("86", phoneNum, testNumber.getText().toString());
                 if(phoneImg.getBackground().getConstantState().equals(drawableCs)){
-                    phoneOkHttp("");//根据id修改phone
+                    phoneOkHttp(Constant.IP + "user/updateUserPhone?phone=" + phone.getText().toString() + "&&id="+userId);//根据id修改phone
                 }else {
                     Toast.makeText(ModifyPhoneNumberActivity.this,"有错误项",Toast.LENGTH_SHORT).show();
                 }
@@ -156,8 +157,6 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
     private void phoneOkHttp(String url) {
         FormBody.Builder builder = new FormBody.Builder();
         FormBody body = builder
-                .add("id", String.valueOf(userId))
-                .add("newPhone",phone.getText().toString())
                 .build();
         Request request = new Request.Builder()
                 .post(body)
@@ -200,11 +199,15 @@ public class ModifyPhoneNumberActivity extends AppCompatActivity {
 
             } else if(msg.what== 5){
                 //网络请求结果
-                if (msg.obj.equals("OK")) {
+                if (msg.obj.equals("0")) {
                     // 操作成功，返回个人界面
                     Toast.makeText(ModifyPhoneNumberActivity.this, "操作成功", Toast.LENGTH_LONG).show();
+                    SharedPreferences share = getSharedPreferences("user",MODE_PRIVATE);
+                    SharedPreferences.Editor editor= share.edit();
+                    editor.putString("phone",phone.getText().toString());
+                    editor.commit();
                     finish();
-                } else if (msg.obj.equals("")) {
+                } else if (msg.obj.equals("-2")) {
                     Toast.makeText(ModifyPhoneNumberActivity.this, "该手机号已被注册了哦", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(ModifyPhoneNumberActivity.this, "操作失败", Toast.LENGTH_LONG).show();
