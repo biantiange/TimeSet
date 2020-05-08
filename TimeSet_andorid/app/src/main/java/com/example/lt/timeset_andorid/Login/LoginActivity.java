@@ -169,9 +169,11 @@ public class LoginActivity extends AppCompatActivity {
         User user = new Gson().fromJson(jsonStr,User.class);
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("id",user.getId());
         editor.putString("phone", user.getPhone());
         editor.putString("headImg", user.getHeadImg());
         editor.putString("userName", user.getUserName());
+        editor.putString("password",user.getPassword());
         editor.putBoolean("flag" , true);   //是否第一次登录，如果不是则后续登录不用输密码
         editor.commit();   //提交
         Log.e("LoginActivity", "存储结束了" + user.toString() );

@@ -4,6 +4,7 @@ import com.baidu.aip.imageclassify.AipImageClassify;
 import com.baidu.aip.ocr.AipOcr;
 import com.google.gson.Gson;
 import com.timeset.photo.entity.Photo;
+import com.timeset.photo.entity.PhotoList;
 import com.timeset.photo.mapper.PhotoMapper;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,8 @@ public class PhotoServiceImpl {
         List<String> listDec = new Gson().fromJson(new String(des),List.class);
         System.out.println("生成链表"+listDec.toString());
         System.out.println("生成字符串"+new String(des));
-        image.setPdescribe(new String(tex)+new String(des));
+        image.setIdentify(new String(tex)+new String(des));
+        //image.setPdescribe(new String(tex)+new String(des));
         System.out.println("图片信息:"+image.toString());
         int result=photoMapper.addPhoto(image);
         if(result!=0){
@@ -69,28 +71,44 @@ public class PhotoServiceImpl {
 
     public List<Photo> findAll(int userId){return photoMapper.findAll(userId);};
 
-    public List<Photo> findByAlbum(String albumId){return photoMapper.findByAlbum(albumId);};
+    public List<PhotoList> findByAlbum(int albumId, int userId){return photoMapper.findByAlbum(albumId,userId);};
 
     public List<Photo> findByTime(String date,int userId){return photoMapper.findByTime(date,userId);};
 
-    public List<Photo> findPlaceOrdescribe(String str,int userId){
-        Set<Photo> photoAll=new HashSet<>();
-        List photos=null;
+    public Map<String, List<Photo>> findPlaceOrDescribeOrIdentify(String str,int userId){
+        Map<String,List<Photo>> map1=new HashMap<>();
         List<Photo> photos1 =photoMapper.findPlace(str,userId);
         List<Photo> photos2 =photoMapper.findDescribe(str,userId);
-        if(photos1.size()!=0){
-            for(Photo p:photos1){
-                photoAll.add(p);
-            }
+        List<Photo> photos3=photoMapper.findIdentify(str,userId);
+        if(photos1.size()>0){
+            map1.put("place",photos1);
         }
-        if(photos2.size()!=0){
-            for(Photo p:photos2){
-                photoAll.add(p);
-            }
+        if(photos2.size()>0){
+            map1.put("contain",photos2);
         }
-        if(photoAll!=null){
-            photos=new ArrayList(photoAll);
+        if(photos3.size()>0){
+            map1.put("identify",photos3);
         }
-        return photos;
+
+
+
+//        lists.add(map1);
+//        Map<String,List<Photo>> map2=new HashMap<>();
+
+//        lists.add(map2);
+//        if(photos1.size()!=0){
+//            for(Photo p:photos1){
+//                photoAll.add(p);
+//            }
+//        }
+//        if(photos2.size()!=0){
+//            for(Photo p:photos2){
+//                photoAll.add(p);
+//            }
+//        }
+//        if(photoAll!=null){
+//            photos=new ArrayList(photoAll);
+//        }
+        return map1;
     }
 }

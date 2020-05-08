@@ -17,10 +17,10 @@ public interface AlbumMapper {
     public List<Album> findAll(int userId);
 
     //增加相册
-    public int addAlbum(int userId,String theme,String albumName);
+    public int addAlbum(Album album);
 
     //删除相册
-    public int deleteAlbum(int userId,int id);
+    public int deleteAlbum(int id);
 
     //根据ID修改相册名称
     public int updateNameAlbum(int id,int userId, String albumName);

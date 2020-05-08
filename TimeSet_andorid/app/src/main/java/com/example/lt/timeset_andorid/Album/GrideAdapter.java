@@ -1,20 +1,28 @@
 package com.example.lt.timeset_andorid.Album;
 /**
- * 王天
- * 照片布局adapter
+ * sky
+ * 照片adapter
  */
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.lt.timeset_andorid.Login.Constant;
+
+import com.example.lt.timeset_andorid.BigTwo.InAlbumActivity;
+import com.example.lt.timeset_andorid.MainActivity;
 import com.example.lt.timeset_andorid.R;
+import com.example.lt.timeset_andorid.util.Constant;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -64,54 +72,63 @@ public class GrideAdapter extends BaseAdapter {
             holder=new ViewHolder();
             holder.image=convertView.findViewById(R.id.image);
             holder.textView=convertView.findViewById(R.id.text);
+            holder.shanchu=convertView.findViewById(R.id.shanchu);
             convertView.setTag(holder);
         }else{
             holder=(ViewHolder) convertView.getTag();
         }
-//        Log.e("position",list.get(position));
         holder.textView.setText(list.get(position).get("text").toString());
-        Glide.with(context).load(list.get(position).get("image")).into(holder.image);
+        Glide.with(context).load(list.get(position).get("image") ).into(holder.image);
 
-        //相册的编辑与删除功能
-        holder.image.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        //跳转相片
+        holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                ImageView shanchu=v.findViewById(R.id.shanchu);
-                ImageView bianji=v.findViewById(R.id.bianji);
-                okHttpClient=new OkHttpClient();
-                if (hasFocus) {
-                    Log.e("111","111111");
-                    v.findViewById(R.id.album_select).setVisibility(View.VISIBLE);
-                   /* shanchu.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Request request=new Request.Builder().url(Constant.URL +"album/delete/"+position).build();
-                            Call call=okHttpClient.newCall(request);
-                            call.enqueue(new Callback() {
-                                @Override
-                                public void onFailure(Call call, IOException e) {
-                                    e.printStackTrace();
-                                }
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    Log.e("删除相册","删除成功");
-                                }
-                            });
-                        }
-                    });*/
-                } else {
-                    Log.e("2222","22222");
-                    v.findViewById(R.id.album_select).setVisibility(View.GONE);
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(context, InAlbumActivity.class);
+                intent.putExtra("albumId",(Integer) list.get(position).get("id"));
+                context.startActivity(intent);
             }
         });
-
+        //相册的编辑与删除功能
+       /* final  EditText edtext =convertView.findViewById(R.id.text);
+        holder.textView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    Log.e("得到焦点",edtext.getText().toString());
+                } else {
+                   Log.e("失去焦点",edtext.getText().toString());
+                   edtext.setText(edtext.getText());
+                }
+            }
+        });*/
+          holder.shanchu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                okHttpClient=new OkHttpClient();
+                int id=(Integer) list.get(position).get("id");
+                Log.e("删除id",id+"");
+                Request request=new Request.Builder().url(Constant.URL +"album/delete?id="+id).build();
+                Call call=okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                    }
+                });
+                Intent intent = new Intent(context,MainActivity.class);
+                context.startActivity(intent);
+            }
+        });
         return convertView;
     }
 
-    private  class ViewHolder{
+    private  class  ViewHolder{
         public ImageView image;
-        public TextView textView;
-
+        public ImageView shanchu;
+        public EditText textView;
     }
 }

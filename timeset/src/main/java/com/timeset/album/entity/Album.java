@@ -12,6 +12,7 @@ public class Album {
     private int useId;
     private String theme;
     private String albumName;
+    private String albumPic;
 
     @Override
     public String toString() {
@@ -20,6 +21,7 @@ public class Album {
                 ", useId=" + useId +
                 ", theme='" + theme + '\'' +
                 ", albumName='" + albumName + '\'' +
+                ", albumPic='" + albumPic + '\'' +
                 '}';
     }
 
@@ -53,5 +55,13 @@ public class Album {
 
     public void setAlbumName(String albumName) {
         this.albumName = albumName;
+    }
+
+    public String getAlbumPic() {
+        return albumPic;
+    }
+
+    public void setAlbumPic(String albumPic) {
+        this.albumPic = albumPic;
     }
 }

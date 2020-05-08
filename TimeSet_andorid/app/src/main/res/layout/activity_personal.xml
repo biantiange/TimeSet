@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#7adfb8">
+
+        <Button
+            android:id="@+id/btn_return_personal"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="0.15"
+            android:background="@drawable/fanhui32"
+            android:onClick="modifyClick" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="110dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:text="个人信息"
+            android:textColor="@color/FloralWhite"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/personal_iv_headImg"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/moren_img" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dip"
+        android:background="@drawable/radius_drawable_bg"
+        android:orientation="vertical"
+        android:padding="10dip">
+
+        <!-- nicheng -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="50dp"
+                android:src="@drawable/nicheng" />
+
+            <TextView
+                android:id="@+id/personal_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:gravity="center"
+                android:hint="昵称"
+                android:padding="5dip"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/modify_nickname"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="0.10"
+                android:background="@drawable/bianji"
+                android:onClick="modifyClick" />
+        </LinearLayout>
+
+        <!--手机号-->
+        <LinearLayout
+            android:id="@+id/input_layout_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="50dp"
+                android:src="@drawable/phone" />
+
+            <TextView
+                android:id="@+id/personal_phone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:gravity="center"
+                android:hint="手机号"
+                android:padding="5dip"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/modify_phoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="0.10"
+                android:background="@drawable/bianji"
+                android:onClick="modifyClick" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+            android:background="#eeeeee" />
+        <!--密码-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="50dp"
+                android:src="@drawable/mima" />
+
+            <TextView
+                android:id="@+id/personal_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:padding="5dip"
+                android:text="12345678"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/modify_password"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="0.10"
+                android:background="@drawable/bianji"
+                android:onClick="modifyClick" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
