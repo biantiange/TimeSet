@@ -17,6 +17,12 @@ android {
             storeFile file('D:/android/project/keystore.jks')
             storePassword '123456'
         }
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('E:/debug.keystore')
+            storePassword 'android'
+        }
     }
     compileSdkVersion 28
     defaultConfig {

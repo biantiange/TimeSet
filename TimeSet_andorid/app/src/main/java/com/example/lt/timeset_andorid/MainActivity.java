@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 
@@ -16,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -23,6 +26,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.lt.timeset_andorid.Album.AddAlbumActivity;
 import com.example.lt.timeset_andorid.Album.GrideAdapter;
 
+import com.example.lt.timeset_andorid.BigTwo.AddPictureActivity;
 import com.example.lt.timeset_andorid.BigTwo.InAlbumActivity;
 import com.example.lt.timeset_andorid.Entity.Album;
 import com.example.lt.timeset_andorid.Entity.User;
@@ -79,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
         }*/
-        sharedPreferences=getSharedPreferences("parent", Context.MODE_PRIVATE);
-        userId=sharedPreferences.getInt("userId",1);
+        sharedPreferences=getSharedPreferences("user", Context.MODE_PRIVATE);
+        userId=sharedPreferences.getInt("id",1);
         //个人设置
         initView();
         //设置头像
@@ -138,25 +142,6 @@ public class MainActivity extends AppCompatActivity {
     private void findUserPic() {
         RequestOptions options=new RequestOptions().circleCrop();
         Glide.with(this).load(R.drawable.touxiang).apply(options).into(img);
-       /* Glide.with(this).load(Constant.URL+""+sharedPreferences.getString("head_img","")).apply(options).into(img);*/
-        /*Request request=new Request.Builder().url(Constant.URL +"user/all?userId=1").build();
-        Call call=okHttpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String u= response.body().string();
-                Log.e("uuu",u);
-                Gson gson=new Gson();
-                User user= gson.fromJson(u,User.class);
-                RequestOptions options=new RequestOptions().circleCrop();
-                Glide.with(this).load(Constant.URL+""+sharedPreferences.getString("head_img","")).apply(options).into(img);
-            }
-        });*/
     }
 
     private void findDefaultAlbum() {
@@ -182,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void findAllAlbum() {
         Log.e("111","111111");
-        Request request=new Request.Builder().url(Constant.URL +"album/all?userId=1").build();
+        Request request=new Request.Builder().url(Constant.URL +"album/all?userId="+userId).build();
         Call call=okHttpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -206,7 +191,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     public void inData(List<Album> albumList){
         Integer [] images={R.drawable.meishi ,R.drawable.jiaoche,R.drawable.fengjing,R.drawable.pengyou };
         for(int i=0;i<albumList.size();i++){

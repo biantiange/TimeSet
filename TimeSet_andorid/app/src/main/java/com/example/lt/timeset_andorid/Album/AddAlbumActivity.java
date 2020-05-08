@@ -1,9 +1,15 @@
 package com.example.lt.timeset_andorid.Album;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +21,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.lt.timeset_andorid.BigTwo.AddPictureActivity;
 import com.example.lt.timeset_andorid.R;
+import com.example.lt.timeset_andorid.util.Constant;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,6 +45,8 @@ public class AddAlbumActivity extends AppCompatActivity {
     private ImageButton return0;
     private Button toadd;
     private EditText album_name;
+    private int userId;//从shapernece获取
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +57,8 @@ public class AddAlbumActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8 );
         }
-
+        sharedPreferences=getSharedPreferences("user", Context.MODE_PRIVATE);
+        userId=sharedPreferences.getInt("id",1);
         initData();
         setListener();
         changeTab(tabStrId[0]);
@@ -85,40 +96,40 @@ public class AddAlbumActivity extends AppCompatActivity {
                 case R.id.to_add_album:
                     //完成创建,获取名字，类型
                     String name=album_name.getText().toString();
-                    int userId=1;//从shapernece获取
+
                     if(name.isEmpty()){
                         Toast.makeText(AddAlbumActivity.this,"相册名称不能为空",Toast.LENGTH_SHORT).show();
                     }else{
+                        Message message=new Message();
                         //与服务器交互，将name，type，userId传入服务器
                         OkHttpClient client=new OkHttpClient();
                         FormBody.Builder re=new FormBody.Builder();
                         RequestBody requestBody=re.add("userId", String.valueOf(userId))
-                                .add("name",name)
-                                .add("type",type).build();
-                        Request request=new Request.Builder().url("").post(requestBody).build();//ip参数
-
+                                .add("albumName",name)
+                                .add("theme",type).build();
+                        Request request=new Request.Builder().url(Constant.URL+"album/add").post(requestBody).build();//ip参数
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                Toast.makeText(AddAlbumActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+                                message.what=1;
+                                handler.sendMessage(message);
                             }
-
-                            @SuppressLint("WrongConstant")
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                String string=response.body().string();//添加成功返回1，否则返回0
-                                if(string.equals("1")){
-                                    //跳转页面到图片选择器
-                                    finish();
+                                String string=response.body().string();//添加成功返回0，否则返回-1
+                                Log.e("albumId",string);
+                                if(string.equals("-1")){
+                                    message.what=3;
+                                    handler.sendMessage(message);
                                 }
                                 else{
-                                    Toast.makeText(AddAlbumActivity.this,"请检查网络111",Toast.LENGTH_SHORT).show();
-                                }
+                                    message.what=2;
+                                    message.obj=string;//返回的时一个albumId
+                                    handler.sendMessage(message);
 
+                                }
                             }
                         });
-
-
                     }
                     break;
                 case R.id.btn_return0:
@@ -126,6 +137,22 @@ public class AddAlbumActivity extends AppCompatActivity {
                     break;
             }
         }
+        private Handler handler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+               if (msg.what==1){
+                   Toast.makeText(AddAlbumActivity.this,"网络连接失败",Toast.LENGTH_SHORT).show();
+               }
+               if (msg.what==2){
+                   Intent intent=new Intent(AddAlbumActivity.this,AddPictureActivity.class).putExtra("albumId",msg.obj.toString());
+                   startActivity(intent);
+                   finish();
+               }
+               if (msg.what==3){
+                   Toast.makeText(AddAlbumActivity.this,"创建失败，请在设置中进行反馈",Toast.LENGTH_SHORT).show();
+               }
+            }
+        };
     }
 
     private void changeTab(String s) {
