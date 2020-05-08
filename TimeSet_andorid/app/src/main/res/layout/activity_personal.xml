@@ -38,7 +38,8 @@
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:src="@drawable/moren_img" />
+        android:src="@drawable/moren_img"
+        android:onClick="modifyClick"/>
 
     <LinearLayout
         android:layout_width="match_parent"

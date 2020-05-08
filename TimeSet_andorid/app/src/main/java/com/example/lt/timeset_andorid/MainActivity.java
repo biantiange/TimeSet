@@ -139,8 +139,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void findUserPic() {
-        RequestOptions options=new RequestOptions().circleCrop();
-        Glide.with(this).load(R.drawable.touxiang).apply(options).into(img);
+        String headImgPath= sharedPreferences.getString( "headImg", "" );
+        RequestOptions options=new RequestOptions().circleCrop().placeholder( R.drawable.touxiang).error( R.drawable.touxiang );
+        Glide.with(this).load(headImgPath).apply(options).into(img);
     }
 
     private void findDefaultAlbum() {

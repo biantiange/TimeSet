@@ -5,6 +5,7 @@
     android:background="#fff"
 
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
@@ -39,6 +40,7 @@
             android:layout_gravity="center_vertical"
             >
             <TextView
+
                 android:layout_width="50dp"
                 android:textSize="20dp"
                 android:layout_height="27dp"
@@ -63,26 +65,30 @@
         android:paddingRight="10dp"
         />
     <LinearLayout android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         android:layout_marginBottom="15dp"
         >
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="35dp"
+            android:src="@drawable/zhuti"/>
         <TextView android:layout_width="0dp"
             android:layout_weight="1"
-            android:textSize="16dp"
+            android:textSize="18dp"
             android:gravity="center_vertical"
             android:textStyle="bold"
             android:layout_height="match_parent"
             android:text="主题"/>
         <TextView android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             />
         <TextView android:layout_width="0dp"
             android:layout_weight="1"
-            android:textSize="14dp"
+            android:textSize="15dp"
             android:gravity="center"
             android:textColor="#339999"
             android:layout_height="match_parent"
@@ -92,9 +98,7 @@
         android:id="@+id/tab_widget"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_height="80dp"
         android:orientation="horizontal">
         <LinearLayout
             android:id="@+id/tab_spec_1"
@@ -107,12 +111,13 @@
                 android:id="@+id/img_1"
                 android:src="@drawable/ordinary"
                 android:layout_marginBottom="2dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
             <TextView
                 android:layout_marginTop="2dp"
                 android:id="@+id/tv_1"
                 android:text="普通"
+                android:textSize="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -125,14 +130,15 @@
             android:layout_height="match_parent">
             <ImageView
                 android:id="@+id/img_2"
-                android:src="@drawable/friend"
+                android:src="@drawable/friendd"
                 android:layout_marginBottom="2dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_width="50dp"
+                android:layout_height="40dp" />
             <TextView
                 android:id="@+id/tv_2"
                 android:text="朋友"
                 android:layout_marginTop="2dp"
+                android:textSize="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -146,14 +152,13 @@
             <ImageView
                 android:id="@+id/img_3"
                 android:src="@drawable/parent_child"
-
                 android:layout_marginBottom="2dp"
-
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_width="50dp"
+                android:layout_height="40dp" />
             <TextView
                 android:id="@+id/tv_3"
                 android:text="亲子"
+                android:textSize="15dp"
                 android:layout_marginTop="2dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -167,14 +172,15 @@
             android:layout_height="match_parent">
             <ImageView
                 android:id="@+id/img_4"
-                android:src="@drawable/travel"
+                android:src="@drawable/lvyou"
                 android:layout_marginBottom="2dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
             <TextView
                 android:id="@+id/tv_4"
                 android:layout_marginTop="2dp"
                 android:text="旅游"
+                android:textSize="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -189,15 +195,17 @@
                 android:id="@+id/img_5"
                 android:src="@drawable/lovers"
                 android:layout_marginBottom="2dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_width="50dp"
+                android:layout_height="40dp" />
             <TextView
                 android:id="@+id/tv_5"
                 android:text="情侣"
+                android:textSize="15dp"
                 android:layout_marginTop="2dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </LinearLayout> <LinearLayout
+        </LinearLayout>
+        <LinearLayout
         android:id="@+id/tab_spec_6"
         android:orientation="vertical"
         android:gravity="center"
@@ -206,39 +214,38 @@
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/img_6"
-            android:src="@drawable/home"
+            android:src="@drawable/family"
             android:layout_marginBottom="2dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
         <TextView
             android:id="@+id/tv_6"
             android:text="家庭"
+            android:textSize="15dp"
             android:layout_marginTop="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
     </LinearLayout>
     <LinearLayout android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="50dp"
         android:gravity="center"
         android:layout_margin="40dp">
-
         <Button
             android:id="@+id/to_add_album"
             android:layout_width="150dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
-            android:background="@drawable/toadd"
+            android:background="@drawable/shape_round_button"
             android:text="完成创建"
-            android:textColor="#fff"
+            android:textColor="@color/FloralWhite"
             android:textSize="18dp" />
 
     </LinearLayout>
 
 
-
-
-
-
-
 </LinearLayout>
+
+
+
+

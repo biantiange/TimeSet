@@ -27,6 +27,9 @@ public interface UserMapper {
     //根据id和手机号修改密码
     public  int updateUserPasswordByPhone(String phone,String password);
 
+    //根据id修改手机号
+    public int updateUserPhoneByUserId(@Param("phone") String phone,@Param("id") String id);
+
     //查询所有用户
     public List<User> findAllPhone();
 
