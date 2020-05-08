@@ -3,44 +3,55 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:paddingBottom="2dp"
         android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/btn_return1"
-            android:layout_width="0dp"
+        <LinearLayout android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="38dp"
-            android:background="#fff"
+            android:layout_height="40dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/return4"
-            />
+            >
+            <ImageButton
+                android:id="@+id/btn_return1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/return32"
+
+                />
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/album_name"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:gravity="center"
-            android:layout_weight="9"
-            android:text="XXX相册"
-            android:textSize="18dp"
+            android:layout_weight="8"
+            android:id="@+id/album_name"
+            android:textSize="20dp"
             android:textColor="#000"
             android:layout_gravity="center"
             />
-        <ImageButton
-            android:layout_gravity="center_vertical"
-            android:id="@+id/btn_search"
-            android:layout_width="0dp"
+        <LinearLayout android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="38dp"
-            android:background="#fff"
-
-            android:src="@drawable/search"
-
-            />
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            >
+            <TextView
+                android:id="@+id/btn_search"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+               android:background="@drawable/search"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
     </LinearLayout>
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:lines="1"
+        android:textSize="5dp"
+        android:text="—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————-—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————----"
+        />
+
     <LinearLayout
         android:id="@+id/tab_widget"
         android:layout_alignParentBottom="true"

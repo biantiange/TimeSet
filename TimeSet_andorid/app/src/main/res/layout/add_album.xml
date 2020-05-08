@@ -5,30 +5,54 @@
     android:background="#fff"
 
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <FrameLayout android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:paddingBottom="2dp"
-        android:background="@drawable/add_ablum_bg1"
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:orientation="horizontal">
+        <LinearLayout android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            >
+            <ImageButton
+                android:id="@+id/btn_return0"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/return32"
 
-        <ImageButton
-            android:id="@+id/btn_return0"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:background="#fff"
+                />
+        </LinearLayout>
 
-            android:src="@drawable/return4"
-            />
-        <TextView android:layout_height="wrap_content"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
             android:gravity="center"
+            android:layout_weight="8"
             android:text="创建相册"
-            android:textSize="18dp"
+            android:textSize="20dp"
             android:textColor="#000"
             android:layout_gravity="center"
             />
-    </FrameLayout>
+        <LinearLayout android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="50dp"
+                android:textSize="20dp"
+                android:layout_height="27dp"
+                android:textColor="#3366CC"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:lines="1"
+        android:textSize="5dp"
+        android:text="——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————----"
+        />
     <EditText
         android:id="@+id/album_name"
         android:layout_marginTop="10dp"
@@ -202,7 +226,7 @@
         <Button
             android:id="@+id/to_add_album"
             android:layout_width="150dp"
-            android:layout_height="21dp"
+            android:layout_height="35dp"
             android:layout_gravity="center"
             android:background="@drawable/toadd"
             android:text="完成创建"
