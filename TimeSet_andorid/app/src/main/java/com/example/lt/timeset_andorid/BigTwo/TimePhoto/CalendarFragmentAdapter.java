@@ -1,6 +1,7 @@
 package com.example.lt.timeset_andorid.BigTwo.TimePhoto;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,24 +53,13 @@ public class CalendarFragmentAdapter extends BaseAdapter {
             holder=(ViewHolder) convertView.getTag();
         }
         // 给数据项填充数据
-
-
-
         holder.txt_name.setText(dataSource.get(position).getPtime());
         //gridView填充数据，创建adapter
         List<Photo> phoneList=dataSource.get(position).getPhotoList();
         CalendarImgAdapter calendarImgAdapter=new CalendarImgAdapter(context,phoneList, R.layout.in_album_list_item_gridview_item);
         holder.gridView.setAdapter(calendarImgAdapter);
-        //时间
 
-        // 给列表项中的控件注册事件监听器
-       /* holder.txt_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //点击更多，显示更多数据
-                Toast.makeText(context,"更多数据。。。",Toast.LENGTH_SHORT).show();
-            }
-        });*/
+
         return convertView;
     }
     private  class ViewHolder{

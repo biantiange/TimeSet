@@ -15,9 +15,21 @@
     <select id="findAll" resultType="com.timeset.photo.entity.Photo">
         select * from photo
     </select>
-
-    <select id="findByAlbum" resultType="com.timeset.photo.entity.Photo">
-        select * from photo where album_id=#{albumId}
+    <resultMap type="com.timeset.photo.entity.PhotoList" id="PhotoListMap">
+        <id property="ptime" column="ptime"/>
+        <collection property="photoLists" ofType="com.timeset.photo.entity.Photo">
+            <result property="id" column="id"/>
+            <result property="albumId" column="album_id"/>
+            <result property="userId" column="user_id"/>
+            <result property="ptime" column="ptime"/>
+            <result property="pdescribe" column="pdescribe"/>
+            <result property="place" column="place"/>
+            <result property="path" column="path"/>
+            <result property="identify" column="identify"/>
+        </collection>
+    </resultMap>
+    <select id="findByAlbum" resultMap="PhotoListMap" >
+        select * from photo where album_id=#{albumId} and user_id=#{uerId} order by ptime desc
     </select>
 
     <select id="findByTime" resultType="com.timeset.photo.entity.Photo">

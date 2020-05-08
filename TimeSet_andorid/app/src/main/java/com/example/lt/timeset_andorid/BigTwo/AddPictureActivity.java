@@ -27,6 +27,7 @@ public class AddPictureActivity extends AppCompatActivity {
     private TextView upLoad;
     private EditText text;
     private GridView gridView;
+    private int albumId;
     private static final int REQUEAT_SELECT_CODE = 100;
     private static final int REQUEST_CAMERA_CODE = 120;
     private static final int CAMERA_OK = 140;
@@ -35,6 +36,7 @@ public class AddPictureActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.in_album_add_img);
+        albumId=getIntent().getExtras().getInt("albumId",-1);
         findView();
         setAdapter();
     }

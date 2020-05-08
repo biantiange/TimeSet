@@ -1,6 +1,9 @@
 package com.timeset.photo.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.timeset.photo.entity.Photo;
+import com.timeset.photo.entity.PhotoList;
 import com.timeset.photo.service.PhotoServiceImpl;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +14,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -81,17 +85,23 @@ public class PhotoController {
     }
 
     @RequestMapping("/findByAlbum")
-    public List<Photo> findByAlbum(@RequestParam("albumId") String albumId) {
+    public String findByAlbum(@RequestParam("albumId") String alId,@RequestParam("userId") String userId) {
         System.out.println("根据相册查询图片");
-        if (albumId != null && !albumId.equals("")) {
-            return photoService.findByAlbum(albumId);
-        }
-        return photosList;
+
+        int albumId= Integer.parseInt(alId);
+        int useId= Integer.parseInt(userId);
+        List<PhotoList> lists=null;
+        Gson gson=new GsonBuilder().serializeNulls().create();
+        lists=photoService.findByAlbum(albumId,useId);
+        String gsonString=gson.toJson(lists);
+        System.out.println(gsonString);
+        return gsonString;
 
     }
 
     @RequestMapping("/findByTime")
     public List<Photo> findByTime(@RequestParam("time") String date,@RequestParam("userId")int userId) {
+
         System.out.println("根据时间查询图片");
         if (userId>0 && date != null && !date.equals("")) {
             return photoService.findByTime(date,userId);

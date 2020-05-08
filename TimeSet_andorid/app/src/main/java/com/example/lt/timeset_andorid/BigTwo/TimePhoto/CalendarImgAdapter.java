@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.lt.timeset_andorid.R;
 
 import java.util.List;
@@ -53,7 +54,13 @@ public class CalendarImgAdapter extends BaseAdapter {
         }
         // 给数据项填充数据
         Photo photo=dataSource.get(position);
-        Glide.with(context).load(photo.getPath()).into(holder.img);
+        String path=photo.getPath();
+        //使用请求选项设置占位符
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.timg)
+                .error(R.drawable.timg)
+                .fallback(R.drawable.timg);
+        Glide.with(context).load(path).apply(requestOptions).into(holder.img);
 
         //设置图片单击事件，将phone参数传进图片查看器
         holder.img.setOnClickListener(new View.OnClickListener() {
