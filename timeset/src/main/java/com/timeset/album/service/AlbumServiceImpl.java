@@ -25,7 +25,7 @@ public class AlbumServiceImpl {
     public List<Album> findAll(int userId){return albumMapper.findAll(userId);};
 
     //增加相册
-    public int addAlbum(int userId,String theme,String albumName){return albumMapper.addAlbum(userId,theme,albumName);};
+    public int addAlbum(Album album){return albumMapper.addAlbum(album);};
 
     //删除相册
     public int deleteAlbum(int id){return albumMapper.deleteAlbum(id);};
