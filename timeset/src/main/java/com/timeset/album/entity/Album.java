@@ -25,14 +25,6 @@ public class Album {
                 '}';
     }
 
-    public String getAlbumPic() {
-        return albumPic;
-    }
-
-    public void setAlbumPic(String albumPic) {
-        this.albumPic = albumPic;
-    }
-
     public int getId() {
         return id;
     }
@@ -63,5 +55,13 @@ public class Album {
 
     public void setAlbumName(String albumName) {
         this.albumName = albumName;
+    }
+
+    public String getAlbumPic() {
+        return albumPic;
+    }
+
+    public void setAlbumPic(String albumPic) {
+        this.albumPic = albumPic;
     }
 }

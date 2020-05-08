@@ -17,7 +17,7 @@ public interface AlbumMapper {
     public List<Album> findAll(int userId);
 
     //增加相册
-    public int addAlbum(int userId,String theme,String albumName);
+    public int addAlbum(Album album);
 
     //删除相册
     public int deleteAlbum(int id);

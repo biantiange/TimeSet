@@ -28,34 +28,38 @@ public class PhotoController {
     private PhotoServiceImpl photoService;
 
     @RequestMapping("/add")
-    public int addPhoto(@RequestParam("file") MultipartFile file, HttpServletRequest request, @RequestParam("userId")  int userId, @RequestParam("albumId")  int albumId, @RequestParam("ptime") String ptime,
+    public int addPhoto(@RequestParam("file") MultipartFile files[], HttpServletRequest request, @RequestParam("userId")  int userId, @RequestParam("albumId")  int albumId, @RequestParam("ptime") String ptime,
                         @RequestParam("place")  String place,@RequestParam("describe")  String describe){
         System.out.println("插入图片");
-        // 生成新的文件名
-        String fileName = System.currentTimeMillis()+file.getOriginalFilename();
-        // 保存路径
-        String destFileName=request.getServletContext().getRealPath("")+"uploaded"+ File.separator+fileName;
-        // 执行保存操作
-        File destFile = new File(destFileName);
-        if (!destFile.getParentFile().exists()){
-            destFile.getParentFile().mkdir();
+        if(files!=null && files.length>=1){
+            for(MultipartFile file:files){
+                // 生成新的文件名
+                String fileName = System.currentTimeMillis()+file.getOriginalFilename();
+                // 保存路径
+                String destFileName=request.getServletContext().getRealPath("")+"uploaded"+ File.separator+fileName;
+                // 执行保存操作
+                File destFile = new File(destFileName);
+                if (!destFile.getParentFile().exists()){
+                    destFile.getParentFile().mkdir();
+                }
+                try {
+                    file.transferTo(destFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Photo photo=new Photo();
+                photo.setUserId(userId);
+                photo.setAlbumId(albumId);
+                photo.setPtime(ptime);
+                photo.setPdescribe(describe);
+                photo.setPath(File.separator+fileName);
+                int result=photoService.addPhoto(photo);
+                if(result==0){
+                    return -1;
+                }
+            }
         }
-        try {
-            file.transferTo(destFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Photo photo=new Photo();
-        photo.setUserId(userId);
-        photo.setAlbumId(albumId);
-        photo.setPtime(ptime);
-        photo.setPdescribe(describe);
-        photo.setPath(File.separator+fileName);
-        int result=photoService.addPhoto(photo);
-        if(result!=0){
-            return 0;
-        }
-        return -1;
+        return 0;
     }
 
     @RequestMapping("/delete")

@@ -7,8 +7,8 @@
         select * from album where user_id=#{userId}
     </select>
 
-    <insert id="addAlbum" useGeneratedKeys="true">
-        insert into album(user_id,theme,album_name) values(#{userId},#{theme},#{albumName})
+    <insert id="addAlbum" useGeneratedKeys="true" keyProperty="id" parameterType="com.timeset.album.entity.Album">
+        insert into album(user_id,theme,album_name,album_pic) values(#{useId},#{theme},#{albumName},#{albumPic})
     </insert>
 
     <delete id="deleteAlbum">
