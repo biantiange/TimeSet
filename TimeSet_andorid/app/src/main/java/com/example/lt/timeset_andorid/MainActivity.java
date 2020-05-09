@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -87,10 +88,14 @@ public class MainActivity extends AppCompatActivity {
         userId=sharedPreferences.getInt("id",1);
         //个人设置
         initView();
-        //设置头像（抽屉内的）
+        //设置头像and nickName（抽屉内的）
         View headerView = navigationView.getHeaderView(0);//获取头布局
         ImageView headImg = headerView.findViewById(R.id.person);
-        headImg.setImageResource(R.drawable.geren);
+        String headImgPath= sharedPreferences.getString( "headImg", "" );
+        RequestOptions options=new RequestOptions().circleCrop().placeholder( R.drawable.touxiang).error( R.drawable.touxiang );
+        Glide.with(this).load(headImgPath).apply(options).into(headImg);
+        TextView nickName = headerView.findViewById(R.id.nickName);
+        nickName.setText(sharedPreferences.getString("userName","errorGetName"));
         //点击头像划出测边框
         img = findViewById(R.id.img);
         img.setOnClickListener(v -> {

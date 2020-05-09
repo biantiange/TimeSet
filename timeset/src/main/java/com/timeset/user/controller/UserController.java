@@ -103,6 +103,7 @@ public class UserController {
             String headImg = System.currentTimeMillis()+file.getOriginalFilename();
             // 保存路径
             String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+headImg;
+            System.out.println(destFileName);
             // 执行保存操作
             File destFile = new File(destFileName);
             if (!destFile.getParentFile().exists()){
