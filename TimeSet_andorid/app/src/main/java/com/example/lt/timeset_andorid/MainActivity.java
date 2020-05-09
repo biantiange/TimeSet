@@ -188,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
                     message.what=2;
                     message.obj=album;
                     handler.sendMessage(message);
-
                 }
             }
         });
@@ -197,40 +196,42 @@ public class MainActivity extends AppCompatActivity {
         Integer [] images={R.drawable.meishi ,R.drawable.jiaoche,R.drawable.fengjing,R.drawable.pengyou };
         for(int i=0;i<albumList.size();i++){
             Map<String, Object> map1 = new HashMap<String, Object>();
+           /* map1.put("image",images[i%4]);*/
             map1.put("text", albumList.get(i).getAlbumName());
             map1.put("id",albumList.get(i).getId());
             switch (albumList.get(i).getTheme()){
                 case "美食":
-                    map1.put("image", R.drawable.meishi);
+                    map1.put("image", R.drawable.meimei);
                     break;
                 case "兴趣":
-                    map1.put("image", R.drawable.jiaoche );
+                    map1.put("image", R.drawable.huahau);
                     break;
                 case "风景":
-                    map1.put("image", R.drawable.fengjing );
+                    map1.put("image", R.drawable.fengjingjing );
                     break;
                 case "朋友":
                     map1.put("image", R.drawable.pengyou );
                     break;
                 case "普通":
-                    map1.put("image", images[i%4] );
+                    map1.put("image",R.drawable.putong);
+                    break;
+                case "亲子":
+                    map1.put("image",R.drawable.qinzi );
                     break;
                 case "情侣":
-                    map1.put("image", images[i%4] );
+                    map1.put("image", R.drawable.qinglv );
                     break;
                 case "家庭":
-                    map1.put("image", images[i%4] );
+                    map1.put("image", R.drawable.jiating );
                     break;
                 case "旅游":
-                    map1.put("image", images[i%4] );
+                    map1.put("image", R.drawable.lvyouu);
                     break;
-            }
+           }
             list.add(map1);
         }
         grideAdapter=new GrideAdapter(MainActivity.this,list,R.layout.list_gride);
         gridView.setAdapter(grideAdapter);
-
-
     }
     private void initView(){
         main_drawer_layout=findViewById(R.id.maindrawer_layout);
