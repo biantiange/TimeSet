@@ -1,5 +1,6 @@
 package com.example.lt.timeset_andorid.Search;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,6 +39,7 @@ public class SearchActivity extends AppCompatActivity {
     private EditText etSearch;
     private LinearLayout linearLayoutNoSearch;
     private Map<String, List<Photo>> dataSource;
+    private SharedPreferences sharedPreferences;
     private static final int GET_LISTVIEW_INF0 = 100;
     private String searchStr = "";
 
@@ -83,7 +85,9 @@ public class SearchActivity extends AppCompatActivity {
 
     private void initListView(String str) {
         OkHttpClient okHttpClient = new OkHttpClient();
-        FormBody.Builder builder = new FormBody.Builder().add("str", str + "").add("userId", "1");
+        sharedPreferences=this.getSharedPreferences("user",MODE_PRIVATE);
+        int userId=sharedPreferences.getInt("id",-1);
+        FormBody.Builder builder = new FormBody.Builder().add("str", str + "").add("userId", String.valueOf(userId));
         FormBody body = builder.build();
         Request request = new Request.Builder().post(body).url(Constant.URL + "photo/find").build();
         Call call = okHttpClient.newCall(request);
