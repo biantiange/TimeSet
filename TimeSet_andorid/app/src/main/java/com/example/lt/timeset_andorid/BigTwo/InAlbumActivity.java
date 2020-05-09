@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class InAlbumActivity extends AppCompatActivity {
     private ImageButton return0;
-    private ImageButton btn_search;
+    private TextView btn_search;
     private LinearLayout layout1;
     private LinearLayout layout2;
     private int albumId;
@@ -45,6 +45,7 @@ public class InAlbumActivity extends AppCompatActivity {
         setContentView(R.layout.in_album);
         //获取intent发送的相册id以及相册name
         id11=getIntent().getIntExtra("id",-1);
+
         setId(id11);
         Log.e("id",getId()+"===================");
         initData();
@@ -65,7 +66,7 @@ public class InAlbumActivity extends AppCompatActivity {
         return0=findViewById(R.id.btn_return1);
         btn_search=findViewById(R.id.btn_search);
         albumName=findViewById(R.id.album_name);
-        albumName.setText(getIntent().getStringExtra("name"));
+        albumName.setText(getIntent().getStringExtra("albumName"));
     }
     private void setListener() {
         MyListener listener = new MyListener();

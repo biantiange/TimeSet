@@ -139,8 +139,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void findUserPic() {
-        RequestOptions options=new RequestOptions().circleCrop();
-        Glide.with(this).load(R.drawable.touxiang).apply(options).into(img);
+        String headImgPath= sharedPreferences.getString( "headImg", "" );
+        RequestOptions options=new RequestOptions().circleCrop().placeholder( R.drawable.touxiang).error( R.drawable.touxiang );
+        Glide.with(this).load(headImgPath).apply(options).into(img);
     }
 
     private void findDefaultAlbum() {
@@ -196,9 +197,34 @@ public class MainActivity extends AppCompatActivity {
         Integer [] images={R.drawable.meishi ,R.drawable.jiaoche,R.drawable.fengjing,R.drawable.pengyou };
         for(int i=0;i<albumList.size();i++){
             Map<String, Object> map1 = new HashMap<String, Object>();
-            map1.put("image", images[i%4] );
             map1.put("text", albumList.get(i).getAlbumName());
             map1.put("id",albumList.get(i).getId());
+            switch (albumList.get(i).getTheme()){
+                case "美食":
+                    map1.put("image", R.drawable.meishi);
+                    break;
+                case "兴趣":
+                    map1.put("image", R.drawable.jiaoche );
+                    break;
+                case "风景":
+                    map1.put("image", R.drawable.fengjing );
+                    break;
+                case "朋友":
+                    map1.put("image", R.drawable.pengyou );
+                    break;
+                case "普通":
+                    map1.put("image", images[i%4] );
+                    break;
+                case "情侣":
+                    map1.put("image", images[i%4] );
+                    break;
+                case "家庭":
+                    map1.put("image", images[i%4] );
+                    break;
+                case "旅游":
+                    map1.put("image", images[i%4] );
+                    break;
+            }
             list.add(map1);
         }
         grideAdapter=new GrideAdapter(MainActivity.this,list,R.layout.list_gride);

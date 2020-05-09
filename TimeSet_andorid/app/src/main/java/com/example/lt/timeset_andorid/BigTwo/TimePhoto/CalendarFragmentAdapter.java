@@ -53,7 +53,8 @@ public class CalendarFragmentAdapter extends BaseAdapter {
             holder=(ViewHolder) convertView.getTag();
         }
         // 给数据项填充数据
-        holder.txt_name.setText(dataSource.get(position).getPtime());
+        String time=dataSource.get(position).getPtime();
+        holder.txt_name.setText(time.substring(0,4)+"年"+time.substring(4,6)+"月"+time.substring(6,8)+"日");
         //gridView填充数据，创建adapter
         List<Photo> phoneList=dataSource.get(position).getPhotoList();
         CalendarImgAdapter calendarImgAdapter=new CalendarImgAdapter(context,phoneList, R.layout.in_album_list_item_gridview_item);
