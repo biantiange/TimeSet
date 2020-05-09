@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         userId=sharedPreferences.getInt("id",1);
         //个人设置
         initView();
-        //设置头像
+        //设置头像（抽屉内的）
         View headerView = navigationView.getHeaderView(0);//获取头布局
         ImageView headImg = headerView.findViewById(R.id.person);
         headImg.setImageResource(R.drawable.geren);
