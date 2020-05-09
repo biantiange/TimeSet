@@ -17,21 +17,24 @@ android {
             storeFile file('D:\\Android\\project\\keystore.jks')
             storePassword '123456'
         }
+
         debug {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('E:\\debug.keystore')
+            storeFile file('E:/debug.keystore')
             storePassword 'android'
         }
+
     }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.lt.timeset_andorid"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -45,7 +48,16 @@ android {
     }
     buildToolsVersion = '28.0.3'
 }
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://dl.google.com/dl/android/maven2/" }
+        maven { url "https://jitpack.io" }
 
+    }
+}
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -68,9 +80,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.8.0'
     // OkHttp
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    //PictureSelector
-    //    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
-    //    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.3'
+    // EventBus
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }

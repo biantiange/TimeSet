@@ -34,12 +34,7 @@
         <activity android:name=".Login.LoginActivity">
            <!-- android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"-->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".Login.PhoneTestActivity" />
@@ -47,7 +42,23 @@
         <activity android:name=".Album.AddAlbumActivity" />
         <activity android:name=".BigTwo.InAlbumActivity"/>
         <activity android:name=".Search.SearchActivity"/>
-        <activity android:name=".BigTwo.AddPictureActivity"/>
+        <activity android:name=".BigTwo.AddPictureActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <provider
+            android:name=".util.PictureFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
