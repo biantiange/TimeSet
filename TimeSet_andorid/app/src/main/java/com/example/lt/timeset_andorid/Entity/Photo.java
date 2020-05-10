@@ -8,6 +8,24 @@ public class Photo {
     private String place;
     private String path;
     private String identify;
+    private String Latitude;//纬度
+    private String longitude;//经度
+
+    public String getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        Latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
 
     public int getId() {
         return id;

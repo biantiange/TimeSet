@@ -109,7 +109,7 @@ public class CalendarFragment extends Fragment {
                Gson gson=new GsonBuilder().serializeNulls().create();
                List<PhotoList> list= gson.fromJson(msg.obj.toString(),new TypeToken<List<PhotoList>>() {}.getType());
                datasource=list;
-               Log.e("s=====================",list.size()+"");
+               Log.e("s=====================",list.size()+""+list.toString());
                CalendarFragmentAdapter calendarFragmentAdapter=new CalendarFragmentAdapter(getContext(),datasource, R.layout.in_album_list_item);
                listView.setAdapter(calendarFragmentAdapter);
            }

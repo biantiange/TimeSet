@@ -25,9 +25,9 @@ public class PhotoServiceImpl {
     private AipOcr aipOcr = TextRecogintion.getAipOcr();
     private AipImageClassify aipImageClassify = ImageRecogintion.getAipImageClassify();
 
-    public int addPhoto(Photo image) {
+    public int addPhoto(Photo image,String path) {
         // 1. 识别生成image的文字信息
-        String text = TextRecogintion.test(aipOcr, image);
+        String text = TextRecogintion.test(path,aipOcr, image);
         JSONObject textObj = new JSONObject(text);
         System.out.println(textObj.names());
         List<Map<String, String>> textList = new Gson().fromJson(textObj.get("words_result").toString(), List.class);
@@ -36,29 +36,29 @@ public class PhotoServiceImpl {
         for (int i = 0; i < textList.size(); i++) {
             tex.append("\""+textList.get(i).get("words")+"\",");
         }
-        tex.deleteCharAt(tex.length()-1);
         tex.append("]");
-        List<String> listTex = new Gson().fromJson(new String(tex),List.class);
-        System.out.println("生成链表"+listTex.toString());
+
+      /* List<String> listTex = new Gson().fromJson(new String(tex),List.class);
+       System.out.println("生成链表"+listTex.toString());*/
         System.out.println("生成字符串"+new String(tex));
+        System.out.println(tex);
         //2. 识别生成image的物体和场景信息
-        String description = ImageRecogintion.getAdvancedGeneral(aipImageClassify, image);
+        String description = ImageRecogintion.getAdvancedGeneral(path,aipImageClassify, image);
         JSONObject desObj = new JSONObject(description);
         List<Map<String, Object>> desList = new Gson().fromJson(desObj.get("result").toString(), List.class);
         System.out.println("获取的识别物体和场景信息");
         StringBuilder des = new StringBuilder("[");
         for (int i = 0; i < desList.size(); i++) {
-            if (Double.parseDouble(desList.get(i).get("score").toString()) > 0.5) {
+            if (Double.parseDouble(desList.get(i).get("score").toString()) > 0.01) {
                 des.append("\""+desList.get(i).get("keyword")+"\",");
             }
         }
         des.deleteCharAt(des.length()-1);
         des.append("]");
-        List<String> listDec = new Gson().fromJson(new String(des),List.class);
-        System.out.println("生成链表"+listDec.toString());
+       // List<String> listDec = new Gson().fromJson(new String(des),List.class);
+       // System.out.println("生成链表"+listDec.toString());
         System.out.println("生成字符串"+new String(des));
         image.setIdentify(new String(tex)+new String(des));
-        //image.setPdescribe(new String(tex)+new String(des));
         System.out.println("图片信息:"+image.toString());
         int result=photoMapper.addPhoto(image);
         if(result!=0){

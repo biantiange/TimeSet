@@ -2,6 +2,7 @@ package com.timeset.photo.service;
 
 import com.baidu.aip.ocr.AipOcr;
 import com.timeset.photo.entity.Photo;
+import com.timeset.util.Constant;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +45,10 @@ public class TextRecogintion {
         return client;
     }
 
-    public static String test(AipOcr client, Photo image){
-        String path = image.getPath();
+    public static String test(String path1,AipOcr client, Photo image){
+        //String path =image.getPath();
+        String path =path1;
+
         /**
          * 通用文字识别 : client.basicGeneral();
          * 通用文字识别（高精度）: client.basicAccurateGeneral()

@@ -15,6 +15,24 @@ public class Photo {
     private String place;
     private String path;
     private String identify;
+    private String longitude;
+    private String latitude;
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
 
     public int getId() {
         return id;
@@ -88,21 +106,12 @@ public class Photo {
                 ", userId=" + userId +
                 ", pdescribe='" + pdescribe + '\'' +
                 ", ptime='" + ptime + '\'' +
-                ", palce='" + place + '\'' +
+                ", place='" + place + '\'' +
                 ", path='" + path + '\'' +
                 ", identify='" + identify + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", latitude='" + latitude + '\'' +
                 '}';
     }
-
-    public Photo(int albumId, int userId, String pdescribe, String ptime, String palce, String path, String identify) {
-        this.albumId = albumId;
-        this.userId = userId;
-        this.pdescribe = pdescribe;
-        this.ptime = ptime;
-        this.place = palce;
-        this.path = path;
-        this.identify = identify;
-    }
-
     public Photo() { }
 }
