@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import com.example.lt.timeset_andorid.BigTwo.InAlbumActivity;
+import com.example.lt.timeset_andorid.Entity.Album;
 import com.example.lt.timeset_andorid.MainActivity;
 import com.example.lt.timeset_andorid.R;
 import com.example.lt.timeset_andorid.util.Constant;
@@ -120,8 +121,8 @@ public class GrideAdapter extends BaseAdapter {
                     public void onResponse(Call call, Response response) throws IOException {
                     }
                 });
-                Intent intent = new Intent(context,MainActivity.class);
-                context.startActivity(intent);
+                list.remove(list.get(position));
+                notifyDataSetChanged();
             }
         });
         return convertView;
