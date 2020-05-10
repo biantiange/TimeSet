@@ -1,5 +1,7 @@
 package com.example.lt.timeset_andorid.BigTwo.TimePhoto;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 /**
  * @ClassName PhotoList
@@ -23,5 +25,13 @@ public class PhotoList {
     }
     public void setPhotoList(List<Photo> photoList) {
         this.photoLists = photoList;
+    }
+
+    @Override
+    public String toString() {
+        return "PhotoList{" +
+                "ptime='" + ptime + '\'' +
+                ", photoLists=" + photoLists +
+                '}';
     }
 }

@@ -3,6 +3,7 @@ package com.timeset.photo.service;
 
 import com.baidu.aip.imageclassify.AipImageClassify;
 import com.timeset.photo.entity.Photo;
+import com.timeset.util.Constant;
 import org.json.JSONObject;
 
 
@@ -35,8 +36,9 @@ public class ImageRecogintion {
             }
             return client;
         }
-        public static String getAdvancedGeneral(AipImageClassify client, Photo image){
-            String path = image.getPath();
+        public static String getAdvancedGeneral(String path1,AipImageClassify client, Photo image){
+//            String path =image.getPath();
+            String path =path1;
             // 本地文件路径
 
             /**

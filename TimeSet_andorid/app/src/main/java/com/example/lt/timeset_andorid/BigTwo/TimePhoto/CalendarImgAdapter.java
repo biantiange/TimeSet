@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.lt.timeset_andorid.R;
+import com.example.lt.timeset_andorid.util.Constant;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,7 +62,8 @@ public class CalendarImgAdapter extends BaseAdapter {
                 .placeholder(R.drawable.timg)
                 .error(R.drawable.timg)
                 .fallback(R.drawable.timg);
-        Glide.with(context).load(path).apply(requestOptions).into(holder.img);
+        Log.e("paht",Constant.URL+path);
+        Glide.with(context).load(Constant.URL+path).apply(requestOptions).into(holder.img);
 
         //设置图片单击事件，将phone参数传进图片查看器
         holder.img.setOnClickListener(new View.OnClickListener() {
