@@ -2,6 +2,7 @@ package com.example.lt.timeset_andorid.BigTwo;
 
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +44,11 @@ public class InAlbumActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.in_album);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(0xff7adfb8);
+        }
+
         //获取intent发送的相册id以及相册name
         id11=getIntent().getIntExtra("id",-1);
 

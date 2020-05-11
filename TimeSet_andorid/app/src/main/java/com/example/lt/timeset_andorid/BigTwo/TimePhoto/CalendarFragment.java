@@ -2,6 +2,7 @@ package com.example.lt.timeset_andorid.BigTwo.TimePhoto;
 
 import android.app.Notification;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -54,6 +55,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View newView = inflater.inflate( R.layout.in_album_calendar, container, false );
+
         return newView;
     }
 
