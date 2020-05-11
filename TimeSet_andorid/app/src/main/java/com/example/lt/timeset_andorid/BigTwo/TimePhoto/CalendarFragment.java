@@ -48,7 +48,6 @@ public class CalendarFragment extends Fragment {
     private SharedPreferences sharedPreferences;//获取用户信息
     private List<PhotoList> datasource=new ArrayList<>();
     private ListView listView;
-    private ImageViewer iver;
     int albumId;
     int userId;
 
@@ -63,7 +62,6 @@ public class CalendarFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         listView=getActivity().findViewById(R.id.in_album_list_items);
-        iver = getActivity().findViewById(R.id.iver_img_show);
         //获取相册id值//根据用户id或者用户手机号以及相册id查询相册数据
         albumId=getActivity().getIntent().getIntExtra("albumId",-1);
         sharedPreferences=getContext().getSharedPreferences("user",MODE_PRIVATE);
@@ -113,7 +111,7 @@ public class CalendarFragment extends Fragment {
                List<PhotoList> list= gson.fromJson(msg.obj.toString(),new TypeToken<List<PhotoList>>() {}.getType());
                datasource=list;
                Log.e("s=====================",list.size()+""+list.toString());
-               CalendarFragmentAdapter calendarFragmentAdapter=new CalendarFragmentAdapter(getContext(),datasource, R.layout.in_album_list_item,listView,iver);
+               CalendarFragmentAdapter calendarFragmentAdapter=new CalendarFragmentAdapter(getContext(),datasource, R.layout.in_album_list_item);
                listView.setAdapter(calendarFragmentAdapter);
            }
 

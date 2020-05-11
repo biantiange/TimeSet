@@ -7,11 +7,7 @@
     <ListView
         android:id="@+id/in_album_list_items"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 
-    <indi.liyi.viewer.ImageViewer
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/iver_img_show"
-        android:visibility="gone"/>
 </LinearLayout>
