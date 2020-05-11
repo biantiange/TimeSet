@@ -2,9 +2,11 @@ package com.example.lt.timeset_andorid.BigTwo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -16,11 +18,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.lt.timeset_andorid.Entity.Photo;
+import com.example.lt.timeset_andorid.Entity.PhotoJson;
 import com.example.lt.timeset_andorid.R;
+
 import com.example.lt.timeset_andorid.util.Constant;
 import com.example.lt.timeset_andorid.util.GlideEngine;
+import com.example.lt.timeset_andorid.util.GpsUtil;
 import com.example.lt.timeset_andorid.util.OnRecyclerItemClickListener;
+import com.google.gson.Gson;
 import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.PictureSelectorExternalUtils;
 import com.luck.picture.lib.animators.AnimationType;
 import com.luck.picture.lib.camera.CustomCameraView;
 import com.luck.picture.lib.config.PictureConfig;
@@ -37,7 +45,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +72,9 @@ public class AddPictureActivity extends AppCompatActivity {
 
     private int userId;     // 用户id
     private int albumId;    // 相册id
+    private List<String> NWList = new ArrayList<>();//图片经纬度集合
     private List<String> imgPaths = new ArrayList<>();  // 图片本地路径数据源
+    private List<PhotoJson> re = new ArrayList<>();
     private List<LocalMedia> result = new ArrayList<>();
 
     public static final String GET_IMAGES_FROM_ADD = "getImagesFromAdd";
@@ -156,7 +169,33 @@ public class AddPictureActivity extends AppCompatActivity {
 
         @Override
         public void onResult(List<LocalMedia> result1) {
+
             result = result1;
+            for (LocalMedia media : result1) {
+                String ptime = "";
+                String lon = "";
+                String lat = "";
+                Photo photo1 = getInfo(media.getPath());
+                if (photo1 != null) {
+                    String s = photo1.getPtime();
+                    if (s != null) {
+                        String[] s1 = s.split(":");
+                        Log.e("===========", s1.toString());
+                        ptime = s1[0] + s1[1] + s1[2].substring(0, 2);
+                    }
+                    lon = photo1.getLongitude();
+                    lat = photo1.getLatitude();
+
+                }
+                PhotoJson photoJson = new PhotoJson();
+                photoJson.setPtime(ptime);
+                photoJson.setLat(lat);
+                photoJson.setLon(lon);
+
+                re.add(photoJson);
+            }
+
+
 //            for (LocalMedia media : result1) {
 //                Log.i(TAG, "是否压缩:" + media.isCompressed());
 //                Log.i(TAG, "压缩:" + media.getCompressPath());
@@ -168,8 +207,15 @@ public class AddPictureActivity extends AppCompatActivity {
 //                Log.i(TAG, "Android Q 特有Path:" + media.getAndroidQToPath());
 //                Log.i(TAG, "宽高: " + media.getWidth() + "x" + media.getHeight());
 //                Log.i(TAG, "Size: " + media.getSize());
-//                // TODO 可以通过PictureSelectorExternalUtils.getExifInterface();方法获取一些额外的资源信息，如旋转角度、经纬度等信息
+            // TODO 可以通过PictureSelectorExternalUtils.getExifInterface();方法获取一些额外的资源信息，如旋转角度、经纬度等信息
+//
 //            }
+         /*   for (LocalMedia media:result1
+                 ) {
+
+                PictureSelectorExternalUtils.getExifInterface();
+
+            }*/
 
             if (null == adapter) {
                 adapter = new AddPictureRecyclerAdapter(result, AddPictureActivity.this, R.layout.item_add_picture_recycler);
@@ -199,9 +245,9 @@ public class AddPictureActivity extends AppCompatActivity {
     // todo: 获取albumId
     private void initDatas() {
         activity = this;
-//        albumId = getIntent().getExtras().getInt("albumId",-1);
-        albumId = 1;
+        albumId = getIntent().getExtras().getInt("albumId", -1);
         userId = getSharedPreferences("user", MODE_PRIVATE).getInt("id", 0);
+
         mWindowAnimationStyle = new PictureWindowAnimationStyle();
         mWindowAnimationStyle.ofAllAnimation(R.anim.picture_anim_up_in, R.anim.picture_anim_down_out);
     }
@@ -257,16 +303,21 @@ public class AddPictureActivity extends AppCompatActivity {
     private OkHttpClient client = new OkHttpClient();
 
     private void upLoadAllMessage() {
+        //将re转为json字符串
+        Gson gson = new Gson();
+        String jr = gson.toJson(re);
         MediaType MutilPart_Form_Data = MediaType.parse("application/octet-stream;charset=utf-8");
         MultipartBody.Builder requestBodyBuilder = null;
         try {
             requestBodyBuilder = new MultipartBody.Builder()
                     .setType(MediaType.parse("multipart/form-data;charset=utf-8"))
-                    .addFormDataPart("userId", userId + "")// 传递表单数据
+                    .addFormDataPart("userId", String.valueOf(userId))// 传递表单数据
                     .setType(MediaType.parse("multipart/form-data;charset=utf-8"))
-                    .addFormDataPart("content", URLEncoder.encode(etContent.getText().toString(), "utf-8"))
+                    .addFormDataPart("describe", URLEncoder.encode(etContent.getText().toString(), "utf-8"))
                     .setType(MediaType.parse("multipart/form-data;charset=utf-8"))
-                    .addFormDataPart("albumId", albumId + "");
+                    .addFormDataPart("albumId", String.valueOf(albumId))
+                    .addFormDataPart("place", "beijng")
+                    .addFormDataPart("infor", jr);
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -276,13 +327,13 @@ public class AddPictureActivity extends AppCompatActivity {
         if (result.size() > 1) {
             for (int i = 0; i < result.size() - 1; i++) {
                 File file = new File(result.get(i).getPath());
-                requestBodyBuilder.addFormDataPart("files", file.getName(), RequestBody.create(MutilPart_Form_Data, file));
+                requestBodyBuilder.addFormDataPart("file", file.getName(), RequestBody.create(MutilPart_Form_Data, file));
             }
         }
         // 3.3 其余一致
         RequestBody requestBody = requestBodyBuilder.build();
         // todo：ip
-        Request request = new Request.Builder().url(Constant.CON_ADD_IMAGE_IP)
+        Request request = new Request.Builder().url(Constant.CON_ADD_IMAGE_IP + "photo/add")
                 .post(requestBody)
                 .build();
         Call call = client.newCall(request);
@@ -302,16 +353,121 @@ public class AddPictureActivity extends AppCompatActivity {
             }
         });
     }
-    private Handler myHandler = new Handler(){
+
+    private Handler myHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case ADD_ACHIEVE:
-                    Toast.makeText(AddPictureActivity.this,"添加成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPictureActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
                     finish();
                     break;
             }
         }
     };
+
+    private Photo getInfo(String path) {
+        Photo photo = null;
+        try {
+
+            ExifInterface exifInterface = new ExifInterface(path);
+
+            //String guangquan = exifInterface.getAttribute(ExifInterface.TAG_APERTURE);
+            String shijain = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+            Log.e("resultdddd",path+"\t"+shijain);
+            /*String baoguangshijian = exifInterface.getAttribute(ExifInterface.TAG_EXPOSURE_TIME);
+            String jiaoju = exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
+            String chang = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+            String kuan = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
+            String moshi = exifInterface.getAttribute(ExifInterface.TAG_MODEL);
+            String zhizaoshang = exifInterface.getAttribute(ExifInterface.TAG_MAKE);
+            String iso = exifInterface.getAttribute(ExifInterface.TAG_ISO);
+            String jiaodu = exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION);
+            String baiph = exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE);
+            String altitude_ref = exifInterface.getAttribute(ExifInterface
+                    .TAG_GPS_ALTITUDE_REF);*/
+            //String altitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_ALTITUDE);
+            String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+           /* String latitude_ref = exifInterface.getAttribute(ExifInterface
+                    .TAG_GPS_LATITUDE_REF);
+            String longitude_ref = exifInterface.getAttribute(ExifInterface
+                    .TAG_GPS_LONGITUDE_REF);*/
+            String longitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+           /* String timestamp = exifInterface.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP);
+            String processing_method = exifInterface.getAttribute(ExifInterface
+                    .TAG_GPS_PROCESSING_METHOD);*/
+
+            //转换经纬度格式
+            double lat = score2dimensionality(latitude);
+            double lon = score2dimensionality(longitude);
+            /**
+             * 将wgs坐标转换成百度坐标
+             * 就可以用这个坐标通过百度SDK 去获取该经纬度的地址描述
+             */
+            double[] wgs2bd = GpsUtil.wgs2bd(lat, lon);
+            Log.e("==============", "shijian:" + shijain + "jingweidu:" + lat + ":::" + lon);
+
+          /*  StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("光圈 = " + guangquan+"\n")
+                    .append("时间 = " + shijain+"\n")
+                    .append("曝光时长 = " + baoguangshijian+"\n")
+                    .append("焦距 = " + jiaoju+"\n")
+                    .append("长 = " + chang+"\n")
+                    .append("宽 = " + kuan+"\n")
+                    .append("型号 = " + moshi+"\n")
+                    .append("制造商 = " + zhizaoshang+"\n")
+                    .append("ISO = " + iso+"\n")
+                    .append("角度 = " + jiaodu+"\n")
+                    .append("白平衡 = " + baiph+"\n")
+                    .append("海拔高度 = " + altitude_ref+"\n")
+                    .append("GPS参考高度 = " + altitude+"\n")
+                    .append("GPS时间戳 = " + timestamp+"\n")
+                    .append("GPS定位类型 = " + processing_method+"\n")
+                    .append("GPS参考经度 = " + latitude_ref+"\n")
+                    .append("GPS参考纬度 = " + longitude_ref+"\n")
+                    .append("GPS经度 = " + lat+"\n")
+                    .append("GPS经度 = " + lon+"\n");
+
+            Log.e("info",stringBuilder.toString());*/
+            photo = new Photo();
+            photo.setPtime(shijain);
+            photo.setLatitude(String.valueOf(lat));
+            photo.setLongitude(String.valueOf(lon));
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return photo;
+
+    }
+
+
+    /**
+     * 将 112/1,58/1,390971/10000 格式的经纬度转换成 112.99434397362694格式
+     *
+     * @param string 度分秒
+     * @return 度
+     */
+    private double score2dimensionality(String string) {
+        double dimensionality = 0.0;
+        if (null == string) {
+            return dimensionality;
+        }
+
+        //用 ，将数值分成3份
+        String[] split = string.split(",");
+        for (int i = 0; i < split.length; i++) {
+
+            String[] s = split[i].split("/");
+            //用112/1得到度分秒数值
+            double v = Double.parseDouble(s[0]) / Double.parseDouble(s[1]);
+            //将分秒分别除以60和3600得到度，并将度分秒相加
+            dimensionality = dimensionality + v / Math.pow(60, i);
+        }
+        return dimensionality;
+    }
+
+
 }

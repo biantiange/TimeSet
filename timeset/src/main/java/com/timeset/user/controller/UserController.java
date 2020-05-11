@@ -48,7 +48,8 @@ public class UserController {
                 // 生成新的文件名
                 String fileName = System.currentTimeMillis()+file.getOriginalFilename();
                 // 保存路径
-                String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+fileName;
+//                String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+fileName;
+                String destFileName=request.getServletContext().getRealPath("")+"headImg/"+fileName;
                 // 执行保存操作
                 File destFile = new File(destFileName);
                 if (!destFile.getParentFile().exists()){
@@ -59,7 +60,7 @@ public class UserController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                user.setHeadImg("headImg"+ File.separator+fileName);
+                user.setHeadImg("headImg/"+fileName);
             }
             int result = userService.insertUser(user);
             if (result != 0) {

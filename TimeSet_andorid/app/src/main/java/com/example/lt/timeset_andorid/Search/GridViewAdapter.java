@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.lt.timeset_andorid.Entity.Photo;
 import com.example.lt.timeset_andorid.R;
+import com.example.lt.timeset_andorid.util.Constant;
 
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class GridViewAdapter extends BaseAdapter {
         }
         // 给数据项填充数据
         Photo photo=dataSource.get(position);
-        Glide.with(context).load(photo.getPath()).into(holder.img);
+        Glide.with(context).load(Constant.URL+photo.getPath()).into(holder.img);
 
         //设置图片单击事件，将phone参数传进图片查看器
         holder.img.setOnClickListener(new View.OnClickListener() {
