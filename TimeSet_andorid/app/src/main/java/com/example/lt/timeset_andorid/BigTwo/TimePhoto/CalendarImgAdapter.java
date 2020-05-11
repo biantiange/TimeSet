@@ -73,7 +73,7 @@ public class CalendarImgAdapter extends BaseAdapter {
         }
         vdList = new ArrayList<>();
         Point mScreenSize = ViewDataUtils.getScreenSize(context.getApplicationContext());
-        for (int i = 0, len = showImgSource.size() - 1; i < len; i++) {
+        for (int i = 0, len = showImgSource.size(); i < len; i++) {
             ViewData viewData = new ViewData();
             viewData.setImageSrc(showImgSource.get(i));
             viewData.setTargetX(0);
