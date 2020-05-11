@@ -31,18 +31,14 @@
         <activity android:name=".Person.ModifyPasswordActivity" />
         <activity android:name=".Person.SettingActivity" />
         <activity android:name=".Person.PersonalActivity" />
-        <activity android:name=".Login.LoginActivity">
-           <!-- android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"-->
-
-        </activity>
+        <activity android:name=".BigTwo.AddPictureActivity"/>
         <activity android:name=".MainActivity" />
         <activity android:name=".Login.PhoneTestActivity" />
         <activity android:name=".Login.RegistryActivity" />
         <activity android:name=".Album.AddAlbumActivity" />
         <activity android:name=".BigTwo.InAlbumActivity"/>
         <activity android:name=".Search.SearchActivity"/>
-        <activity android:name=".BigTwo.AddPictureActivity">
+        <activity android:name=".Login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
