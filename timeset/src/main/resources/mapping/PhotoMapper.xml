@@ -13,7 +13,7 @@
     </delete>
 
     <select id="findAll" resultType="com.timeset.photo.entity.Photo">
-        select * from photo
+        select * from photo where user_id = #{userId}
     </select>
     <resultMap type="com.timeset.photo.entity.PhotoList" id="PhotoListMap">
         <id property="ptime" column="ptime"/>

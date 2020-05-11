@@ -18,7 +18,7 @@ public interface PhotoMapper {
     public int deletePhoto(int id);
 
     //查找全部照片
-    public List<Photo> findAll(int UserId);
+    public List<Photo> findAll(int userId);
 
     //根据相册查询照片
     public List<PhotoList> findByAlbum(int albumId, int uerId);
