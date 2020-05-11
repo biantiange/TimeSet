@@ -57,6 +57,7 @@ public class PhotoController {
             //String destFileName=Constant.ImgPath+File.separator+fileName;
             // 执行保存操作
             File destFile = new File(destFileName);
+            System.out.println(destFileName);
             if (!destFile.getParentFile().exists()) {
                 destFile.getParentFile().mkdir();
             }
