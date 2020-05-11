@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static org.thymeleaf.util.StringUtils.trim;
+
 /**
  * @ClassName PhotoController
  * @Description
@@ -136,7 +138,8 @@ public class PhotoController {
     }
 
     @RequestMapping("/find")
-    public Map<String, List<Photo>> find(@RequestParam("str") String str, @RequestParam("userId") int userId) {
+    public Map<String, List<Photo>> find(@RequestParam("str") String str1, @RequestParam("userId") int userId) {
+        String str=trim(str1);
         System.out.println("根据字符查询图片");
         if (userId > 0 && str != null && !str.equals("")) {
             return photoService.findPlaceOrDescribeOrIdentify(str, userId);
