@@ -11,6 +11,9 @@ import android.os.Message;
 import android.util.Log;
 
 
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
@@ -68,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView img;
     private ImageView search;
     private ImageView addAlbum;
+    private ImageView  headImg;
+    private  TextView  nickName;
     private List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
     int userId;
     SharedPreferences sharedPreferences;
@@ -78,24 +83,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  SDKInitializer.initialize(getApplicationContext());
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(0xff7adfb8);
-        }*/
         sharedPreferences=getSharedPreferences("user", Context.MODE_PRIVATE);
         userId=sharedPreferences.getInt("id",1);
         //个人设置
         initView();
         //设置头像and nickName（抽屉内的）
         View headerView = navigationView.getHeaderView(0);//获取头布局
-        ImageView headImg = headerView.findViewById(R.id.person);
-        String headImgPath= sharedPreferences.getString( "headImg", "" );
-        RequestOptions options=new RequestOptions().circleCrop().placeholder( R.drawable.touxiang).error( R.drawable.touxiang );
-        Glide.with(this).load(headImgPath).apply(options).into(headImg);
-        TextView nickName = headerView.findViewById(R.id.nickName);
-        nickName.setText(sharedPreferences.getString("userName","errorGetName"));
+         headImg = headerView.findViewById(R.id.person);
+         nickName = headerView.findViewById(R.id.nickName);
+        uperson();
         //点击头像划出测边框
         img = findViewById(R.id.img);
         img.setOnClickListener(v -> {
@@ -127,10 +124,6 @@ public class MainActivity extends AppCompatActivity {
         addAlbum=findViewById(R.id.jiahao);
         img=findViewById(R.id.img);
         search=findViewById(R.id.sousuo);
-        findUserPic();
-        findDefaultAlbum();
-        findAllAlbum();
-
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,6 +136,17 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    private void initView(){
+        main_drawer_layout=findViewById(R.id.maindrawer_layout);
+        navigationView = findViewById(R.id.nav);
+    }
+    private void uperson(){
+        String headImgPath= sharedPreferences.getString( "headImg", "" );
+        RequestOptions options=new RequestOptions().circleCrop().placeholder( R.drawable.touxiang).error( R.drawable.touxiang );
+        Glide.with(this).load(headImgPath).apply(options).into(headImg);
+        nickName.setText(sharedPreferences.getString("userName","errorGetName"));
+    }
     private void findUserPic() {
         String headImgPath= sharedPreferences.getString( "headImg", "" );
         RequestOptions options=new RequestOptions().circleCrop().placeholder( R.drawable.touxiang).error( R.drawable.touxiang );
@@ -150,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findDefaultAlbum() {
-        Log.e("111","111111");
+        Log.e("default","111111");
         Request request=new Request.Builder().url(Constant.URL +"album/all?userId=0").build();
         Call call=okHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -172,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void findAllAlbum() {
-        Log.e("111","111111");
+        Log.e("all","111111");
         Request request=new Request.Builder().url(Constant.URL +"album/all?userId="+userId).build();
         Call call=okHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -193,12 +197,13 @@ public class MainActivity extends AppCompatActivity {
                     message.what=2;
                     message.obj=album;
                     handler.sendMessage(message);
+
                 }
             }
         });
     }
     public void inData(List<Album> albumList){
-        Integer [] images={R.drawable.meishi ,R.drawable.jiaoche,R.drawable.fengjing,R.drawable.pengyou };
+       // Integer [] images={R.drawable.meishi ,R.drawable.jiaoche,R.drawable.fengjing,R.drawable.pengyou };
         for(int i=0;i<albumList.size();i++){
             Map<String, Object> map1 = new HashMap<String, Object>();
            /* map1.put("image",images[i%4]);*/
@@ -237,10 +242,8 @@ public class MainActivity extends AppCompatActivity {
         }
         grideAdapter=new GrideAdapter(MainActivity.this,list,R.layout.list_gride);
         gridView.setAdapter(grideAdapter);
-    }
-    private void initView(){
-        main_drawer_layout=findViewById(R.id.maindrawer_layout);
-        navigationView = findViewById(R.id.nav);
+      //  registerForContextMenu(gridView);//给listview注册上下文菜单
+
     }
     Handler handler=new Handler(){
         @Override
@@ -257,7 +260,47 @@ public class MainActivity extends AppCompatActivity {
                 List<Album> albumList= gson.fromJson((String) msg.obj,listType);
                 inData(albumList);
             }
+            if(msg.what==3){
+                uperson();
+                findUserPic();
+                findDefaultAlbum();
+                findAllAlbum();
+            }
         }
     };
 
+    /*@Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        // 加载xml中的上下文菜单
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.gride_menu, menu);
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit:
+                Toast.makeText(MainActivity.this, "编辑操作", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.share:
+                Toast.makeText(MainActivity.this, "分享操作", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.delete:
+                Toast.makeText(MainActivity.this, "删除操作", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }*/
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+       Log.e("onResume","onResum");
+        Message message=new Message();
+        message.what=3;
+        handler.sendMessage(message);
+    }
 }

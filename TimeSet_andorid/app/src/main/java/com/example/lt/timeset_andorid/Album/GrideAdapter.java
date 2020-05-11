@@ -91,8 +91,8 @@ public class GrideAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
-        //相册的编辑与删除功能
-       /* final  EditText edtext =convertView.findViewById(R.id.text);
+        /*//相册的编辑与删除功能
+        final  EditText edtext =convertView.findViewById(R.id.text);
         holder.textView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

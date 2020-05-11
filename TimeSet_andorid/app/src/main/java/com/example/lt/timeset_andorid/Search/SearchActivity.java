@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,7 +36,7 @@ import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity {
     private ListView listView;
-    private TextView tvSerach;
+    private ImageView tvSerach;
     private EditText etSearch;
     private LinearLayout linearLayoutNoSearch;
     private Map<String, List<Photo>> dataSource;
