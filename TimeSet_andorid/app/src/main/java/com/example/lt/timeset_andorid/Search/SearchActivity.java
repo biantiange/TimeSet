@@ -1,6 +1,7 @@
 package com.example.lt.timeset_andorid.Search;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,7 +37,7 @@ import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity {
     private ListView listView;
-    private TextView tvSerach;
+    private ImageView tvSerach;
     private EditText etSearch;
     private LinearLayout linearLayoutNoSearch;
     private Map<String, List<Photo>> dataSource;
@@ -69,6 +71,9 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(0xff7adfb8);
+        }
         etSearch = findViewById(R.id.et_search);
         linearLayoutNoSearch = findViewById(R.id.ll_no_search);
         listView = findViewById(R.id.lv_search);
