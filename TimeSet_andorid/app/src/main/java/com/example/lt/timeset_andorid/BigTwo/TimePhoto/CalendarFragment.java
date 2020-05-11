@@ -2,6 +2,7 @@ package com.example.lt.timeset_andorid.BigTwo.TimePhoto;
 
 import android.app.Notification;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import indi.liyi.viewer.ImageViewer;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -47,6 +49,7 @@ public class CalendarFragment extends Fragment {
     private SharedPreferences sharedPreferences;//获取用户信息
     private List<PhotoList> datasource=new ArrayList<>();
     private ListView listView;
+    private ImageViewer iver;
     int albumId;
     int userId;
 
@@ -54,6 +57,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View newView = inflater.inflate( R.layout.in_album_calendar, container, false );
+
         return newView;
     }
 
@@ -61,6 +65,7 @@ public class CalendarFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         listView=getActivity().findViewById(R.id.in_album_list_items);
+        iver = getActivity().findViewById(R.id.iver_img_show);
         //获取相册id值//根据用户id或者用户手机号以及相册id查询相册数据
         albumId=getActivity().getIntent().getIntExtra("albumId",-1);
         sharedPreferences=getContext().getSharedPreferences("user",MODE_PRIVATE);
@@ -110,7 +115,7 @@ public class CalendarFragment extends Fragment {
                List<PhotoList> list= gson.fromJson(msg.obj.toString(),new TypeToken<List<PhotoList>>() {}.getType());
                datasource=list;
                Log.e("s=====================",list.size()+""+list.toString());
-               CalendarFragmentAdapter calendarFragmentAdapter=new CalendarFragmentAdapter(getContext(),datasource, R.layout.in_album_list_item);
+               CalendarFragmentAdapter calendarFragmentAdapter=new CalendarFragmentAdapter(getContext(),datasource, R.layout.in_album_list_item,listView,iver);
                listView.setAdapter(calendarFragmentAdapter);
            }
 
