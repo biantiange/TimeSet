@@ -132,7 +132,7 @@ public class CalendarImgAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 //Intent intent=new Intent(context,)
-                showBigImgs(position);
+//                showBigImgs(position);
                 Log.e("图片点击事件",photo.toString());
             }
         });

@@ -84,12 +84,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-<<<<<<< HEAD
-=======
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
         }
->>>>>>> 290e4bf28dd2b67af95bf98a2a9d8d33a154044a
         sharedPreferences=getSharedPreferences("user", Context.MODE_PRIVATE);
         userId=sharedPreferences.getInt("id",1);
         //个人设置
@@ -267,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
                 inData(albumList);
             }
             if(msg.what==3){
+                list.clear();
                 uperson();
                 findUserPic();
                 findDefaultAlbum();
