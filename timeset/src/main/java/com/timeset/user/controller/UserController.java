@@ -3,6 +3,7 @@ package com.timeset.user.controller;
 import com.timeset.photo.entity.Photo;
 import com.timeset.user.entity.User;
 import com.timeset.user.service.UserServiceImpl;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +50,8 @@ public class UserController {
                 String fileName = System.currentTimeMillis()+file.getOriginalFilename();
                 // 保存路径
 //                String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+fileName;
-                String destFileName=request.getServletContext().getRealPath("")+"headImg/"+fileName;
+//                String destFileName=request.getServletContext().getRealPath("")+"headImg/"+fileName;
+                String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+fileName;
                 // 执行保存操作
                 File destFile = new File(destFileName);
                 if (!destFile.getParentFile().exists()){
@@ -60,7 +62,7 @@ public class UserController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                user.setHeadImg("headImg/"+fileName);
+                user.setHeadImg(fileName);
             }
             int result = userService.insertUser(user);
             if (result != 0) {
@@ -103,7 +105,8 @@ public class UserController {
             // 生成新的文件名
             String headImg = System.currentTimeMillis()+file.getOriginalFilename();
             // 保存路径
-            String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+headImg;
+//            String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+headImg;
+            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+headImg;
             System.out.println(destFileName);
             // 执行保存操作
             File destFile = new File(destFileName);
