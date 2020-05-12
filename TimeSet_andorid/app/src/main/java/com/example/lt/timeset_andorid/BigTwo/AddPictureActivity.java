@@ -317,6 +317,8 @@ public class AddPictureActivity extends AppCompatActivity {
                     .setType(MediaType.parse("multipart/form-data;charset=utf-8"))
                     .addFormDataPart("albumId", String.valueOf(albumId))
                     .addFormDataPart("place", "beijng")
+                    .addFormDataPart("city","city")
+                    .addFormDataPart("district","district")
                     .addFormDataPart("infor", jr);
 
         } catch (UnsupportedEncodingException e) {
