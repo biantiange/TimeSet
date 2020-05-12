@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -79,12 +80,22 @@ public class InAlbumActivity extends AppCompatActivity {
         changeFragment(tabStrId[0]);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (iver.onKeyDown(keyCode, event)) {
+            return iver.onKeyDown(keyCode, event);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void viewImage(Map<String,Object> showMap){
         switch (showMap.get("type").toString()){
             case "showImg":
+
                 int position = (int) showMap.get("position");
                 List<String> dataSource = (List<String>) showMap.get("datasource");
+                Log.e("Subscribe",dataSource.get(position));
                 showBigImgs(position,dataSource);
                 break;
         }
@@ -92,6 +103,7 @@ public class InAlbumActivity extends AppCompatActivity {
     // 展示图片
     private void showBigImgs(int position,List<String> showImgSource) {
         iver.setVisibility(View.VISIBLE);
+        llOut.setVisibility(View.GONE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             iver.setElevation(3.0f);
         }
@@ -105,6 +117,9 @@ public class InAlbumActivity extends AppCompatActivity {
             viewData.setTargetWidth(mScreenSize.x);
             viewData.setTargetHeight(ViewDataUtils.dp2px(getApplicationContext(), 200));
             vdList.add(viewData);
+        }
+        for (ViewData data:vdList){
+            Log.e("vdList",""+data.getImageSrc().toString());
         }
         iver.overlayStatusBar(false) // ImageViewer 是否会占据 StatusBar 的空间
                 .viewData(vdList) // 数据源
