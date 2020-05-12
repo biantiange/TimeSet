@@ -43,7 +43,7 @@ public class PhotoController {
 
     @RequestMapping("/add")
     public int addPhoto(@RequestParam("file") MultipartFile files[], HttpServletRequest request, @RequestParam("userId") int userId, @RequestParam("albumId") int albumId,
-                        @RequestParam("place") String place, @RequestParam("describe") String describe, @RequestParam("infor") String infor) {
+                        @RequestParam("city") String city,@RequestParam("district") String district,@RequestParam("place") String place, @RequestParam("describe") String describe, @RequestParam("infor") String infor) {
         System.out.println("插入图片");
         System.out.println(userId);
         Gson gson = new GsonBuilder().serializeNulls().create();
@@ -73,6 +73,8 @@ public class PhotoController {
                 e.printStackTrace();
             }
             Photo photo = new Photo();
+            photo.setCity(city);
+            photo.setDistrict(district);
             photo.setPlace(place);
             photo.setUserId(userId);
             photo.setAlbumId(albumId);

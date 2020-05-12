@@ -5,7 +5,7 @@
 <mapper namespace="com.timeset.photo.mapper.PhotoMapper">
 
     <insert id="addPhoto" useGeneratedKeys="true">
-        insert into photo(user_id,album_id,pdescribe,ptime,place,path,identify,longitude,latitude) values(#{userId},#{albumId},#{pdescribe},#{ptime},#{place},#{path},#{identify},#{longitude},#{latitude})
+        insert into photo(user_id,album_id,pdescribe,ptime,place,path,identify,longitude,latitude,city,district) values(#{userId},#{albumId},#{pdescribe},#{ptime},#{place},#{path},#{identify},#{longitude},#{latitude},#{city},#{district})
     </insert>
 
     <delete id="deletePhoto">
