@@ -21,7 +21,7 @@ public interface PhotoMapper {
     public List<Photo> findAll(int userId);
 
     //根据相册查询照片
-    public List<PhotoList> findByAlbum(int albumId, int uerId);
+    public List<PhotoList> findByAlbum(int albumId, int userId);
 
     //根据时间查询照片
     public List<Photo> findByTime(String ptime,int userId);

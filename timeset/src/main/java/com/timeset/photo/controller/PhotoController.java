@@ -9,6 +9,7 @@ import com.timeset.photo.entity.PhotoList;
 import com.timeset.photo.service.PhotoServiceImpl;
 import com.timeset.user.controller.UserController;
 import com.timeset.util.Constant;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,8 +55,11 @@ public class PhotoController {
             // 生成新的文件名
             String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
             // 保存路径
-            String destFileName = request.getServletContext().getRealPath("") + "uploaded" + File.separator + fileName;
+            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+fileName;
+            //String destFileName1 = request.getServletContext().getRealPath("") + "uploaded" + File.separator + fileName;
             System.out.println(destFileName);
+            //System.out.println(destFileName1);
+
             //String destFileName=Constant.ImgPath+File.separator+fileName;
             // 执行保存操作
             File destFile = new File(destFileName);
@@ -83,7 +87,7 @@ public class PhotoController {
             photo.setPdescribe(describe);
             photo.setLatitude(jlist.get(i).getLat());
             photo.setLongitude(jlist.get(i).getLon());
-            photo.setPath("uploaded" + "/" + fileName);
+            photo.setPath(fileName);
 
             int result = photoService.addPhoto(photo, destFileName);
 //            if (result == 0) {
