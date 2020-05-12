@@ -11,21 +11,25 @@ MobSDK {
 }
 android {
     signingConfigs {
-        config {
-            keyAlias 'key_android'
-            keyPassword '123456'
-            storeFile file('D:\\Android\\project\\keystore.jks')
-            storePassword '123456'
-        }
-
         debug {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('E:/debug.keystore')
+            storeFile file('C:/Users/lt/.android/debug.keystore')
             storePassword 'android'
         }
-
+        config {
+            keyAlias 'key_android'
+            keyPassword '123456'
+            storeFile file('E:/shixun/keystore.jks')
+            storePassword '123456'
+        }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.lt.timeset_andorid"
@@ -71,7 +75,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     //gilde
     implementation 'com.facebook.fresco:fresco:0.13.0'
-
     implementation 'top.zibin:Luban:1.1.1'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.kuyue:utils:1.0.8'
@@ -85,4 +88,6 @@ dependencies {
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.3'
     // EventBus
     implementation 'org.greenrobot:eventbus:3.1.1'
+    //map
+    implementation files('libs/BaiduLBS_Android.jar')
 }
