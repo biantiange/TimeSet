@@ -18,7 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +46,7 @@ public class PhotoController {
 
     @RequestMapping("/add")
     public int addPhoto(@RequestParam("file") MultipartFile files[], HttpServletRequest request, @RequestParam("userId") int userId, @RequestParam("albumId") int albumId,
-                        @RequestParam("city") String city,@RequestParam("district") String district,@RequestParam("place") String place, @RequestParam("describe") String describe, @RequestParam("infor") String infor) {
+                        @RequestParam("city") String city, @RequestParam("district") String district, @RequestParam("place") String place, @RequestParam("describe") String describe, @RequestParam("infor") String infor) {
         System.out.println("插入图片");
         System.out.println(userId);
         Gson gson = new GsonBuilder().serializeNulls().create();
@@ -55,7 +58,7 @@ public class PhotoController {
             // 生成新的文件名
             String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
             // 保存路径
-            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+fileName;
+            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + fileName;
             //String destFileName1 = request.getServletContext().getRealPath("") + "uploaded" + File.separator + fileName;
             System.out.println(destFileName);
             //System.out.println(destFileName1);
@@ -63,7 +66,7 @@ public class PhotoController {
             //String destFileName=Constant.ImgPath+File.separator+fileName;
             // 执行保存操作
             File destFile = new File(destFileName);
-            System.out.println(destFileName);
+//            System.out.println(destFileName);
             if (!destFile.getParentFile().exists()) {
                 destFile.getParentFile().mkdir();
             }
@@ -78,12 +81,12 @@ public class PhotoController {
             photo.setPlace(place);
             photo.setUserId(userId);
             photo.setAlbumId(albumId);
-            String date="";
-            if(jlist.get(i).getPtime().length()==0){
+            String date = "";
+            if (jlist.get(i).getPtime().length() == 0) {
                 SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
-                 date=df.format(new Date());// new Date()为获取当前系统时间
-            }else {
-                date=jlist.get(i).getPtime();
+                date = df.format(new Date());// new Date()为获取当前系统时间
+            } else {
+                date = jlist.get(i).getPtime();
             }
             photo.setPtime(date);
             photo.setPdescribe(describe);
@@ -92,6 +95,7 @@ public class PhotoController {
             photo.setPath(fileName);
 
             int result = photoService.addPhoto(photo, destFileName);
+
 //            if (result == 0) {
 //                return -1;
 //            }
@@ -146,10 +150,12 @@ public class PhotoController {
 
     @RequestMapping("/find")
     public Map<String, List<Photo>> find(@RequestParam("str") String str1, @RequestParam("userId") int userId) {
-        String str=trim(str1);
-        System.out.println("根据字符查询图片");
-        if (userId > 0 && str != null && !str.equals("")) {
-            return photoService.findPlaceOrDescribeOrIdentify(str, userId);
+        if (str1 != null) {
+            String str = trim(str1);
+            System.out.println("根据字符查询图片");
+            if (userId > 0 && str != null && !str.equals("")) {
+                return photoService.findPlaceOrDescribeOrIdentify(str, userId);
+            }
         }
         return null;
     }

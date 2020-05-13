@@ -42,6 +42,9 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     public int getCount() {
+        if(dataSource==null){
+            return 0;
+        }
         return dataSource.size();
     }
 

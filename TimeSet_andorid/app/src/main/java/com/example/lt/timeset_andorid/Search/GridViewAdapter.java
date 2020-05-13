@@ -15,7 +15,12 @@ import com.example.lt.timeset_andorid.Entity.Photo;
 import com.example.lt.timeset_andorid.R;
 import com.example.lt.timeset_andorid.util.Constant;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +32,7 @@ public class GridViewAdapter extends BaseAdapter {
     private Context context;
     private List<Photo> dataSource;
     private int item_layout_id;
-
+    private List<String> showImgSource = new ArrayList<>();
     public GridViewAdapter(Context context, List<Photo> dataSource, int item_layout_id) {
         this.context = context;
         this.dataSource = dataSource;
@@ -41,6 +46,9 @@ public class GridViewAdapter extends BaseAdapter {
     public long getItemId(int position) { return position; }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
+        for (Photo photo : dataSource){
+            showImgSource.add(Constant.URL+photo.getPath());
+        }
         ViewHolder holder;
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(item_layout_id, null);
@@ -57,9 +65,16 @@ public class GridViewAdapter extends BaseAdapter {
         holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Intent intent=new Intent(context,)
+                Map<String,Object> postMap = new HashMap<>();
+                postMap.put("type","searchshowImg");
+                postMap.put("datasource",showImgSource);
+                postMap.put("position",position);
+                EventBus.getDefault().post(postMap);
+                Log.e("图片点击事件-搜索",photo.toString());
             }
         });
+
         return convertView;
     }
     private class ViewHolder extends RecyclerView.ViewHolder{

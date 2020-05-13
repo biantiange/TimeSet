@@ -10,6 +10,10 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.*;
 
 /**
@@ -66,6 +70,7 @@ public class PhotoServiceImpl {
         }
         return -1;
     }
+
 
     public int deletePhoto(int id){return photoMapper.deletePhoto(id);};
 
