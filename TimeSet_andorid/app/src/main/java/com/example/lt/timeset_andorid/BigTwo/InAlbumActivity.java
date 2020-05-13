@@ -52,13 +52,17 @@ public class InAlbumActivity extends AppCompatActivity {
     private ImageViewer iver;
     private int albumId;
     private Map<String, MyTabSpec> map = new HashMap<>();
-    private String [] tabStrId = {"时间相册", "足迹地球"};
+    private String[] tabStrId = {"时间相册", "足迹地球"};
     private Fragment curFragment = null;
     private TextView albumName;//相册名字
     private int id11;//相册id
-    public int getId(){return id11;}
-    public void setId(int id1){this.id11=id1;}
+
+    public int getId() { return id11; }
+
+    public void setId(int id1) { this.id11 = id1; }
+
     private ImageButton addImg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,28 +74,38 @@ public class InAlbumActivity extends AppCompatActivity {
 
         //获取intent发送的相册id以及相册name
         EventBus.getDefault().register(this);
-        id11=getIntent().getIntExtra("id",-1);
+        id11 = getIntent().getIntExtra("id", -1);
 
         setId(id11);
-        Log.e("id",getId()+"===================");
+//        Log.e("id",getId()+"===================");
         initData();
         findView();
         setListener();
         changeFragment(tabStrId[0]);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void viewImage(Map<String,Object> showMap){
-        switch (showMap.get("type").toString()){
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (iver.onKeyDown(keyCode, event)) {
+            return iver.onKeyDown(keyCode, event);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void viewImage(Map<String, Object> showMap) {
+        switch (showMap.get("type").toString()) {
             case "showImg":
                 int position = (int) showMap.get("position");
                 List<String> dataSource = (List<String>) showMap.get("datasource");
-                showBigImgs(position,dataSource);
+                Log.e("Subscribe",dataSource.toString());
+                showBigImgs(position, dataSource);
                 break;
         }
     }
+
     // 展示图片
-    private void showBigImgs(int position,List<String> showImgSource) {
+    private void showBigImgs(int position, List<String> showImgSource) {
         iver.setVisibility(View.VISIBLE);
         llOut.setVisibility(View.GONE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -107,6 +121,9 @@ public class InAlbumActivity extends AppCompatActivity {
             viewData.setTargetWidth(mScreenSize.x);
             viewData.setTargetHeight(ViewDataUtils.dp2px(getApplicationContext(), 200));
             vdList.add(viewData);
+        }
+        for (ViewData data : vdList) {
+//            Log.e("vdList",""+data.getImageSrc().toString());
         }
         iver.overlayStatusBar(false) // ImageViewer 是否会占据 StatusBar 的空间
                 .viewData(vdList) // 数据源
@@ -132,6 +149,7 @@ public class InAlbumActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -144,17 +162,19 @@ public class InAlbumActivity extends AppCompatActivity {
         map.get(tabStrId[0]).setFragment(new CalendarFragment());
         map.get(tabStrId[1]).setFragment(new MapFragment());
     }
+
     private void findView() {
         layout1 = findViewById(R.id.tab_spec_1);
         layout2 = findViewById(R.id.tab_spec_2);
-        addImg=findViewById(R.id.add_img);
-        return0=findViewById(R.id.btn_return1);
-        btn_search=findViewById(R.id.btn_search);
-        albumName=findViewById(R.id.album_name);
+        addImg = findViewById(R.id.add_img);
+        return0 = findViewById(R.id.btn_return1);
+        btn_search = findViewById(R.id.btn_search);
+        albumName = findViewById(R.id.album_name);
         llOut = findViewById(R.id.ll_in_album_out);
         iver = findViewById(R.id.iver_show_img);
         albumName.setText(getIntent().getStringExtra("albumName"));
     }
+
     private void setListener() {
         MyListener listener = new MyListener();
         layout1.setOnClickListener(listener);
@@ -163,30 +183,35 @@ public class InAlbumActivity extends AppCompatActivity {
         btn_search.setOnClickListener(listener);
         addImg.setOnClickListener(listener);
     }
+
     private class MyTabSpec {
         private Fragment fragment = null;
+
         public Fragment getFragment() {
             return fragment;
         }
+
         public void setFragment(Fragment fragment) {
             this.fragment = fragment;
         }
     }
+
     private void changeFragment(String s) {
         Fragment fragment = map.get(s).getFragment();
-        if(curFragment == fragment) return;
+        if (curFragment == fragment) return;
         FragmentTransaction transaction =
                 getSupportFragmentManager().beginTransaction();
-        if(curFragment!=null)
+        if (curFragment != null)
             transaction.remove(curFragment);
-        if(!fragment.isAdded()) {
+        if (!fragment.isAdded()) {
             transaction.add(R.id.tab_content, fragment);
         }
         transaction.show(fragment);
         curFragment = fragment;
         transaction.commit();
     }
-    private class MyListener implements View.OnClickListener{
+
+    private class MyListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -198,17 +223,17 @@ public class InAlbumActivity extends AppCompatActivity {
                     changeFragment(tabStrId[1]);
                     break;
                 case R.id.add_img:
-                    albumId=getIntent().getIntExtra("albumId",-1);
-                   Intent intent=new Intent(InAlbumActivity.this,AddPictureActivity.class ).putExtra("albumId",albumId);
-                   startActivity(intent);
-                   finish();
-                   break;
+                    albumId = getIntent().getIntExtra("albumId", -1);
+                    Intent intent = new Intent(InAlbumActivity.this, AddPictureActivity.class).putExtra("albumId", albumId);
+                    startActivity(intent);
+                    finish();
+                    break;
 
                 case R.id.btn_return1:
                     finish();
                     break;
                 case R.id.btn_search:
-                    Intent intent1=new Intent(InAlbumActivity.this, SearchActivity.class);
+                    Intent intent1 = new Intent(InAlbumActivity.this, SearchActivity.class);
                     startActivity(intent1);
 
                     break;

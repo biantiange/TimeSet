@@ -96,10 +96,11 @@ public class AddAlbumActivity extends AppCompatActivity {
                 case R.id.to_add_album:
                     //完成创建,获取名字，类型
                     String name=album_name.getText().toString();
-
                     if(name.isEmpty()){
                         Toast.makeText(AddAlbumActivity.this,"相册名称不能为空",Toast.LENGTH_SHORT).show();
                     }else{
+                        toadd.setText("正在创建");
+                        toadd.setEnabled(false);
                         Message message=new Message();
                         //与服务器交互，将name，type，userId传入服务器
                         OkHttpClient client=new OkHttpClient();
@@ -144,7 +145,9 @@ public class AddAlbumActivity extends AppCompatActivity {
                    Toast.makeText(AddAlbumActivity.this,"网络连接失败",Toast.LENGTH_SHORT).show();
                }
                if (msg.what==2){
-                   Intent intent=new Intent(AddAlbumActivity.this,AddPictureActivity.class).putExtra("albumId",msg.obj.toString());
+                   toadd.setEnabled(true);
+                   toadd.setText("完成创建");
+                   Intent intent=new Intent(AddAlbumActivity.this,AddPictureActivity.class).putExtra("albumId",Integer.parseInt(msg.obj.toString()));
                    startActivity(intent);
                    finish();
                }

@@ -27,16 +27,28 @@
             android:gravity="center"
             android:text="添加照片"
             android:textColor="#000"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
-        <TextView
+        <!--<TextView-->
+            <!--android:id="@+id/tv_add_picture_upload"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginRight="@dimen/dp10"-->
+            <!--android:text="上传"-->
+            <!--android:textColor="#FFA000"-->
+            <!--android:textSize="18sp" />-->
+        <Button
             android:id="@+id/tv_add_picture_upload"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:gravity="center"
+            android:stateListAnimator="@null"
             android:layout_marginRight="@dimen/dp10"
             android:text="上传"
+            android:background="#fff"
             android:textColor="#FFA000"
             android:textSize="18sp" />
 

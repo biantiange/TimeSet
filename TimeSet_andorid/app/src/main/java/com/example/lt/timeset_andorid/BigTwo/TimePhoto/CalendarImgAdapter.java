@@ -51,7 +51,7 @@ public class CalendarImgAdapter extends BaseAdapter {
         this.dataSource = dataSource; // 数据源
         this.item_layout_id = item_layout_id; // 列表项布局文件ID
         for (Photo photo : dataSource){
-            showImgSource.add(photo.getPath());
+            showImgSource.add(Constant.URL+photo.getPath());
         }
     }
     public int getCount() {
@@ -84,7 +84,7 @@ public class CalendarImgAdapter extends BaseAdapter {
                 .placeholder(R.drawable.timg)
                 .error(R.drawable.timg)
                 .fallback(R.drawable.timg);
-        Log.e("paht",Constant.URL+path);
+//        Log.e("paht",Constant.URL+path);
         Glide.with(context).load(Constant.URL+path).apply(requestOptions).into(holder.img);
 
         //设置图片单击事件，将phone参数传进图片查看器

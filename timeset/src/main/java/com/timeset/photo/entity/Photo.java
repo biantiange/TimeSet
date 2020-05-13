@@ -17,6 +17,8 @@ public class Photo {
     private String identify;
     private String longitude;
     private String latitude;
+    private String district;
+    private String city;
 
     public String getLongitude() {
         return longitude;
@@ -98,6 +100,22 @@ public class Photo {
         this.identify = identify;
     }
 
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     @Override
     public String toString() {
         return "Photo{" +
@@ -111,7 +129,10 @@ public class Photo {
                 ", identify='" + identify + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", latitude='" + latitude + '\'' +
+                ", district='" + district + '\'' +
+                ", city='" + city + '\'' +
                 '}';
     }
+
     public Photo() { }
 }

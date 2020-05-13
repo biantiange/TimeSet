@@ -5,7 +5,7 @@
 <mapper namespace="com.timeset.photo.mapper.PhotoMapper">
 
     <insert id="addPhoto" useGeneratedKeys="true">
-        insert into photo(user_id,album_id,pdescribe,ptime,place,path,identify,longitude,latitude) values(#{userId},#{albumId},#{pdescribe},#{ptime},#{place},#{path},#{identify},#{longitude},#{latitude})
+        insert into photo(user_id,album_id,pdescribe,ptime,place,path,identify,longitude,latitude,city,district) values(#{userId},#{albumId},#{pdescribe},#{ptime},#{place},#{path},#{identify},#{longitude},#{latitude},#{city},#{district})
     </insert>
 
     <delete id="deletePhoto">
@@ -31,23 +31,23 @@
         </collection>
     </resultMap>
     <select id="findByAlbum" resultMap="PhotoListMap" >
-        select * from photo where album_id=#{albumId} and user_id=#{uerId} order by ptime desc
+        select * from photo where album_id=#{albumId} and user_id=#{userId} order by ptime desc
     </select>
 
     <select id="findByTime" resultType="com.timeset.photo.entity.Photo">
-        select * from photo where ptime=#{ptime}
+        select * from photo where ptime=#{ptime} and user_id=#{userId}
     </select>
 
     <select id="findPlace" resultType="com.timeset.photo.entity.Photo">
-        select * from photo where place like "%"#{place}"%"
+        select * from photo where place like "%"#{place}"%" and user_id=#{userId}
     </select>
 
     <select id="findDescribe" resultType="com.timeset.photo.entity.Photo">
-        select * from photo where pdescribe like "%"#{pdescribe}"%"
+        select * from photo where pdescribe like "%"#{pdescribe}"%" and user_id=#{userId}
     </select>
 
     <select id="findIdentify" resultType="com.timeset.photo.entity.Photo">
-        select * from photo where identify like "%"#{identify}"%"
+        select * from photo where identify like "%"#{identify}"%" and user_id=#{userId}
     </select>
 
 

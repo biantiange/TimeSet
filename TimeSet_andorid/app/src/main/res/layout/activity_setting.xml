@@ -41,25 +41,124 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="100"
+            android:background="#f6f6f6"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#f6f6f6"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/zhaoxiangji" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/Version"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:onClick="settingClick"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="版本更新"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:text="已是最新版本"
+                    android:textSize="12dp" />
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="研发中..." />
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:onClick="settingClick"
+                android:padding="10dp"
+                android:text="功能介绍"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:onClick="settingClick"
+                android:padding="10dp"
+                android:text="帮助"
+                android:textSize="16dp" />
+
+            <RelativeLayout
+                android:id="@+id/clean_cache"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:onClick="settingClick"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="清除缓存"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/clean_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:text="0.0Byte"
+                    android:textSize="12dp" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:onClick="settingClick"
+                android:padding="10dp"
+                android:text="隐私协议"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:onClick="settingClick"
+                android:padding="10dp"
+                android:text="反馈"
+                android:textSize="16dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="9"
+            android:background="#f6f6f6"
             android:gravity="center">
 
             <TextView
                 android:id="@+id/esc"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
+                android:background="#f6f6f6"
                 android:gravity="center"
                 android:onClick="settingClick"
                 android:text="退出登录"

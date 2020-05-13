@@ -2,6 +2,7 @@ package com.example.lt.timeset_andorid.BigTwo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -65,7 +67,8 @@ import okhttp3.Response;
 public class AddPictureActivity extends AppCompatActivity {
     private static final int ADD_ACHIEVE = 500;
     private ImageView ivBack;
-    private TextView upLoad;
+    //    private TextView upLoad;
+    private Button upLoad;
     private RecyclerView rcvImg;
     private EditText etContent;
     private AddPictureRecyclerAdapter adapter;
@@ -245,7 +248,7 @@ public class AddPictureActivity extends AppCompatActivity {
     // todo: 获取albumId
     private void initDatas() {
         activity = this;
-        albumId = getIntent().getExtras().getInt("albumId", -1);
+        albumId = getIntent().getExtras().getInt("albumId",-1);
         userId = getSharedPreferences("user", MODE_PRIVATE).getInt("id", 0);
 
         mWindowAnimationStyle = new PictureWindowAnimationStyle();
@@ -294,7 +297,14 @@ public class AddPictureActivity extends AppCompatActivity {
                     break;
                 case R.id.tv_add_picture_upload:
                     // 上传
-                    upLoadAllMessage();
+                    if(albumId==-1){
+                        Toast.makeText(AddPictureActivity.this,"未获取到相册id,添加图片失败!",Toast.LENGTH_SHORT).show();
+                    }else {
+                        upLoadAllMessage();
+                        upLoad.setTextColor(Color.GRAY);
+                        upLoad.setText("正在上传");
+                        upLoad.setEnabled(false);
+                    }
                     break;
             }
         }
@@ -317,6 +327,8 @@ public class AddPictureActivity extends AppCompatActivity {
                     .setType(MediaType.parse("multipart/form-data;charset=utf-8"))
                     .addFormDataPart("albumId", String.valueOf(albumId))
                     .addFormDataPart("place", "beijng")
+                    .addFormDataPart("city", "city")
+                    .addFormDataPart("district", "district")
                     .addFormDataPart("infor", jr);
 
         } catch (UnsupportedEncodingException e) {
@@ -360,6 +372,9 @@ public class AddPictureActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case ADD_ACHIEVE:
+                    upLoad.setText("上传");
+                    upLoad.setTextColor(Color.parseColor("#FFA000"));
+                    upLoad.setEnabled(true);
                     Toast.makeText(AddPictureActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
                     finish();
                     break;
@@ -375,7 +390,7 @@ public class AddPictureActivity extends AppCompatActivity {
 
             //String guangquan = exifInterface.getAttribute(ExifInterface.TAG_APERTURE);
             String shijain = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-            Log.e("resultdddd",path+"\t"+shijain);
+//            Log.e("resultdddd", path + "\t" + shijain);
             /*String baoguangshijian = exifInterface.getAttribute(ExifInterface.TAG_EXPOSURE_TIME);
             String jiaoju = exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
             String chang = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
@@ -406,7 +421,7 @@ public class AddPictureActivity extends AppCompatActivity {
              * 就可以用这个坐标通过百度SDK 去获取该经纬度的地址描述
              */
             double[] wgs2bd = GpsUtil.wgs2bd(lat, lon);
-            Log.e("==============", "shijian:" + shijain + "jingweidu:" + lat + ":::" + lon);
+//            Log.e("==============", "shijian:" + shijain + "jingweidu:" + lat + ":::" + lon);
 
           /*  StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("光圈 = " + guangquan+"\n")

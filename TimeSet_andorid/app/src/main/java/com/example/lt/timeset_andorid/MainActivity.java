@@ -127,12 +127,9 @@ public class MainActivity extends AppCompatActivity {
         addAlbum=findViewById(R.id.jiahao);
         img=findViewById(R.id.img);
         search=findViewById(R.id.sousuo);
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                startActivity(intent);
-            }
+        search.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            startActivity(intent);
         });
         addAlbum.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddAlbumActivity.class);
