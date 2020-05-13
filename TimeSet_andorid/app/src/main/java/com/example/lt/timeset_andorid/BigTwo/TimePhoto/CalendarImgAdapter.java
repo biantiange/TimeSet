@@ -44,7 +44,6 @@ public class CalendarImgAdapter extends BaseAdapter {
     private int item_layout_id; // 声明列表项的布局
 
     private List<String> showImgSource = new ArrayList<>();
-    private List<ViewData> vdList;
     // 声明列表项中的控件
     public CalendarImgAdapter(Context context, List<Photo> dataSource,
                               int item_layout_id) {

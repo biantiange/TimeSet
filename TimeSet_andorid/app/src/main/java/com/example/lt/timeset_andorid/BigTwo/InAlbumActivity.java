@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -92,6 +93,7 @@ public class InAlbumActivity extends AppCompatActivity {
     // 展示图片
     private void showBigImgs(int position,List<String> showImgSource) {
         iver.setVisibility(View.VISIBLE);
+        llOut.setVisibility(View.GONE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             iver.setElevation(3.0f);
         }
@@ -212,6 +214,13 @@ public class InAlbumActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (iver.onKeyDown(keyCode, event)) {
+            return iver.onKeyDown(keyCode, event);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
 
