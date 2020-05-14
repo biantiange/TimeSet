@@ -54,27 +54,42 @@ public class PhotoController {
         }.getType());
         System.out.println(jlist);
         String pa = UserController.class.getClassLoader().getResource("").getPath().split("timeset")[0];
-        int repeat=0;
+        int repeat = 0;
         for (int i = 0; i < files.length; i++) {
             // 生成新的文件名
 //            String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
             String fileName = files[i].getOriginalFilename();
+            String dir1 = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/";
+            File file1=new File((dir1));
+            if(!file1.exists()){
+                file1.mkdir();
+            }
+            String dir2 = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/"+userId+"/";
+            File file2=new File((dir2));
+            if(!file2.exists()){
+                file2.mkdir();
+            }
             // 保存路径
-            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + fileName;
+            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + userId + "/" +albumId+"/"+  fileName;
             //String destFileName1 = request.getServletContext().getRealPath("") + "uploaded" + File.separator + fileName;
             System.out.println(destFileName);
             //System.out.println(destFileName1);
-
             //String destFileName=Constant.ImgPath+File.separator+fileName;
             // 执行保存操作
             File destFile = new File(destFileName);
 //            System.out.println(destFileName);
-            if(destFile.exists()){
+//            if(destFile.exists()){
+//                repeat++;
+//            }else {
+            if (!destFile.getParentFile().exists()) {
+                destFile.getParentFile().mkdir();
+                System.out.println("创建目录");
+            }else{
+                System.out.println("目录存在");
+            }
+            if (destFile.exists()) {
                 repeat++;
-            }else {
-                if (!destFile.getParentFile().exists()) {
-                    destFile.getParentFile().mkdir();
-                }
+            } else {
                 try {
                     files[i].transferTo(destFile);
                 } catch (IOException e) {
@@ -101,11 +116,12 @@ public class PhotoController {
 
                 int result = photoService.addPhoto(photo, destFileName);
             }
+        }
 
 //            if (result == 0) {
 //                return -1;
 //            }
-        }
+//        }
 
         return repeat;
     }
