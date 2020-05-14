@@ -25,12 +25,6 @@
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent" />
-        <ImageView
-            android:id="@+id/tianpian"
-            android:src="@drawable/tianpian"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="25dp"/>
 
         <ImageView
             android:id="@+id/shanchu"

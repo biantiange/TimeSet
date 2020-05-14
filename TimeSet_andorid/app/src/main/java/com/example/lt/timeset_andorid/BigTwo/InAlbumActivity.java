@@ -10,11 +10,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -57,6 +62,12 @@ public class InAlbumActivity extends AppCompatActivity {
     private TextView albumName;//相册名字
     private int id11;//相册id
 
+    //抽屉
+    private DrawerLayout mDrawer;
+    private ListView TimeListView;
+    private TimeAdapter tAdapter;
+    private List<Map<String,Object>> listTime=new ArrayList();
+
     public int getId() { return id11; }
 
     public void setId(int id1) { this.id11 = id1; }
@@ -82,6 +93,8 @@ public class InAlbumActivity extends AppCompatActivity {
         findView();
         setListener();
         changeFragment(tabStrId[0]);
+        //时间轴
+        findTime();
     }
 
     @Override
@@ -162,7 +175,7 @@ public class InAlbumActivity extends AppCompatActivity {
         map.get(tabStrId[0]).setFragment(new CalendarFragment());
         map.get(tabStrId[1]).setFragment(new MapFragment());
     }
-
+    //时间轴
     private void findView() {
         layout1 = findViewById(R.id.tab_spec_1);
         layout2 = findViewById(R.id.tab_spec_2);
@@ -173,6 +186,28 @@ public class InAlbumActivity extends AppCompatActivity {
         llOut = findViewById(R.id.ll_in_album_out);
         iver = findViewById(R.id.iver_show_img);
         albumName.setText(getIntent().getStringExtra("albumName"));
+        //抽屉
+        mDrawer = findViewById(R.id.drawer_layout);
+        TimeListView =findViewById(R.id.list_time);
+
+    }
+
+    private void findTime(){
+        for (int i = 0; i <9; i++) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("time","11");
+            map.put("statu",0);
+            listTime.add(map);
+        }
+        tAdapter = new TimeAdapter(this, listTime);
+        TimeListView.setAdapter(tAdapter);
+        TimeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                listTime.get(position).put("statu",1) ;
+                tAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void setListener() {

@@ -46,9 +46,8 @@ public class PhotoController {
 
     @RequestMapping("/add")
     public int addPhoto(@RequestParam("file") MultipartFile files[], HttpServletRequest request, @RequestParam("userId") int userId, @RequestParam("albumId") int albumId,
-                        @RequestParam("city") String city, @RequestParam("district") String district, @RequestParam("place") String place, @RequestParam("describe") String describe, @RequestParam("infor") String infor) {
+                       @RequestParam("describe") String describe, @RequestParam("infor") String infor) {
         System.out.println("插入图片");
-        System.out.println(userId);
         Gson gson = new GsonBuilder().serializeNulls().create();
         List<PhotoJson> jlist = gson.fromJson(infor, new TypeToken<List<PhotoJson>>() {
         }.getType());
@@ -96,11 +95,12 @@ public class PhotoController {
                     e.printStackTrace();
                 }
                 Photo photo = new Photo();
-                photo.setCity(city);
-                photo.setDistrict(district);
-                photo.setPlace(place);
+                photo.setCity(jlist.get(i).getCity());
+                photo.setDistrict(jlist.get(i).getDistrict());
+                photo.setPlace(jlist.get(i).getPlace());
                 photo.setUserId(userId);
                 photo.setAlbumId(albumId);
+                photo.setProvince(jlist.get(i).getProvince());
                 String date = "";
                 if (jlist.get(i).getPtime().length() == 0) {
                     SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式

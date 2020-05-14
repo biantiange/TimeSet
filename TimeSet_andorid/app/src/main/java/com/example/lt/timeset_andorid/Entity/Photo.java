@@ -10,6 +10,9 @@ public class Photo {
     private String identify;
     private String Latitude;//纬度
     private String longitude;//经度
+    private String district;//区县
+    private String city;//市
+    private String province;//省
 
     public String getLatitude() {
         return Latitude;
@@ -91,6 +94,30 @@ public class Photo {
         this.identify = identify;
     }
 
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     @Override
     public String toString() {
         return "Photo{" +
@@ -99,20 +126,30 @@ public class Photo {
                 ", userId=" + userId +
                 ", pdescribe='" + pdescribe + '\'' +
                 ", ptime='" + ptime + '\'' +
-                ", palce='" + place + '\'' +
+                ", place='" + place + '\'' +
                 ", path='" + path + '\'' +
                 ", identify='" + identify + '\'' +
+                ", Latitude='" + Latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", district='" + district + '\'' +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
                 '}';
     }
 
-    public Photo(int albumId, int userId, String pdescribe, String ptime, String palce, String path, String identify) {
+    public Photo(int albumId, int userId, String pdescribe, String ptime, String place, String path, String identify, String latitude, String longitude, String district, String city, String province) {
         this.albumId = albumId;
         this.userId = userId;
         this.pdescribe = pdescribe;
         this.ptime = ptime;
-        this.place = palce;
+        this.place = place;
         this.path = path;
         this.identify = identify;
+        Latitude = latitude;
+        this.longitude = longitude;
+        this.district = district;
+        this.city = city;
+        this.province = province;
     }
 
     public Photo() { }
