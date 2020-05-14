@@ -54,6 +54,7 @@ public class PhotoController {
         }.getType());
         System.out.println(jlist);
         String pa = UserController.class.getClassLoader().getResource("").getPath().split("timeset")[0];
+        int repeat=0;
         for (int i = 0; i < files.length; i++) {
             // 生成新的文件名
 //            String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
@@ -68,41 +69,45 @@ public class PhotoController {
             // 执行保存操作
             File destFile = new File(destFileName);
 //            System.out.println(destFileName);
-            if (!destFile.getParentFile().exists()) {
-                destFile.getParentFile().mkdir();
-            }
-            try {
-                files[i].transferTo(destFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Photo photo = new Photo();
-            photo.setCity(city);
-            photo.setDistrict(district);
-            photo.setPlace(place);
-            photo.setUserId(userId);
-            photo.setAlbumId(albumId);
-            String date = "";
-            if (jlist.get(i).getPtime().length() == 0) {
-                SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
-                date = df.format(new Date());// new Date()为获取当前系统时间
-            } else {
-                date = jlist.get(i).getPtime();
-            }
-            photo.setPtime(date);
-            photo.setPdescribe(describe);
-            photo.setLatitude(jlist.get(i).getLat());
-            photo.setLongitude(jlist.get(i).getLon());
-            photo.setPath(fileName);
+            if(destFile.exists()){
+                repeat++;
+            }else {
+                if (!destFile.getParentFile().exists()) {
+                    destFile.getParentFile().mkdir();
+                }
+                try {
+                    files[i].transferTo(destFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Photo photo = new Photo();
+                photo.setCity(city);
+                photo.setDistrict(district);
+                photo.setPlace(place);
+                photo.setUserId(userId);
+                photo.setAlbumId(albumId);
+                String date = "";
+                if (jlist.get(i).getPtime().length() == 0) {
+                    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
+                    date = df.format(new Date());// new Date()为获取当前系统时间
+                } else {
+                    date = jlist.get(i).getPtime();
+                }
+                photo.setPtime(date);
+                photo.setPdescribe(describe);
+                photo.setLatitude(jlist.get(i).getLat());
+                photo.setLongitude(jlist.get(i).getLon());
+                photo.setPath(fileName);
 
-            int result = photoService.addPhoto(photo, destFileName);
+                int result = photoService.addPhoto(photo, destFileName);
+            }
 
 //            if (result == 0) {
 //                return -1;
 //            }
         }
 
-        return 0;
+        return repeat;
     }
 
     @RequestMapping("/delete")
