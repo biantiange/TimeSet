@@ -94,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
         //设置头像and nickName（抽屉内的）
         View headerView = navigationView.getHeaderView(0);//获取头布局
          headImg = headerView.findViewById(R.id.person);
+         headImg.setOnClickListener(v -> {
+             Log.e("headImges","succeed");
+         });
          nickName = headerView.findViewById(R.id.nickName);
         uperson();
         //点击头像划出测边框
