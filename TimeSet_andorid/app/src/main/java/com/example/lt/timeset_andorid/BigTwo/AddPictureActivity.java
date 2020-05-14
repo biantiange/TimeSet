@@ -248,7 +248,7 @@ public class AddPictureActivity extends AppCompatActivity {
     // todo: 获取albumId
     private void initDatas() {
         activity = this;
-        albumId = getIntent().getExtras().getInt("albumId",-1);
+        albumId = getIntent().getExtras().getInt("albumId", -1);
         userId = getSharedPreferences("user", MODE_PRIVATE).getInt("id", 0);
 
         mWindowAnimationStyle = new PictureWindowAnimationStyle();
@@ -297,9 +297,9 @@ public class AddPictureActivity extends AppCompatActivity {
                     break;
                 case R.id.tv_add_picture_upload:
                     // 上传
-                    if(albumId==-1){
-                        Toast.makeText(AddPictureActivity.this,"未获取到相册id,添加图片失败!",Toast.LENGTH_SHORT).show();
-                    }else {
+                    if (albumId == -1) {
+                        Toast.makeText(AddPictureActivity.this, "未获取到相册id,添加图片失败!", Toast.LENGTH_SHORT).show();
+                    } else {
                         upLoadAllMessage();
                         upLoad.setTextColor(Color.GRAY);
                         upLoad.setText("正在上传");
@@ -326,7 +326,7 @@ public class AddPictureActivity extends AppCompatActivity {
                     .addFormDataPart("describe", URLEncoder.encode(etContent.getText().toString(), "utf-8"))
                     .setType(MediaType.parse("multipart/form-data;charset=utf-8"))
                     .addFormDataPart("albumId", String.valueOf(albumId))
-                    .addFormDataPart("place", "beijng")
+                    .addFormDataPart("place", "beijing")
                     .addFormDataPart("city", "city")
                     .addFormDataPart("district", "district")
                     .addFormDataPart("infor", jr);
@@ -345,7 +345,7 @@ public class AddPictureActivity extends AppCompatActivity {
         // 3.3 其余一致
         RequestBody requestBody = requestBodyBuilder.build();
         // todo：ip
-        Request request = new Request.Builder().url(Constant.CON_ADD_IMAGE_IP + "photo/add")
+        Request request = new Request.Builder().url(Constant.IP + "photo/add")
                 .post(requestBody)
                 .build();
         Call call = client.newCall(request);
@@ -357,10 +357,12 @@ public class AddPictureActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                String string=response.body().string();//添加成功返回图片重复数
+                Log.e("添加图片",string);
                 // todo：获取返回参数
                 Message message = new Message();
                 message.what = ADD_ACHIEVE;
-                message.obj = response.body().string();
+                message.obj = string;
                 myHandler.sendMessage(message);
             }
         });
@@ -375,7 +377,7 @@ public class AddPictureActivity extends AppCompatActivity {
                     upLoad.setText("上传");
                     upLoad.setTextColor(Color.parseColor("#FFA000"));
                     upLoad.setEnabled(true);
-                    Toast.makeText(AddPictureActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPictureActivity.this, msg.obj+"张图片重复", Toast.LENGTH_SHORT).show();
                     finish();
                     break;
             }
@@ -385,33 +387,26 @@ public class AddPictureActivity extends AppCompatActivity {
     private Photo getInfo(String path) {
         Photo photo = null;
         try {
-
             ExifInterface exifInterface = new ExifInterface(path);
-
             //String guangquan = exifInterface.getAttribute(ExifInterface.TAG_APERTURE);
             String shijain = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-//            Log.e("resultdddd", path + "\t" + shijain);
-            /*String baoguangshijian = exifInterface.getAttribute(ExifInterface.TAG_EXPOSURE_TIME);
-            String jiaoju = exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
-            String chang = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
-            String kuan = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
-            String moshi = exifInterface.getAttribute(ExifInterface.TAG_MODEL);
-            String zhizaoshang = exifInterface.getAttribute(ExifInterface.TAG_MAKE);
-            String iso = exifInterface.getAttribute(ExifInterface.TAG_ISO);
-            String jiaodu = exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION);
-            String baiph = exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE);
-            String altitude_ref = exifInterface.getAttribute(ExifInterface
-                    .TAG_GPS_ALTITUDE_REF);*/
-            //String altitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_ALTITUDE);
+//            String baoguangshijian = exifInterface.getAttribute(ExifInterface.TAG_EXPOSURE_TIME);
+//            String jiaoju = exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
+//            String chang = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+//            String kuan = exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
+//            String moshi = exifInterface.getAttribute(ExifInterface.TAG_MODEL);
+//            String zhizaoshang = exifInterface.getAttribute(ExifInterface.TAG_MAKE);
+//            String iso = exifInterface.getAttribute(ExifInterface.TAG_ISO);
+//            String jiaodu = exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION);
+//            String baiph = exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE);
+//            String altitude_ref = exifInterface.getAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF);
+//            String altitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_ALTITUDE);
             String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-           /* String latitude_ref = exifInterface.getAttribute(ExifInterface
-                    .TAG_GPS_LATITUDE_REF);
-            String longitude_ref = exifInterface.getAttribute(ExifInterface
-                    .TAG_GPS_LONGITUDE_REF);*/
+//            String latitude_ref = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
+//            String longitude_ref = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
             String longitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-           /* String timestamp = exifInterface.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP);
-            String processing_method = exifInterface.getAttribute(ExifInterface
-                    .TAG_GPS_PROCESSING_METHOD);*/
+//            String timestamp = exifInterface.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP);
+//            String processing_method = exifInterface.getAttribute(ExifInterface.TAG_GPS_PROCESSING_METHOD);
 
             //转换经纬度格式
             double lat = score2dimensionality(latitude);
@@ -423,7 +418,7 @@ public class AddPictureActivity extends AppCompatActivity {
             double[] wgs2bd = GpsUtil.wgs2bd(lat, lon);
 //            Log.e("==============", "shijian:" + shijain + "jingweidu:" + lat + ":::" + lon);
 
-          /*  StringBuilder stringBuilder = new StringBuilder();
+          /*StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("光圈 = " + guangquan+"\n")
                     .append("时间 = " + shijain+"\n")
                     .append("曝光时长 = " + baoguangshijian+"\n")
@@ -447,17 +442,14 @@ public class AddPictureActivity extends AppCompatActivity {
             Log.e("info",stringBuilder.toString());*/
             photo = new Photo();
             photo.setPtime(shijain);
-            photo.setLatitude(String.valueOf(lat));
-            photo.setLongitude(String.valueOf(lon));
-
-
+            photo.setLatitude(String.valueOf(wgs2bd[0]));
+            photo.setLongitude(String.valueOf(wgs2bd[1]));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return photo;
 
     }
-
 
     /**
      * 将 112/1,58/1,390971/10000 格式的经纬度转换成 112.99434397362694格式

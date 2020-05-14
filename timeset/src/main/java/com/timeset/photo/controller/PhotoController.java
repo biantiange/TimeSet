@@ -48,60 +48,62 @@ public class PhotoController {
     public int addPhoto(@RequestParam("file") MultipartFile files[], HttpServletRequest request, @RequestParam("userId") int userId, @RequestParam("albumId") int albumId,
                         @RequestParam("city") String city, @RequestParam("district") String district, @RequestParam("place") String place, @RequestParam("describe") String describe, @RequestParam("infor") String infor) {
         System.out.println("插入图片");
-        System.out.println(userId);
         Gson gson = new GsonBuilder().serializeNulls().create();
         List<PhotoJson> jlist = gson.fromJson(infor, new TypeToken<List<PhotoJson>>() {
         }.getType());
-        System.out.println(jlist);
+//        System.out.println(jlist);
         String pa = UserController.class.getClassLoader().getResource("").getPath().split("timeset")[0];
+        int repeat=0;
         for (int i = 0; i < files.length; i++) {
             // 生成新的文件名
-            String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
+            System.out.println("文件名：" + files[i].getOriginalFilename());
+            String fileName = files[i].getOriginalFilename();
+//            String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
             // 保存路径
             String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + fileName;
             //String destFileName1 = request.getServletContext().getRealPath("") + "uploaded" + File.separator + fileName;
-            System.out.println(destFileName);
+//            System.out.println(destFileName);
             //System.out.println(destFileName1);
-
             //String destFileName=Constant.ImgPath+File.separator+fileName;
             // 执行保存操作
             File destFile = new File(destFileName);
 //            System.out.println(destFileName);
-            if (!destFile.getParentFile().exists()) {
-                destFile.getParentFile().mkdir();
-            }
-            try {
-                files[i].transferTo(destFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Photo photo = new Photo();
-            photo.setCity(city);
-            photo.setDistrict(district);
-            photo.setPlace(place);
-            photo.setUserId(userId);
-            photo.setAlbumId(albumId);
-            String date = "";
-            if (jlist.get(i).getPtime().length() == 0) {
-                SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
-                date = df.format(new Date());// new Date()为获取当前系统时间
+            if (destFile.exists()) {
+                repeat++;
             } else {
-                date = jlist.get(i).getPtime();
+                if (!destFile.getParentFile().exists()) {
+                    destFile.getParentFile().mkdir();
+                }
+                try {
+                    files[i].transferTo(destFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Photo photo = new Photo();
+                photo.setCity(city);
+                photo.setDistrict(district);
+                photo.setPlace(place);
+                photo.setUserId(userId);
+                photo.setAlbumId(albumId);
+                String date = "";
+                if (jlist.get(i).getPtime().length() == 0) {
+                    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
+                    date = df.format(new Date());// new Date()为获取当前系统时间
+                } else {
+                    date = jlist.get(i).getPtime();
+                }
+                photo.setPtime(date);
+                photo.setPdescribe(describe);
+                photo.setLatitude(jlist.get(i).getLat());
+                photo.setLongitude(jlist.get(i).getLon());
+                photo.setPath(fileName);
+
+                int result = photoService.addPhoto(photo, destFileName);
             }
-            photo.setPtime(date);
-            photo.setPdescribe(describe);
-            photo.setLatitude(jlist.get(i).getLat());
-            photo.setLongitude(jlist.get(i).getLon());
-            photo.setPath(fileName);
-
-            int result = photoService.addPhoto(photo, destFileName);
-
-//            if (result == 0) {
-//                return -1;
-//            }
         }
 
-        return 0;
+        System.out.println("重复图片个数:"+repeat);
+        return repeat;
     }
 
     @RequestMapping("/delete")
