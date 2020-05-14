@@ -345,7 +345,7 @@ public class AddPictureActivity extends AppCompatActivity {
         // 3.3 其余一致
         RequestBody requestBody = requestBodyBuilder.build();
         // todo：ip
-        Request request = new Request.Builder().url(Constant.CON_ADD_IMAGE_IP + "photo/add")
+        Request request = new Request.Builder().url(Constant.IP + "photo/add")
                 .post(requestBody)
                 .build();
         Call call = client.newCall(request);
@@ -357,10 +357,11 @@ public class AddPictureActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                String str=response.body().string();
                 // todo：获取返回参数
                 Message message = new Message();
                 message.what = ADD_ACHIEVE;
-                message.obj = response.body().string();
+                message.obj = str;
                 myHandler.sendMessage(message);
             }
         });
@@ -375,7 +376,7 @@ public class AddPictureActivity extends AppCompatActivity {
                     upLoad.setText("上传");
                     upLoad.setTextColor(Color.parseColor("#FFA000"));
                     upLoad.setEnabled(true);
-                    Toast.makeText(AddPictureActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPictureActivity.this, msg.obj+"张图片重复", Toast.LENGTH_SHORT).show();
                     finish();
                     break;
             }
