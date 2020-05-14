@@ -56,7 +56,8 @@ public class PhotoController {
         String pa = UserController.class.getClassLoader().getResource("").getPath().split("timeset")[0];
         for (int i = 0; i < files.length; i++) {
             // 生成新的文件名
-            String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
+//            String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
+            String fileName = files[i].getOriginalFilename();
             // 保存路径
             String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + fileName;
             //String destFileName1 = request.getServletContext().getRealPath("") + "uploaded" + File.separator + fileName;
