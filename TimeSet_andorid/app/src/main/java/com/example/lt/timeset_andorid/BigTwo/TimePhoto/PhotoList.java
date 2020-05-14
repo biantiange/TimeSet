@@ -1,8 +1,10 @@
 package com.example.lt.timeset_andorid.BigTwo.TimePhoto;
 
-import androidx.annotation.NonNull;
+import com.example.lt.timeset_andorid.Entity.Photo;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
 /**
  * @ClassName PhotoList
  * @Description 中间表
@@ -14,6 +16,7 @@ import java.util.List;
 public class PhotoList {
     private String ptime;
     private List<Photo> photoLists;
+
     public String getPtime() {
         return ptime;
     }

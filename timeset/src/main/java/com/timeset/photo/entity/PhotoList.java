@@ -7,7 +7,6 @@ import java.util.List;
  * @Date 2020-05-03
  */
 
-
 public class PhotoList {
     private String ptime;
     private List<Photo> photoLists;

@@ -8,18 +8,18 @@ public class Photo {
     private String place;
     private String path;
     private String identify;
-    private String Latitude;//纬度
+    private String latitude;//纬度
     private String longitude;//经度
     private String district;//区县
     private String city;//市
     private String province;//省
 
     public String getLatitude() {
-        return Latitude;
+        return latitude;
     }
 
     public void setLatitude(String latitude) {
-        Latitude = latitude;
+        this.latitude = latitude;
     }
 
     public String getLongitude() {
@@ -129,7 +129,7 @@ public class Photo {
                 ", place='" + place + '\'' +
                 ", path='" + path + '\'' +
                 ", identify='" + identify + '\'' +
-                ", Latitude='" + Latitude + '\'' +
+                ", Latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", district='" + district + '\'' +
                 ", city='" + city + '\'' +
@@ -145,7 +145,7 @@ public class Photo {
         this.place = place;
         this.path = path;
         this.identify = identify;
-        Latitude = latitude;
+        this.latitude = latitude;
         this.longitude = longitude;
         this.district = district;
         this.city = city;

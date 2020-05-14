@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,9 +40,9 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.bumptech.glide.Glide;
-import com.example.lt.timeset_andorid.BigTwo.InAlbumActivity;
-import com.example.lt.timeset_andorid.BigTwo.TimePhoto.Photo;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.lt.timeset_andorid.BigTwo.TimePhoto.PhotoList;
+import com.example.lt.timeset_andorid.Entity.Photo;
 import com.example.lt.timeset_andorid.R;
 import com.example.lt.timeset_andorid.util.Constant;
 import com.google.gson.Gson;
@@ -49,6 +50,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +75,6 @@ public class MapFragment extends Fragment {
     private int albumId;
     private int userId;
     private SharedPreferences sharedPreferences;//获取用户信息
-
     private List<PhotoList> plToAdaper;     // 获取数据源
     private Map<String, List<PhotoList>> photoMap = new HashMap<>();
 
@@ -84,6 +86,7 @@ public class MapFragment extends Fragment {
     private View newView = null;
     private BaiduMap baiduMap = null;
     private LocationClient locationClient = null;   // 定位服务
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -199,7 +202,6 @@ public class MapFragment extends Fragment {
                     Message message = new Message();
                     message.what = 2;
                     message.obj = strings;
-
                     handler.sendMessage(message);
                 }
             });
@@ -232,16 +234,16 @@ public class MapFragment extends Fragment {
 
         }
     };
+
     //  将获取的数据源封装成一个可以显示在地图上的List
     private void initPlToMark(List<PhotoList> plToAdaper) {
-        // 根据photoList里边每一个 list，按着地点封装进map
         List<Photo> allPhoto = new ArrayList<>();
-        for (PhotoList photoList:plToAdaper){
+        for (PhotoList photoList : plToAdaper) {
             allPhoto.addAll(photoList.getPhotoList());
         }
         // 将数据源封装入Map
         for (Photo photo : allPhoto) {
-            String place = photo.getPlace();
+            String place = photo.getCity();
             if (photoMap.containsKey(place)) {   // 先判断photoMap中是否含有相应地点的key
                 List<PhotoList> photoLists = photoMap.get(place);
                 // 此时含有对应key 地点
@@ -256,19 +258,22 @@ public class MapFragment extends Fragment {
                     photoLists.add(photoList);
                 } else {
                     boolean haveTime = false;
-                    for (int i=0;i<photoLists.size();i++){
-                        if (photoLists.get(i).getPtime().equals(photo.getPtime())){
+                    for (int i = 0; i < photoLists.size(); i++) {
+                        if (photoLists.get(i).getPtime().equals(photo.getPtime())) {
                             photoLists.get(i).getPhotoList().add(photo);
                             haveTime = true;
+                            photoMap.put(place, photoLists);
                             break;
                         }
                     }
-                    if (!haveTime){
+                    if (!haveTime) {
                         PhotoList photoList = new PhotoList();
                         photoList.setPtime(photo.getPtime());
                         List<Photo> photos = new ArrayList<>();
                         photos.add(photo);
                         photoList.setPhotoList(photos);
+                        photoLists.add(photoList);
+                        photoMap.put(place, photoLists);
                     }
                 }
                 photoMap.put(place, photoLists);
@@ -279,9 +284,59 @@ public class MapFragment extends Fragment {
                 List<Photo> photos = new ArrayList<>();
                 photos.add(photo);
                 photoList.setPhotoList(photos);
+                photoLists.add(photoList);
                 photoMap.put(place, photoLists);
             }
         }
+//        // 根据photoList里边每一个 list，按着地点封装进map
+//        List<Photo> allPhoto = new ArrayList<>();
+//        for (PhotoList photoList:plToAdaper){
+//            allPhoto.addAll(photoList.getPhotoList());
+//        }
+//        // 将数据源封装入Map
+//        for (Photo photo : allPhoto) {
+//            String place = photo.getCity();
+//            if (photoMap.containsKey(place)) {   // 先判断photoMap中是否含有相应地点的key
+//                List<PhotoList> photoLists = photoMap.get(place);
+//                // 此时含有对应key 地点
+//                if (null == photoLists) {
+//                    // 如果这个为对应list的第一个数据
+//                    photoLists = new ArrayList<>();
+//                    PhotoList photoList = new PhotoList();
+//                    photoList.setPtime(photo.getPtime());   // 创建time
+//                    List<Photo> photos = new ArrayList<>();
+//                    photos.add(photo);
+//                    photoList.setPhotoList(photos);
+//                    photoLists.add(photoList);
+//                } else {
+//                    boolean haveTime = false;
+//                    for (int i=0;i<photoLists.size();i++){
+//                        if (photoLists.get(i).getPtime().equals(photo.getPtime())){
+//                            photoLists.get(i).getPhotoList().add(photo);
+//                            haveTime = true;
+//                            break;
+//                        }
+//                    }
+//                    if (!haveTime){
+//                        PhotoList photoList = new PhotoList();
+//                        photoList.setPtime(photo.getPtime());
+//                        List<Photo> photos = new ArrayList<>();
+//                        photos.add(photo);
+//                        photoList.setPhotoList(photos);
+//                    }
+//                }
+//                photoMap.put(place, photoLists);
+//            } else {  // 此时不含有对应key
+//                List<PhotoList> photoLists = new ArrayList<>(); // 创建对应的 PhotoList
+//                PhotoList photoList = new PhotoList();
+//                photoList.setPtime(photo.getPtime());   // 创建time
+//                List<Photo> photos = new ArrayList<>();
+//                photos.add(photo);
+//                photoList.setPhotoList(photos);
+//                photoLists.add(photoList);
+//                photoMap.put(place, photoLists);
+//            }
+//        }
     }
 
     // 给所有图片覆盖到地图上
@@ -378,8 +433,12 @@ public class MapFragment extends Fragment {
         } else {
             tvCount.setVisibility(View.VISIBLE);
         }
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.moren_img);
+        Log.e("ttttttttttt", Constant.IP + imgRes.get(0).getPhotoList().get(0).getPath());
+        String url = Constant.IP + imgRes.get(0).getPhotoList().get(0).getPath();
         Glide.with(this)
-                .load(imgRes.get(0).getPhotoList().get(0).getPath())
+                .load(url)
+                .apply(options)
                 .into(ivCover);
         tvCount.setText(imgRes.size() + "");
         if (imgRes.size() < 10) {
@@ -393,6 +452,7 @@ public class MapFragment extends Fragment {
     }
 
     class GetLatLngTask extends AsyncTask {
+
         private String city;
 
         public GetLatLngTask(String city) {
@@ -420,7 +480,7 @@ public class MapFragment extends Fragment {
             super.onPostExecute(o);
             List<Address> addressList = (List<Address>) o;
             LatLng latLng = null;
-            if (!addressList.isEmpty()) {
+            if (addressList != null || !addressList.isEmpty()) {
                 Address address_temp = addressList.get(0);
                 //计算经纬度
                 latLng = new LatLng(address_temp.getLongitude(), address_temp.getLatitude());
@@ -457,13 +517,14 @@ public class MapFragment extends Fragment {
                 if (!marker.getTitle().equals(TITLE_MYSELF)) {
                     Intent intent = new Intent(getContext(), ShowFootPhotoActivity.class);
                     intent.putExtra("photos", new Gson().toJson(photoMap.get(marker.getTitle())));
-                    intent.putExtra("city",marker.getTitle());
+                    intent.putExtra("city", marker.getTitle());
                     startActivity(intent);
                 }
                 return false;
             }
         });
     }
+
     // 隐藏百度Logo
     private void hideBaiduLogo() {
         // 隐藏baiduMap logo
@@ -473,20 +534,23 @@ public class MapFragment extends Fragment {
             child.setVisibility(View.GONE);
         }
     }
+
     @Override
-    public void onDestroy () {
+    public void onDestroy() {
         super.onDestroy();
         // 在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mapView.onDestroy();
     }
+
     @Override
-    public void onResume () {
+    public void onResume() {
         super.onResume();
         // 在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mapView.onResume();
     }
+
     @Override
-    public void onPause () {
+    public void onPause() {
         super.onPause();
         // 在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mapView.onPause();
