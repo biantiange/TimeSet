@@ -19,6 +19,7 @@ public class Photo {
     private String latitude;
     private String district;
     private String city;
+    private String province;
 
     public String getLongitude() {
         return longitude;
@@ -116,6 +117,14 @@ public class Photo {
         this.city = city;
     }
 
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     @Override
     public String toString() {
         return "Photo{" +
@@ -131,6 +140,7 @@ public class Photo {
                 ", latitude='" + latitude + '\'' +
                 ", district='" + district + '\'' +
                 ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
                 '}';
     }
 
