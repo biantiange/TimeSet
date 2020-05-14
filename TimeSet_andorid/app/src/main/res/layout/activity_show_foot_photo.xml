@@ -72,10 +72,19 @@
 
     </RelativeLayout>
 
+    <!-- 单展示展示的界面 -->
     <RelativeLayout
         android:id="@+id/rl_foot_earth_iver_show_out"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tv_foot_earth_mark_item_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:textColor="#fff"
+            android:textSize="15sp" />
     </RelativeLayout>
 </RelativeLayout>
