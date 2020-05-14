@@ -30,7 +30,9 @@
                 android:background="@null"
                 android:gravity="center"
                 android:hint="地点/内容/描述"
+                android:imeOptions="actionSearch"
                 android:paddingRight="10dp"
+                android:singleLine="true"
                 android:textColorHint="#8C8C8C"
                 android:textCursorDrawable="@null"
                 android:textSize="14sp" />
@@ -65,7 +67,7 @@
         <LinearLayout
             android:id="@+id/ll_no_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="500dp"
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="gone">

@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -58,6 +60,7 @@ public class SearchActivity extends AppCompatActivity {
     private String searchStr = "";
     private LinearLayout llOut;
     private ImageViewer iver;
+    private InputMethodManager manager;//输入法管理器
 
     private Handler handler = new Handler() {
         @Override
@@ -88,6 +91,7 @@ public class SearchActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
         }
+
         //获取
         EventBus.getDefault().register(this);
         etSearch = findViewById(R.id.et_search);
@@ -96,9 +100,26 @@ public class SearchActivity extends AppCompatActivity {
         tvSerach = findViewById(R.id.tv_search);
         llOut = findViewById(R.id.ll_search_in_album_out);
         iver = findViewById(R.id.iver_search_show_img);
-        tvSerach.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        tvSerach.setOnClickListener(v -> {
+            searchStr = etSearch.getText().toString();
+            if(searchStr == null){
+                Toast.makeText(SearchActivity.this,"请输入搜索内容！",Toast.LENGTH_SHORT).show();
+            }
+            Log.e("search", searchStr);
+            initListView(searchStr);
+        });
+        //键盘搜索
+        manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        search();
+    }
+
+    private void search() {
+        etSearch.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                //先隐藏键盘
+                if (manager.isActive()) {
+                    manager.hideSoftInputFromWindow(etSearch.getApplicationWindowToken(), 0);
+                }
                 searchStr = etSearch.getText().toString();
                 if(searchStr == null){
                     Toast.makeText(SearchActivity.this,"请输入搜索内容！",Toast.LENGTH_SHORT).show();
@@ -106,6 +127,8 @@ public class SearchActivity extends AppCompatActivity {
                 Log.e("search", searchStr);
                 initListView(searchStr);
             }
+            //记得返回false
+            return false;
         });
     }
 
@@ -142,7 +165,7 @@ public class SearchActivity extends AppCompatActivity {
             case "searchshowImg":
                 int position = (int) showMap.get("position");
                 List<String> dataSource = (List<String>) showMap.get("datasource");
-                Log.e("Subscribe_show",dataSource.get(position));
+                Log.e("Subscribe_show",dataSource.toString());
                 showBigImgs(position, dataSource);
                 break;
         }

@@ -46,6 +46,7 @@ public class GridViewAdapter extends BaseAdapter {
     public long getItemId(int position) { return position; }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
+        showImgSource.clear();
         for (Photo photo : dataSource){
             showImgSource.add(Constant.URL+photo.getPath());
         }
@@ -62,16 +63,16 @@ public class GridViewAdapter extends BaseAdapter {
         Glide.with(context).load(Constant.URL+photo.getPath()).into(holder.img);
 
         //设置图片单击事件，将phone参数传进图片查看器
-        holder.img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intent=new Intent(context,)
-                Map<String,Object> postMap = new HashMap<>();
-                postMap.put("type","searchshowImg");
-                postMap.put("datasource",showImgSource);
-                postMap.put("position",position);
-                EventBus.getDefault().post(postMap);
-                Log.e("图片点击事件-搜索",photo.toString());
+        holder.img.setOnClickListener(v -> {
+            //Intent intent=new Intent(context,)
+            Map<String,Object> postMap = new HashMap<>();
+            postMap.put("type","searchshowImg");
+            postMap.put("datasource",showImgSource);
+            postMap.put("position",position);
+            EventBus.getDefault().post(postMap);
+            Log.e("图片点击事件-搜索",photo.toString());
+            for (String img:showImgSource){
+                Log.e("showImg",img.trim());
             }
         });
 
