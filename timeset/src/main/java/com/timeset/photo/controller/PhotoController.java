@@ -54,54 +54,76 @@ public class PhotoController {
         }.getType());
         System.out.println(jlist);
         String pa = UserController.class.getClassLoader().getResource("").getPath().split("timeset")[0];
+        int repeat = 0;
         for (int i = 0; i < files.length; i++) {
             // 生成新的文件名
-            String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
+//            String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
+            String fileName = files[i].getOriginalFilename();
+            String dir1 = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/";
+            File file1=new File((dir1));
+            if(!file1.exists()){
+                file1.mkdir();
+            }
+            String dir2 = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/"+userId+"/";
+            File file2=new File((dir2));
+            if(!file2.exists()){
+                file2.mkdir();
+            }
             // 保存路径
-            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + fileName;
+            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + userId + "/" +albumId+"/"+  fileName;
             //String destFileName1 = request.getServletContext().getRealPath("") + "uploaded" + File.separator + fileName;
             System.out.println(destFileName);
             //System.out.println(destFileName1);
-
             //String destFileName=Constant.ImgPath+File.separator+fileName;
             // 执行保存操作
             File destFile = new File(destFileName);
 //            System.out.println(destFileName);
+//            if(destFile.exists()){
+//                repeat++;
+//            }else {
             if (!destFile.getParentFile().exists()) {
                 destFile.getParentFile().mkdir();
+                System.out.println("创建目录");
+            }else{
+                System.out.println("目录存在");
             }
-            try {
-                files[i].transferTo(destFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Photo photo = new Photo();
-            photo.setCity(city);
-            photo.setDistrict(district);
-            photo.setPlace(place);
-            photo.setUserId(userId);
-            photo.setAlbumId(albumId);
-            String date = "";
-            if (jlist.get(i).getPtime().length() == 0) {
-                SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
-                date = df.format(new Date());// new Date()为获取当前系统时间
+            if (destFile.exists()) {
+                repeat++;
             } else {
-                date = jlist.get(i).getPtime();
-            }
-            photo.setPtime(date);
-            photo.setPdescribe(describe);
-            photo.setLatitude(jlist.get(i).getLat());
-            photo.setLongitude(jlist.get(i).getLon());
-            photo.setPath(fileName);
+                try {
+                    files[i].transferTo(destFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Photo photo = new Photo();
+                photo.setCity(city);
+                photo.setDistrict(district);
+                photo.setPlace(place);
+                photo.setUserId(userId);
+                photo.setAlbumId(albumId);
+                String date = "";
+                if (jlist.get(i).getPtime().length() == 0) {
+                    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
+                    date = df.format(new Date());// new Date()为获取当前系统时间
+                } else {
+                    date = jlist.get(i).getPtime();
+                }
+                photo.setPtime(date);
+                photo.setPdescribe(describe);
+                photo.setLatitude(jlist.get(i).getLat());
+                photo.setLongitude(jlist.get(i).getLon());
+                photo.setPath(fileName);
 
-            int result = photoService.addPhoto(photo, destFileName);
+                int result = photoService.addPhoto(photo, destFileName);
+            }
+        }
 
 //            if (result == 0) {
 //                return -1;
 //            }
-        }
+//        }
 
-        return 0;
+        return repeat;
     }
 
     @RequestMapping("/delete")
