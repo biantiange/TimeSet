@@ -30,6 +30,8 @@ public class ShowFootPhotoActivity extends AppCompatActivity implements View.OnC
     private ImageView ivExit;
     private TextView tvCount;
     private TextView tvCity;
+    private RelativeLayout rlIverShow;
+    private TextView tvPhotoComment;
     private FootEarthTimeRecyclerAdapter adapter;
 
     private String city = "北京";
@@ -50,7 +52,7 @@ public class ShowFootPhotoActivity extends AppCompatActivity implements View.OnC
     }
 
     private void setRecyclerView() {
-        adapter = new FootEarthTimeRecyclerAdapter(photos, this, R.layout.item_foot_earth_time, rlOut, iver, recyShow);
+        adapter = new FootEarthTimeRecyclerAdapter(photos, this, R.layout.item_foot_earth_time, rlOut, iver, recyShow,rlIverShow,tvPhotoComment);
         recyShow.setAdapter(adapter);
     }
 
@@ -73,6 +75,8 @@ public class ShowFootPhotoActivity extends AppCompatActivity implements View.OnC
         ivExit = findViewById(R.id.iv_foot_earth_show_exit);
         tvCount = findViewById(R.id.tv_foot_earth_show_img_count);
         tvCity = findViewById(R.id.tv_foot_earth_show_img_province);
+        rlIverShow = findViewById(R.id.rl_foot_earth_iver_show_out);
+        tvPhotoComment = findViewById(R.id.tv_foot_earth_mark_item_comment);
     }
 
     private void initDatas() {

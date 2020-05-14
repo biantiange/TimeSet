@@ -27,15 +27,20 @@ public class FootEarthTimeRecyclerAdapter extends RecyclerView.Adapter {
     private int layout_item_id;
     private RelativeLayout rlOut;
     private ImageViewer iver;
+    private RelativeLayout rlIverShow;
+    private TextView tvComment;
     private RecyclerView rcv;
     public FootEarthTimeRecyclerAdapter(List<PhotoList> photoLists, Context context, int layout_item_id,
-                                        RelativeLayout rlOut, ImageViewer iver,RecyclerView rcv) {
+                                        RelativeLayout rlOut, ImageViewer iver,RecyclerView rcv,
+                                        RelativeLayout rlIverShow, TextView tvComment) {
         this.photoLists = photoLists;
         this.context = context;
         this.layout_item_id = layout_item_id;
         this.rlOut = rlOut;
         this.iver = iver;
         this.rcv = rcv;
+        this.rlIverShow = rlIverShow;
+        this.tvComment = tvComment;
     }
 
     @NonNull
@@ -53,7 +58,7 @@ public class FootEarthTimeRecyclerAdapter extends RecyclerView.Adapter {
         myViewHolder.tvTime.setText(time.substring(0, 4) + "年" + time.substring(4, 6) + "月" + time.substring(6, 8) + "日");
         //gridView填充数据，创建adapter
         List<Photo> phoneList = photoLists.get(position).getPhotoList();
-        FootEarthPhotoRecyclerAdapter adapter = new FootEarthPhotoRecyclerAdapter(context, phoneList, R.layout.item_foot_earth_images, rlOut,iver,rcv);
+        FootEarthPhotoRecyclerAdapter adapter = new FootEarthPhotoRecyclerAdapter(context, phoneList, R.layout.item_foot_earth_images, rlOut,iver,rcv,rlIverShow,tvComment);
         myViewHolder.gridView.setAdapter(adapter);
     }
 

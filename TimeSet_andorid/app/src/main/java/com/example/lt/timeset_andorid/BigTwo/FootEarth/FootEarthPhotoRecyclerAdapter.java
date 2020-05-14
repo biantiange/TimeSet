@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,10 +31,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import indi.liyi.viewer.ImageDrawee;
 import indi.liyi.viewer.ImageViewer;
 import indi.liyi.viewer.ViewData;
 import indi.liyi.viewer.ViewerStatus;
 import indi.liyi.viewer.listener.OnBrowseStatusListener;
+import indi.liyi.viewer.listener.OnItemChangedListener;
 import indi.liyi.viewer.listener.OnItemClickListener;
 import indi.liyi.viewer.listener.OnItemLongPressListener;
 
@@ -44,16 +47,21 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
     private RelativeLayout rlOut;
     private ImageViewer iver;
     private RecyclerView rcv;
+    private RelativeLayout rlIverShow;
+    private TextView tvComment;
     private List<String> showImgSource = new ArrayList<>();
 
     public FootEarthPhotoRecyclerAdapter(Context context, List<Photo> dataSource, int item_layout_id,
-                                         RelativeLayout rlOut, ImageViewer iver,RecyclerView rcv) {
+                                         RelativeLayout rlOut, ImageViewer iver,RecyclerView rcv,
+                                         RelativeLayout rlIverShow, TextView tvComment) {
         this.context = context;
         this.dataSource = dataSource;
         this.item_layout_id = item_layout_id;
         this.rlOut = rlOut;
         this.iver = iver;
         this.rcv = rcv;
+        this.rlIverShow = rlIverShow;
+        this.tvComment = tvComment;
         for (Photo photo : dataSource) {
             showImgSource.add(Constant.URL + photo.getPath());
 //            showImgSource.add(photo.getPath());
@@ -112,6 +120,9 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
         holder.ivImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String comment = dataSource.get(position).getPdescribe();
+                if (null != comment && !comment.equals(""))
+                    tvComment.setText(comment);
                 showBigImgs(position);
             }
         });
@@ -121,9 +132,6 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
     // 展示图片
     private void showBigImgs(int position) {
         iver.setVisibility(View.VISIBLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            iver.setElevation(3.0f);
-        }
         List<ViewData> vdList = new ArrayList<>();
         Point mScreenSize = ViewDataUtils.getScreenSize(context.getApplicationContext());
         for (int i = 0, len = showImgSource.size(); i < len; i++) {
@@ -160,7 +168,17 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
                 return true;
             }
         });
-
+        // 切换图片
+        iver.setOnItemChangedListener(new OnItemChangedListener() {
+            @Override
+            public void onItemChanged(int position, ImageDrawee drawee) {
+                if(rlIverShow.getVisibility() == View.VISIBLE){
+                    String comment = dataSource.get(position).getPdescribe();
+                    if (null != comment && !comment.equals(""))
+                        tvComment.setText(comment);
+                }
+            }
+        });
         iver.setOnBrowseStatusListener(new OnBrowseStatusListener() {
             @Override
             public void onBrowseStatus(int status) {
