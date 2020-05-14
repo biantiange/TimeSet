@@ -112,7 +112,7 @@ public class PhotoController {
                 photo.setPdescribe(describe);
                 photo.setLatitude(jlist.get(i).getLat());
                 photo.setLongitude(jlist.get(i).getLon());
-                photo.setPath(fileName);
+                photo.setPath(+ userId + "/" +albumId+"/"+fileName);
 
                 int result = photoService.addPhoto(photo, destFileName);
             }
