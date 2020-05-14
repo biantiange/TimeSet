@@ -240,13 +240,6 @@ public class InAlbumActivity extends AppCompatActivity {
             }
         }
     }
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (iver.onKeyDown(keyCode, event)) {
-            return iver.onKeyDown(keyCode, event);
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }
 
 
