@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.example.lt.timeset_andorid.util.Constant;
 import com.example.lt.timeset_andorid.util.PhotoLoader;
 import com.example.lt.timeset_andorid.util.ViewDataUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,12 @@ import indi.liyi.viewer.listener.OnBrowseStatusListener;
 import indi.liyi.viewer.listener.OnItemChangedListener;
 import indi.liyi.viewer.listener.OnItemClickListener;
 import indi.liyi.viewer.listener.OnItemLongPressListener;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
     private Context context;    // 上下文环境
@@ -254,13 +262,15 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // 1. 删除数据源
+                int id = dataSource.get(position).getId();
                 dataSource.remove(position);
                 showImgSource.remove(position);
                 notifyDataSetChanged();
                 // 2. 关闭iver
                 iver.cancel();
                 tvCount.setText(dataSource.size()+"");
-                // 2. 修改数据库
+                // 3. 修改数据库
+                changeDelete(id);
             }
         });
         adBuilder.setNegativeButton("我手滑了", new DialogInterface.OnClickListener() {
@@ -271,7 +281,29 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
         });
         adBuilder.create().show();
     }
+    private static final String IP = "/photo/delete";
+    private void changeDelete(int id) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder builder = new FormBody.Builder().add("photoId",id+"");
+        FormBody body = builder.build();
+        Request request = new Request.Builder().post(body).url(IP).build();
+        final Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//                Toast.makeText(context,"delete失败",Toast.LENGTH_SHORT).show();
+                Log.e("deleteee","失败");
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                String strings = response.body().string();
+//                Toast.makeText(context,"1",Toast.LENGTH_SHORT).show();
+                Log.e("deletee","成果");
+            }
+        });
+    }
     private class ViewHolder {
         RelativeLayout rlOut;
         ImageView ivImg;

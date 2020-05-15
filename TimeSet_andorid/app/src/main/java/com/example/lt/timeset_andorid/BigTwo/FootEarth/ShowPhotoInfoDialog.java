@@ -2,6 +2,7 @@ package com.example.lt.timeset_andorid.BigTwo.FootEarth;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,15 @@ import android.widget.TextView;
 
 import com.example.lt.timeset_andorid.Entity.Photo;
 import com.example.lt.timeset_andorid.R;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class ShowPhotoInfoDialog {
     private static ShowPhotoInfoDialog showPhotoInfoDialog;
@@ -99,8 +109,32 @@ public class ShowPhotoInfoDialog {
             @Override
             public void onClick(View v) {
                 photo.setPdescribe(etDescribe.getText().toString());
-//                updateData();
+                changeUpdate(etDescribe.getText().toString());
                 dialog.dismiss();
+            }
+        });
+    }
+
+    private static final String IP = "photo/updatePhotoDescription";
+    private void changeUpdate(String newDescribe) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder builder = new FormBody.Builder().add("newDescribe",newDescribe).add("photoId",photo.getId()+"");
+        FormBody body = builder.build();
+        Request request = new Request.Builder().post(body).url(IP).build();
+        final Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//                Toast.makeText(context,"update失败",Toast.LENGTH_SHORT).show();
+                Log.e("updateee","失败");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                String strings = response.body().string();
+//                Toast.makeText(context,"2",Toast.LENGTH_SHORT).show();
+                Log.e("updateee","成果");
             }
         });
     }
