@@ -74,6 +74,8 @@ public class PhotoServiceImpl {
 
     public int deletePhoto(int id){return photoMapper.deletePhoto(id);};
 
+    public int updatePhotoDescription(String describe,int id){ return photoMapper.updatePhotoDescription(describe,id);}
+
     public List<Photo> findAll(int userId){return photoMapper.findAll(userId);};
 
     public List<PhotoList> findByAlbum(int albumId, int userId){return photoMapper.findByAlbum(albumId,userId);};

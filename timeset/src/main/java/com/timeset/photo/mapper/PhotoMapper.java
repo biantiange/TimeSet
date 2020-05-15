@@ -34,4 +34,7 @@ public interface PhotoMapper {
 
     //根据描述查询照片
     public List<Photo> findDescribe(String pdescribe,int userId);
+
+    //根据id修改图片描述
+    public int updatePhotoDescription(String describe,int id);
 }
