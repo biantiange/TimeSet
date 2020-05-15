@@ -11,10 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lt.timeset_andorid.BigTwo.TimePhoto.CalendarImgAdapter;
 import com.example.lt.timeset_andorid.BigTwo.TimePhoto.NoScrollGridView;
-import com.example.lt.timeset_andorid.BigTwo.TimePhoto.Photo;
 import com.example.lt.timeset_andorid.BigTwo.TimePhoto.PhotoList;
+import com.example.lt.timeset_andorid.Entity.Photo;
 import com.example.lt.timeset_andorid.R;
 
 import java.util.List;

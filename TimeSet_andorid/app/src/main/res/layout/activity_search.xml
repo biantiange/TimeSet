@@ -21,7 +21,8 @@
             android:layout_gravity="center"
             android:background="@drawable/button_edge"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
             <EditText
                 android:id="@+id/et_search"

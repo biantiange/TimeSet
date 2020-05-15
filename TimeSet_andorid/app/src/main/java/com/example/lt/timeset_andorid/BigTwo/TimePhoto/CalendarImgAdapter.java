@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.lt.timeset_andorid.Entity.Photo;
 import com.example.lt.timeset_andorid.R;
 import com.example.lt.timeset_andorid.util.Constant;
 import com.example.lt.timeset_andorid.util.PhotoLoader;
@@ -45,16 +46,20 @@ public class CalendarImgAdapter extends BaseAdapter {
 
     private List<String> showImgSource = new ArrayList<>();
     // 声明列表项中的控件
-    public CalendarImgAdapter(Context context, List<Photo> dataSource,
-                              int item_layout_id) {
+    public CalendarImgAdapter(Context context, List<Photo> dataSource, int item_layout_id) {
         this.context = context;       // 上下文环境
         this.dataSource = dataSource; // 数据源
         this.item_layout_id = item_layout_id; // 列表项布局文件ID
-        for (Photo photo : dataSource){
-            showImgSource.add(Constant.URL+photo.getPath());
+        if(dataSource!=null) {
+            for (Photo photo : dataSource) {
+                showImgSource.add(Constant.URL + photo.getPath());
+            }
         }
     }
     public int getCount() {
+        if(dataSource==null){
+            return 0;
+        }
         return dataSource.size();
     }
     public Photo getItem(int position) {

@@ -28,6 +28,9 @@
             <result property="identify" column="identify"/>
             <result property="longitude" column="longitude"/>
             <result property="latitude" column="latitude"/>
+            <result property="city" column="city"/>
+            <result property="district" column="district"/>
+            <result property="province" column="province"/>
         </collection>
     </resultMap>
     <select id="findByAlbum" resultMap="PhotoListMap" >

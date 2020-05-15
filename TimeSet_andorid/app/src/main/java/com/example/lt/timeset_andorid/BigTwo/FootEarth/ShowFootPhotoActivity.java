@@ -10,14 +10,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.lt.timeset_andorid.BigTwo.TimePhoto.Photo;
 import com.example.lt.timeset_andorid.BigTwo.TimePhoto.PhotoList;
 import com.example.lt.timeset_andorid.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import indi.liyi.viewer.ImageViewer;

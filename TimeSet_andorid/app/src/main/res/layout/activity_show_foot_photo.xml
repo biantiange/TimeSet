@@ -65,18 +65,68 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- 修改的界面 -->
     <RelativeLayout
         android:id="@+id/rl_foot_earth_iver_show_edit_out"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#fff">
+
+            <ImageView
+                android:id="@+id/iv_foot_earth_iver_show_edit_exit"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/left_exit" />
+
+            <TextView
+                android:id="@+id/tv_foot_earth_iver_show_edit_time"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@id/iv_foot_earth_iver_show_edit_exit"
+                android:gravity="center_vertical"
+                android:text="2017年4月6日"
+                android:textColor="#000"
+                android:textSize="19sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:background="#fff">
+
+            <ImageView
+                android:id="@+id/iv_foot_earth_iver_show_edit_detail"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/detail" />
+
+            <ImageView
+                android:id="@+id/iv_foot_earth_iver_show_edit_delete"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/delete" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <!-- 单展示展示的界面 -->
     <RelativeLayout
         android:id="@+id/rl_foot_earth_iver_show_out"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_foot_earth_mark_item_comment"
