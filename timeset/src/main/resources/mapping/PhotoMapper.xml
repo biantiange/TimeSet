@@ -53,5 +53,11 @@
         select * from photo where identify like "%"#{identify}"%" and user_id=#{userId}
     </select>
 
+    <update id="updatePhotoDescription" >
+        update photo
+        set pdescribe=#{describe}
+        where id =#{id}
+    </update>
+
 
 </mapper>

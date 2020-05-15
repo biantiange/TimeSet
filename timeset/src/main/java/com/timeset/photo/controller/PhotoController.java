@@ -127,10 +127,22 @@ public class PhotoController {
     }
 
     @RequestMapping("/delete")
-    public int delete(@RequestParam("id") int id) {
+    public int delete(@RequestParam("photoId") int id) {
         System.out.println("删除图片");
         if (id != 0) {
             int result = photoService.deletePhoto(id);
+            if (result != 0) {
+                return 0;
+            }
+        }
+        return -1;
+    }
+
+    @RequestMapping("updatePhotoDescription")
+    public int updatePhotoDescription(@RequestParam("newDescribe") String newDescribe,@RequestParam("photoId") int id){
+        System.out.println("修改图片描述");
+        if (id != 0) {
+            int result = photoService.updatePhotoDescription(newDescribe,id);
             if (result != 0) {
                 return 0;
             }
