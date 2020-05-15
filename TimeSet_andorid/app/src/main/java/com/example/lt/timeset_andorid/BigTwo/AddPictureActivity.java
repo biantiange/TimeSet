@@ -144,7 +144,7 @@ public class AddPictureActivity extends AppCompatActivity {
 //                .setPictureCropStyle()//动态自定义裁剪主题
                 .setPictureWindowAnimationStyle(mWindowAnimationStyle)//相册启动退出动画
                 .isCamera(true)//列表是否显示拍照按钮
-                .imageFormat(PictureMimeType.PNG)//拍照图片格式后缀,默认jpeg, PictureMimeType.PNG，Android Q使用PictureMimeType.PNG_Q
+//                .imageFormat(PictureMimeType.PNG)//拍照图片格式后缀,默认jpeg, PictureMimeType.PNG，Android Q使用PictureMimeType.PNG_Q
                 .maxSelectNum(18)//最大选择数量,默认9张
                 .minSelectNum(1)// 最小选择数量
 //                .maxVideoSelectNum()//视频最大选择数量
@@ -295,6 +295,7 @@ public class AddPictureActivity extends AppCompatActivity {
         activity = this;
         albumId = getIntent().getExtras().getInt("albumId", -1);
         userId = getSharedPreferences("user", MODE_PRIVATE).getInt("id", 0);
+
 
         mWindowAnimationStyle = new PictureWindowAnimationStyle();
         mWindowAnimationStyle.ofAllAnimation(R.anim.picture_anim_up_in, R.anim.picture_anim_down_out);
