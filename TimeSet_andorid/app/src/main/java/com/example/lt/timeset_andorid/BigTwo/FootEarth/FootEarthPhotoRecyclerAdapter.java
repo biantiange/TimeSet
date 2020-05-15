@@ -2,6 +2,8 @@ package com.example.lt.timeset_andorid.BigTwo.FootEarth;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -43,19 +46,32 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
     private RecyclerView rcv;
     private RelativeLayout rlIverShow;
     private TextView tvComment;
+    private RelativeLayout rlIverEdit;
+    private ImageView ivEditExit;
+    private TextView tvEditTime;
+    private ImageView ivEditDetail;
+    private ImageView ivEditDelete;
+    private TextView tvCount;
     private List<String> showImgSource = new ArrayList<>();
 
     public FootEarthPhotoRecyclerAdapter(Context context, List<Photo> dataSource, int item_layout_id,
-                                         RelativeLayout rlOut, ImageViewer iver,RecyclerView rcv,
-                                         RelativeLayout rlIverShow, TextView tvComment) {
+                                         RelativeLayout rlOut, ImageViewer iver, RecyclerView rcv,TextView tvCount,
+                                         RelativeLayout rlIverShow, TextView tvComment,
+                                         RelativeLayout rlIverEdit, ImageView ivEditExit, TextView tvEditTime, ImageView ivEditDetail, ImageView ivEditDelete) {
         this.context = context;
         this.dataSource = dataSource;
         this.item_layout_id = item_layout_id;
         this.rlOut = rlOut;
         this.iver = iver;
         this.rcv = rcv;
+        this.tvCount = tvCount;
         this.rlIverShow = rlIverShow;
         this.tvComment = tvComment;
+        this.rlIverEdit = rlIverEdit;
+        this.ivEditExit = ivEditExit;
+        this.tvEditTime = tvEditTime;
+        this.ivEditDetail = ivEditDetail;
+        this.ivEditDelete = ivEditDelete;
         for (Photo photo : dataSource) {
             showImgSource.add(Constant.URL + photo.getPath());
 //            showImgSource.add(photo.getPath());
@@ -87,10 +103,10 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
             holder.rlOut = convertView.findViewById(R.id.rl_foot_earth_item_out);
             holder.ivImg = convertView.findViewById(R.id.iv_foot_earth_item_show);
             int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
-            int width = (widthPixels - 30) / 3 ;
-            int height = width ;
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width,height);
-            layoutParams.setMargins(2,2,2,2);
+            int width = (widthPixels - 30) / 3;
+            int height = width;
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
+            layoutParams.setMargins(2, 2, 2, 2);
             holder.rlOut.setLayoutParams(layoutParams);
             convertView.setTag(holder);
         } else {
@@ -117,6 +133,8 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
                 String comment = dataSource.get(position).getPdescribe();
                 if (null != comment && !comment.equals(""))
                     tvComment.setText(comment);
+                rlIverShow.setVisibility(View.VISIBLE);
+                iver.setBackgroundColor(Color.parseColor("#000000"));
                 showBigImgs(position);
             }
         });
@@ -124,8 +142,9 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
     }
 
     // 展示图片
-    private void showBigImgs(int position) {
+    private void showBigImgs(final int position) {
         iver.setVisibility(View.VISIBLE);
+
         List<ViewData> vdList = new ArrayList<>();
         Point mScreenSize = ViewDataUtils.getScreenSize(context.getApplicationContext());
         for (int i = 0, len = showImgSource.size(); i < len; i++) {
@@ -137,7 +156,7 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
             viewData.setTargetHeight(ViewDataUtils.dp2px(context.getApplicationContext(), 200));
             vdList.add(viewData);
         }
-        iver.overlayStatusBar(false) // ImageViewer 是否会占据 StatusBar 的空间
+        iver.overlayStatusBar(true) // ImageViewer 是否会占据 StatusBar 的空间
                 .viewData(vdList) // 数据源
                 .imageLoader(new PhotoLoader()) // 设置图片加载方式
                 .playEnterAnim(true) // 是否开启进场动画，默认为true
@@ -151,15 +170,49 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
         // 监听单击事件
         iver.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public boolean onItemClick(int position, ImageView imageView) {
-                return true;
-            }
-        });
-        // 监听长点击事件
-        iver.setOnItemLongPressListener(new OnItemLongPressListener() {
-            @Override
-            public boolean onItemLongPress(int position, ImageView imageView) {
-                return true;
+            public boolean onItemClick(final int position, ImageView imageView) { // 将展示修改界面
+                if (rlIverShow.getVisibility() == View.VISIBLE){
+                    rlIverShow.setVisibility(View.GONE);    // 展示界面消失
+                    rlIverEdit.setVisibility(View.VISIBLE);
+                    iver.setBackgroundColor(Color.parseColor("#ffffff"));  // 背景色变白
+                    // 展示修改界面显示
+                    ivEditExit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            iver.cancel();
+                        }
+                    });
+                    String time = dataSource.get(position).getPtime();
+                    if (null != time){
+                        tvEditTime.setText(time.substring(0, 4) + "年" + time.substring(4, 6) + "月" + time.substring(6, 8) + "日");
+                    }else{
+                        tvEditTime.setText("");
+                    }
+                    ivEditDetail.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ShowPhotoInfoDialog dialog = ShowPhotoInfoDialog.getDialog();
+                            dialog.setContext(context);
+                            dialog.setPhoto(dataSource.get(position));
+                            dialog.showBottomDialog();
+                        }
+                    });
+                    ivEditDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showDeleteDialog(position);
+                        }
+                    });
+                }else if (rlIverEdit.getVisibility() == View.VISIBLE){  // 将展示展示界面
+                    rlIverEdit.setVisibility(View.GONE);
+                    rlIverShow.setVisibility(View.VISIBLE); // 展示界面显示
+                    iver.setBackgroundColor(Color.parseColor("#000000"));// 背景色变黑
+                    // 修改comment
+                    String comment = dataSource.get(position).getPdescribe();
+                    if (null != comment && !comment.equals(""))
+                        tvComment.setText(comment);
+                }
+                return true;    // 返回值为true，不会退出展示
             }
         });
         // 切换图片
@@ -180,14 +233,45 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
                     // 正在开启启动预览图片
                     rlOut.setVisibility(View.GONE);
                     rcv.setVisibility(View.GONE);
+                    rlIverShow.setVisibility(View.VISIBLE);
+                    rlIverEdit.setVisibility(View.GONE);    // 进来时展示展示界面
                 } else if (status == ViewerStatus.STATUS_SILENCE) {
                     // 此时未开启预览图片
                     rlOut.setVisibility(View.VISIBLE);
                     rcv.setVisibility(View.VISIBLE);
+                    rlIverShow.setVisibility(View.GONE);
+                    rlIverEdit.setVisibility(View.GONE);
                 }
             }
         });
     }
+    private void showDeleteDialog(final int position){
+        // 显示一个Dialog
+        AlertDialog.Builder adBuilder = new AlertDialog.Builder(context);
+        adBuilder.setTitle("确定删除此图片");
+
+        adBuilder.setPositiveButton("确认删除", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 1. 删除数据源
+                dataSource.remove(position);
+                showImgSource.remove(position);
+                notifyDataSetChanged();
+                // 2. 关闭iver
+                iver.cancel();
+                tvCount.setText(dataSource.size()+"");
+                // 2. 修改数据库
+            }
+        });
+        adBuilder.setNegativeButton("我手滑了", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 选中“取消”按钮，取消界面
+            }
+        });
+        adBuilder.create().show();
+    }
+
     private class ViewHolder {
         RelativeLayout rlOut;
         ImageView ivImg;
