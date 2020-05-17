@@ -43,7 +43,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BigTwo.FootEarth.ShowFootPhotoActivity">
+        <activity android:name=".BigTwo.FootEarth.ShowFootPhotoActivity"
+            android:launchMode="singleTask">
 
         </activity>
         <!-- 百度地图 -->

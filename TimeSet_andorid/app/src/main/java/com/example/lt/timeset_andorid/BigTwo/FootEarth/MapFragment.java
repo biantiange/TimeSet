@@ -547,17 +547,15 @@ public class MapFragment extends Fragment {
 
     private void addItemTouchListener() {
         // 4. 给覆盖物添加点击监听事件    标志物需要设置可拖拽
-        baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                if (!marker.getTitle().equals(TITLE_MYSELF)) {
-                    Intent intent = new Intent(getContext(), ShowFootPhotoActivity.class);
-                    intent.putExtra("photos", new Gson().toJson(photoMap.get(marker.getTitle())));
-                    intent.putExtra("city", marker.getTitle());
-                    startActivity(intent);
-                }
-                return false;
+        baiduMap.setOnMarkerClickListener(marker -> {
+            Log.e("keydown1","hhhh");
+            if (!marker.getTitle().equals(TITLE_MYSELF)) {
+                Intent intent = new Intent(getActivity(), ShowFootPhotoActivity.class);
+                intent.putExtra("photos", new Gson().toJson(photoMap.get(marker.getTitle())));
+                intent.putExtra("city", marker.getTitle());
+                startActivity(intent);
             }
+            return true;
         });
     }
 

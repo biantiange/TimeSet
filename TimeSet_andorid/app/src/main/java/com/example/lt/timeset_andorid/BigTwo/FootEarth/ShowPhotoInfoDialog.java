@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.lt.timeset_andorid.Entity.Photo;
 import com.example.lt.timeset_andorid.R;
+import com.example.lt.timeset_andorid.util.Constant;
 
 import java.io.IOException;
 
@@ -115,7 +116,7 @@ public class ShowPhotoInfoDialog {
         });
     }
 
-    private static final String IP = "photo/updatePhotoDescription";
+    private static final String IP = Constant.IP+"photo/updatePhotoDescription";
     private void changeUpdate(String newDescribe) {
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder builder = new FormBody.Builder().add("newDescribe",newDescribe).add("photoId",photo.getId()+"");

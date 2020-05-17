@@ -281,7 +281,7 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
         });
         adBuilder.create().show();
     }
-    private static final String IP = "/photo/delete";
+    private static final String IP = Constant.IP + "/photo/delete";
     private void changeDelete(int id) {
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder builder = new FormBody.Builder().add("photoId",id+"");
