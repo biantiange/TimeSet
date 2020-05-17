@@ -28,8 +28,15 @@ public class ShowFootPhotoActivity extends AppCompatActivity implements View.OnC
     private ImageView ivExit;
     private TextView tvCount;
     private TextView tvCity;
+
     private RelativeLayout rlIverShow;
     private TextView tvPhotoComment;
+
+    private RelativeLayout rlIverEdit;
+    private ImageView ivEditExit;
+    private TextView tvEditTime;
+    private ImageView ivEditDetail;
+    private ImageView ivEditDelete;
     private FootEarthTimeRecyclerAdapter adapter;
 
     private String city = "北京";
@@ -50,7 +57,9 @@ public class ShowFootPhotoActivity extends AppCompatActivity implements View.OnC
     }
 
     private void setRecyclerView() {
-        adapter = new FootEarthTimeRecyclerAdapter(photos, this, R.layout.item_foot_earth_time, rlOut, iver, recyShow,rlIverShow,tvPhotoComment);
+        adapter = new FootEarthTimeRecyclerAdapter(photos, this, R.layout.item_foot_earth_time, rlOut, iver, recyShow, tvCount
+                , rlIverShow, tvPhotoComment
+                , rlIverEdit, ivEditExit, tvEditTime, ivEditDetail, ivEditDelete);
         recyShow.setAdapter(adapter);
     }
 
@@ -59,11 +68,11 @@ public class ShowFootPhotoActivity extends AppCompatActivity implements View.OnC
     }
 
     private void initViews() {
-        for (PhotoList pl : photos){
+        for (PhotoList pl : photos) {
             total += pl.getPhotoList().size();
         }
         tvCount.setText("" + total);
-        tvCity.setText(""+city);
+        tvCity.setText("" + city);
     }
 
     private void findViews() {
@@ -75,13 +84,19 @@ public class ShowFootPhotoActivity extends AppCompatActivity implements View.OnC
         tvCity = findViewById(R.id.tv_foot_earth_show_img_province);
         rlIverShow = findViewById(R.id.rl_foot_earth_iver_show_out);
         tvPhotoComment = findViewById(R.id.tv_foot_earth_mark_item_comment);
+        rlIverEdit = findViewById(R.id.rl_foot_earth_iver_show_edit_out);
+        ivEditExit = findViewById(R.id.iv_foot_earth_iver_show_edit_exit);
+        tvEditTime = findViewById(R.id.tv_foot_earth_iver_show_edit_time);
+        ivEditDetail = findViewById(R.id.iv_foot_earth_iver_show_edit_detail);
+        ivEditDelete = findViewById(R.id.iv_foot_earth_iver_show_edit_delete);
     }
 
     private void initDatas() {
         String photoStr = getIntent().getStringExtra("photos");
-        city =getIntent().getStringExtra("city");
-        Type type = new TypeToken<List<PhotoList>>() {}.getType();
-        photos = gson.fromJson(photoStr,type);
+        city = getIntent().getStringExtra("city");
+        Type type = new TypeToken<List<PhotoList>>() {
+        }.getType();
+        photos = gson.fromJson(photoStr, type);
 
 //        // 1. 获取照片数据( 模拟通过intent获取phonoList数据源)
 //        photos = new ArrayList<>();

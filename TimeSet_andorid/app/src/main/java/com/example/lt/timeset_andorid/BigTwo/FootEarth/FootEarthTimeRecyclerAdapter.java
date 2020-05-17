@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,17 +30,31 @@ public class FootEarthTimeRecyclerAdapter extends RecyclerView.Adapter {
     private RelativeLayout rlIverShow;
     private TextView tvComment;
     private RecyclerView rcv;
+    private RelativeLayout rlIverEdit;
+    private ImageView ivEditExit;
+    private TextView tvEditTime;
+    private ImageView ivEditDetail;
+    private ImageView ivEditDelete;
+    private TextView tvCount;
+
     public FootEarthTimeRecyclerAdapter(List<PhotoList> photoLists, Context context, int layout_item_id,
-                                        RelativeLayout rlOut, ImageViewer iver,RecyclerView rcv,
-                                        RelativeLayout rlIverShow, TextView tvComment) {
+                                        RelativeLayout rlOut, ImageViewer iver, RecyclerView rcv, TextView tvCount,
+                                        RelativeLayout rlIverShow, TextView tvComment,
+                                        RelativeLayout rlIverEdit, ImageView ivEditExit, TextView tvEditTime, ImageView ivEditDetail, ImageView ivEditDelete) {
         this.photoLists = photoLists;
         this.context = context;
         this.layout_item_id = layout_item_id;
         this.rlOut = rlOut;
+        this.tvCount = tvCount;
         this.iver = iver;
         this.rcv = rcv;
         this.rlIverShow = rlIverShow;
         this.tvComment = tvComment;
+        this.rlIverEdit = rlIverEdit;
+        this.ivEditExit = ivEditExit;
+        this.tvEditTime = tvEditTime;
+        this.ivEditDetail = ivEditDetail;
+        this.ivEditDelete = ivEditDelete;
     }
 
     @NonNull
@@ -53,19 +68,21 @@ public class FootEarthTimeRecyclerAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final MyViewHolder myViewHolder = (MyViewHolder) holder;
         String time = photoLists.get(position).getPtime();
-        Log.e("Timeeeeee",time);
+        Log.e("Timeeeeee", time);
         myViewHolder.tvTime.setText(time.substring(0, 4) + "年" + time.substring(4, 6) + "月" + time.substring(6, 8) + "日");
         //gridView填充数据，创建adapter
         List<Photo> phoneList = photoLists.get(position).getPhotoList();
-        FootEarthPhotoRecyclerAdapter adapter = new FootEarthPhotoRecyclerAdapter(context, phoneList, R.layout.item_foot_earth_images, rlOut,iver,rcv,rlIverShow,tvComment);
+        FootEarthPhotoRecyclerAdapter adapter = new FootEarthPhotoRecyclerAdapter(context, phoneList, R.layout.item_foot_earth_images, rlOut, iver, rcv, tvCount,
+                rlIverShow, tvComment,
+                rlIverEdit, ivEditExit, tvEditTime, ivEditDetail, ivEditDelete);
         myViewHolder.gridView.setAdapter(adapter);
     }
 
     @Override
     public int getItemCount() {
-        if (photoLists == null){
+        if (photoLists == null) {
             return 0;
-        }else{
+        } else {
             return photoLists.size();
         }
     }

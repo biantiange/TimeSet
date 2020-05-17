@@ -241,6 +241,7 @@ public class MapFragment extends Fragment {
         for (PhotoList photoList : plToAdaper) {
             allPhoto.addAll(photoList.getPhotoList());
         }
+        photoMap.clear();
         // 将数据源封装入Map
         for (Photo photo : allPhoto) {
             String place = photo.getCity();
@@ -547,6 +548,7 @@ public class MapFragment extends Fragment {
         super.onResume();
         // 在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mapView.onResume();
+        initDataByOkHTTP();
     }
 
     @Override
