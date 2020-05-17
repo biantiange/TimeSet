@@ -8,6 +8,7 @@ import com.timeset.photo.entity.PhotoList;
 import com.timeset.photo.mapper.PhotoMapper;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -72,7 +73,13 @@ public class PhotoServiceImpl {
     }
 
 
-    public int deletePhoto(int id){return photoMapper.deletePhoto(id);};
+    public int deletePhoto(int id){
+
+        String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + photoMapper.findPhotoNameById(id).getPath().trim();
+        File file = new File(destFileName);
+        file.delete();
+        return photoMapper.deletePhoto(id);
+    }
 
     public int updatePhotoDescription(String describe,int id){ return photoMapper.updatePhotoDescription(describe,id);}
 

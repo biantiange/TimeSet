@@ -125,16 +125,6 @@ public class PhotoController {
 
         return repeat;
     }
-    /**
-     * 图片去重
-     * 去除对应用户对应相册里重复的图片，把重复的图片存放到  用户Id/相册Id_duplicate/ 下 （工具类的参数2）
-     * 工具类的参数1 是对应文件目录（上述）
-     * 根据重复图片名在数据库中查找并删除该数据（难搞）
-     * */
-    public int duplicateRemoval(){
-
-        return -1;
-    }
 
     @RequestMapping("/delete")
     public int delete(@RequestParam("photoId") int id) {

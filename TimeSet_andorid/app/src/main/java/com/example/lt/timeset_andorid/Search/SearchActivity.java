@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import indi.liyi.viewer.ImageDrawee;
 import indi.liyi.viewer.ImageViewer;
@@ -65,6 +66,7 @@ public class SearchActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private static final int GET_LISTVIEW_INF0 = 100;
     private String searchStr = "";
+    private ListViewAdapter listViewAdapter;
 
     private LinearLayout llOut;
     private ImageViewer iver;
@@ -95,7 +97,7 @@ public class SearchActivity extends AppCompatActivity {
                     } else {
                         linearLayoutNoSearch.setVisibility(View.GONE);
                     }
-                    ListViewAdapter listViewAdapter = new ListViewAdapter(searchStr, SearchActivity.this, dataSource, R.layout.activity_search_listview_item);
+                    listViewAdapter = new ListViewAdapter(searchStr, SearchActivity.this, dataSource, R.layout.activity_search_listview_item);
                     listView.setAdapter(listViewAdapter);
 
                     break;
@@ -345,15 +347,14 @@ public class SearchActivity extends AppCompatActivity {
         adBuilder.setPositiveButton("确认删除", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // 1. 删除数据源
-                Map<String, String> deleteMap = new HashMap<>();
-                deleteMap.put("type", "delete");
-                deleteMap.put("position", i + "");
-                deleteMap.put("time", photo.getPtime());
-                EventBus.getDefault().post(deleteMap);
-                // 2. 关闭iver
+                Set<String> keys = dataSource.keySet();
+                List<String> list = new ArrayList(keys);
+                String str = list.get(0);
+                dataSource.get(str).remove(i);
+                listViewAdapter.notifyDataSetChanged();
+                // 1. 关闭iver
                 iver.cancel();
-                // 3. 修改数据库
+                // 2. 修改数据库
                 changeDelete(photo.getId());
             }
         });

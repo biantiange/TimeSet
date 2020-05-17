@@ -53,6 +53,10 @@
         select * from photo where identify like "%"#{identify}"%" and user_id=#{userId}
     </select>
 
+    <select id="findPhotoNameById" resultType="com.timeset.photo.entity.Photo">
+        select * from photo where id = #{id}
+    </select>
+
     <update id="updatePhotoDescription" >
         update photo
         set pdescribe=#{describe}

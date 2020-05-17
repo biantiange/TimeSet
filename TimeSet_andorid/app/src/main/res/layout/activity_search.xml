@@ -106,7 +106,8 @@
         android:id="@+id/rl_search_iver_show_edit_out"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:elevation="3dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -162,7 +163,8 @@
         android:id="@+id/rl_search_iver_show_out"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:elevation="3dp">
 
         <TextView
             android:id="@+id/tv_search_mark_item_comment"
