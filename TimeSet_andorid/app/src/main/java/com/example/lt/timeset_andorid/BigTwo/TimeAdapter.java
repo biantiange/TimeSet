@@ -52,7 +52,8 @@ public class TimeAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        // holder.msg.setText(mList.get(position).get("time").toString());
+        String s=mList.get(position).get("time").toString();
+         holder.msg.setText(s.substring(0,4)+"年"+s.substring(4,6)+"月");
         final ImageView image = convertView.findViewById(R.id.quan);
         if ((Integer) mList.get(position).get("statu") == 1) {
             Log.e("Statu", "Statu");

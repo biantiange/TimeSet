@@ -3,10 +3,13 @@ package com.example.lt.timeset_andorid.BigTwo;
 
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.graphics.Point;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,25 +28,40 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.lt.timeset_andorid.BigTwo.FootEarth.MapFragment;
 import com.example.lt.timeset_andorid.BigTwo.TimePhoto.CalendarFragment;
+import com.example.lt.timeset_andorid.BigTwo.TimePhoto.CalendarFragmentAdapter;
+import com.example.lt.timeset_andorid.BigTwo.TimePhoto.PhotoList;
 import com.example.lt.timeset_andorid.MainActivity;
 import com.example.lt.timeset_andorid.R;
 import com.example.lt.timeset_andorid.Search.SearchActivity;
+import com.example.lt.timeset_andorid.util.Constant;
 import com.example.lt.timeset_andorid.util.PhotoLoader;
 import com.example.lt.timeset_andorid.util.ViewDataUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import indi.liyi.viewer.ImageViewer;
 import indi.liyi.viewer.ViewData;
 import indi.liyi.viewer.ViewerStatus;
 import indi.liyi.viewer.listener.OnBrowseStatusListener;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * 赵宁：点击某个相册后，相册里面的展示
@@ -62,6 +80,9 @@ public class InAlbumActivity extends AppCompatActivity {
     private TextView albumName;//相册名字
     private int id11;//相册id
 
+    private SharedPreferences sharedPreferences;//获取用户信息
+    private List<PhotoList> datasource=new ArrayList<>();
+    int userId;
     //抽屉
     private DrawerLayout mDrawer;
     private ListView TimeListView;
@@ -94,7 +115,8 @@ public class InAlbumActivity extends AppCompatActivity {
         setListener();
         changeFragment(tabStrId[0]);
         //时间轴
-        findTime();
+        findTimeData();
+       // findTime();
     }
 
     @Override
@@ -175,6 +197,8 @@ public class InAlbumActivity extends AppCompatActivity {
         map.get(tabStrId[0]).setFragment(new CalendarFragment());
         map.get(tabStrId[1]).setFragment(new MapFragment());
     }
+
+
     //时间轴
     private void findView() {
         layout1 = findViewById(R.id.tab_spec_1);
@@ -192,10 +216,47 @@ public class InAlbumActivity extends AppCompatActivity {
 
     }
 
-    private void findTime(){
-        for (int i = 0; i <9; i++) {
+    private void findTimeData(){
+        sharedPreferences=getSharedPreferences("user",MODE_PRIVATE);
+        userId=sharedPreferences.getInt("id",-1);
+        albumId = getIntent().getIntExtra("albumId", -1);
+        OkHttpClient okHttpClient=new OkHttpClient();
+        if(albumId!=-1&&userId!=-1) {
+            FormBody.Builder builder = new FormBody.Builder().add("albumId",  String.valueOf(albumId)).add("userId", String.valueOf(userId));
+            FormBody body = builder.build();
+            Request request = new Request.Builder().post(body).url(Constant.URL + "/photo/findByAlbum").build();
+            final Call call = okHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String strings = response.body().string();
+                    Log.e("time111111111",strings);
+                    Message message=new Message();
+                    message.what=1;
+                    message.obj=strings;
+                    handler.sendMessage(message);
+
+                }
+            });
+        }
+    }
+
+    private void findTime(List<PhotoList> datasource){
+        HashSet<String > hashSet=new HashSet<>();
+        for(int j=0;j<datasource.size();j++){
+           hashSet.add(datasource.get(j).getPtime().substring(0,6));
+        }
+        TreeSet<String> treeSet=new TreeSet<>(hashSet);
+        treeSet.comparator();
+
+        for (String str : treeSet) {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("time","11");
+          //  Log.e("tttt",);
+            map.put("time",str);
             map.put("statu",0);
             listTime.add(map);
         }
@@ -204,8 +265,10 @@ public class InAlbumActivity extends AppCompatActivity {
         TimeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                EventBus.getDefault().post(listTime.get(position).get("time"));
                 listTime.get(position).put("statu",1) ;
                 tAdapter.notifyDataSetChanged();
+                mDrawer.closeDrawers();
             }
         });
     }
@@ -270,11 +333,22 @@ public class InAlbumActivity extends AppCompatActivity {
                 case R.id.btn_search:
                     Intent intent1 = new Intent(InAlbumActivity.this, SearchActivity.class);
                     startActivity(intent1);
-
                     break;
             }
         }
     }
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                Gson gson=new GsonBuilder().serializeNulls().create();
+                List<PhotoList> list= gson.fromJson(msg.obj.toString(),new TypeToken<List<PhotoList>>() {}.getType());
+                datasource=list;
+                 findTime(datasource);
+            }
+
+        }
+    };
 
 }
 
