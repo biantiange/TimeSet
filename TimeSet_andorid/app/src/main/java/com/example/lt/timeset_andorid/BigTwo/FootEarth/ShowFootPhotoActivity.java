@@ -1,6 +1,7 @@
 package com.example.lt.timeset_andorid.BigTwo.FootEarth;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ public class ShowFootPhotoActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_foot_photo);
+        Log.e("keydown2","reen");
 
         initDatas();
         findViews();
@@ -166,8 +168,10 @@ public class ShowFootPhotoActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (iver.onKeyDown(keyCode, event)) {
+            Log.e("keydown","true");
             return iver.onKeyDown(keyCode, event);
         }
+        Log.e("keydown","fff");
         return super.onKeyDown(keyCode, event);
     }
 }

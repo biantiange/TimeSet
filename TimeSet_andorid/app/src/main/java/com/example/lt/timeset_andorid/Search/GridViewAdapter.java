@@ -69,6 +69,7 @@ public class GridViewAdapter extends BaseAdapter {
             postMap.put("type","searchshowImg");
             postMap.put("datasource",showImgSource);
             postMap.put("position",position);
+            postMap.put("photoList",dataSource);
             EventBus.getDefault().post(postMap);
             Log.e("图片点击事件-搜索",photo.toString());
             for (String img:showImgSource){
