@@ -343,7 +343,16 @@ public class MapFragment extends Fragment {
     // 给所有图片覆盖到地图上
     private void setAllPhotoToBaiduMap() {
         for (String city : photoMap.keySet()) {
-            new GetLatLngTask(city).execute();
+            List<PhotoList> photoList = photoMap.get(city);
+           // for (PhotoList photoList1 : photoList) {
+            PhotoList photoList1=photoList.get(0);
+                for (Photo photo : photoList1.getPhotoList()) {
+                    String lat = photo.getLatitude();
+                    String lon = photo.getLongitude();
+                    new GetLatLngTask(lat, lon, city).execute();
+                }
+           // }
+//            new GetLatLngTask(city).execute();
         }
     }
 
@@ -455,23 +464,41 @@ public class MapFragment extends Fragment {
     class GetLatLngTask extends AsyncTask {
 
         private String city;
+        //
+//        public GetLatLngTask(String city) {
+//            this.city = city;
+//        }
+        private String lat;
+        private String lon;
 
-        public GetLatLngTask(String city) {
-            this.city = city;
+        public GetLatLngTask(String lat, String lon, String city) {
+            this.lat = lat;
+            this.lon = lon;
+            this.city=city;
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
             List<Address> addressList = null;
-            if (city != null) {
-                Geocoder gc = new Geocoder(getContext(), Locale.CHINA);
-                Log.e("输出", "0000" + city);
-                try {
-                    addressList = gc.getFromLocationName(city, 1);
-                    Log.e("输出", "1111" + city);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//            if (city != null) {
+//                Geocoder gc = new Geocoder(getContext(), Locale.CHINA);
+//                Log.e("输出", "0000" + city);
+//                try {
+//                    addressList = gc.getFromLocationName(city, 1);
+//                    Log.e("输出", "1111" + city);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+            if (lat != null && lon!=null && city!=null) {
+//                Geocoder gc = new Geocoder(getContext(), Locale.CHINA);
+//                Log.e("输出", "0000" + city);
+//                try {
+//                    addressList = gc.getFromLocationName(city, 1);
+//                    Log.e("输出", "1111" + city);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
             return addressList;
         }
@@ -479,17 +506,25 @@ public class MapFragment extends Fragment {
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            List<Address> addressList = (List<Address>) o;
-            LatLng latLng = null;
-            if (addressList != null || !addressList.isEmpty()) {
-                Address address_temp = addressList.get(0);
-                //计算经纬度
-                latLng = new LatLng(address_temp.getLongitude(), address_temp.getLatitude());
-                Log.e("输出", "1111111" + city);
-                System.out.println("经度：" + latLng.latitude);
-                System.out.println("纬度：" + latLng.longitude);
+//            List<Address> addressList = (List<Address>) o;
+//            Log.e("hhhhhhhhhhhhhh1", o + "");
+//            LatLng latLng = null;
+//            if (addressList != null || !addressList.isEmpty()) {
+//                Address address_temp = addressList.get(0);
+//                //计算经纬度
+//                latLng = new LatLng(address_temp.getLongitude(), address_temp.getLatitude());
+//                Log.e("输出", "1111111" + city);
+//                System.out.println("经度：" + latLng.latitude);
+//                System.out.println("纬度：" + latLng.longitude);
+//            }
+            System.out.println("经度：" + lon);
+            System.out.println("纬度：" + lat);
+            if (lat != null && lon!=null && !lat.equals("") && !lon.equals("")) {
+                double lonn = Double.parseDouble(lon.trim());
+                double latt = Double.parseDouble(lat.trim());
+                LatLng latLng = new LatLng(lonn, latt);
+                addMarkOverlay(latLng, city, photoMap.get(city));
             }
-            addMarkOverlay(latLng, city, photoMap.get(city));
         }
     }
 
