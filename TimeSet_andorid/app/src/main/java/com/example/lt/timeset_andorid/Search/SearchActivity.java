@@ -1,6 +1,8 @@
 package com.example.lt.timeset_andorid.Search;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,21 +12,24 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.lt.timeset_andorid.BigTwo.FootEarth.ShowPhotoInfoDialog;
 import com.example.lt.timeset_andorid.Entity.Photo;
 import com.example.lt.timeset_andorid.R;
 import com.example.lt.timeset_andorid.util.Constant;
 import com.example.lt.timeset_andorid.util.PhotoLoader;
 import com.example.lt.timeset_andorid.util.ViewDataUtils;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,11 +42,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.appcompat.app.AppCompatActivity;
+import indi.liyi.viewer.ImageDrawee;
 import indi.liyi.viewer.ImageViewer;
 import indi.liyi.viewer.ViewData;
 import indi.liyi.viewer.ViewerStatus;
 import indi.liyi.viewer.listener.OnBrowseStatusListener;
+import indi.liyi.viewer.listener.OnItemChangedListener;
+import indi.liyi.viewer.listener.OnItemClickListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -58,8 +65,20 @@ public class SearchActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private static final int GET_LISTVIEW_INF0 = 100;
     private String searchStr = "";
+
     private LinearLayout llOut;
     private ImageViewer iver;
+    private RelativeLayout rlIverShow;
+    private TextView tvPhotoComment;
+
+    private RelativeLayout rlIverEdit;
+    private ImageView ivEditExit;
+    private TextView tvEditTime;
+    private ImageView ivEditDetail;
+    private ImageView ivEditDelete;
+    private int position;
+    private List<String> imgDataSource;
+    private List<Photo> photos;
     private InputMethodManager manager;//输入法管理器
 
     private Handler handler = new Handler() {
@@ -71,7 +90,7 @@ public class SearchActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     dataSource = gson.fromJson(msg.obj.toString(), new TypeToken<Map<String, List<Photo>>>() {
                     }.getType());
-                    if (dataSource == null ||  dataSource.size() == 0) {
+                    if (dataSource == null || dataSource.size() == 0) {
                         linearLayoutNoSearch.setVisibility(View.VISIBLE);
                     } else {
                         linearLayoutNoSearch.setVisibility(View.GONE);
@@ -100,10 +119,17 @@ public class SearchActivity extends AppCompatActivity {
         tvSerach = findViewById(R.id.tv_search);
         llOut = findViewById(R.id.ll_search_in_album_out);
         iver = findViewById(R.id.iver_search_show_img);
+        rlIverShow = findViewById(R.id.rl_search_iver_show_out);
+        tvPhotoComment = findViewById(R.id.tv_search_mark_item_comment);
+        rlIverEdit = findViewById(R.id.rl_search_iver_show_edit_out);
+        ivEditExit = findViewById(R.id.iv_search_iver_show_edit_exit);
+        tvEditTime = findViewById(R.id.tv_search_iver_show_edit_time);
+        ivEditDetail = findViewById(R.id.iv_search_iver_show_edit_detail);
+        ivEditDelete = findViewById(R.id.iv_search_iver_show_edit_delete);
         tvSerach.setOnClickListener(v -> {
             searchStr = etSearch.getText().toString();
-            if(searchStr == null){
-                Toast.makeText(SearchActivity.this,"请输入搜索内容！",Toast.LENGTH_SHORT).show();
+            if (searchStr == null) {
+                Toast.makeText(SearchActivity.this, "请输入搜索内容！", Toast.LENGTH_SHORT).show();
             }
             Log.e("search", searchStr);
             initListView(searchStr);
@@ -121,8 +147,8 @@ public class SearchActivity extends AppCompatActivity {
                     manager.hideSoftInputFromWindow(etSearch.getApplicationWindowToken(), 0);
                 }
                 searchStr = etSearch.getText().toString();
-                if(searchStr == null){
-                    Toast.makeText(SearchActivity.this,"请输入搜索内容！",Toast.LENGTH_SHORT).show();
+                if (searchStr == null) {
+                    Toast.makeText(SearchActivity.this, "请输入搜索内容！", Toast.LENGTH_SHORT).show();
                 }
                 Log.e("search", searchStr);
                 initListView(searchStr);
@@ -134,8 +160,8 @@ public class SearchActivity extends AppCompatActivity {
 
     private void initListView(String str) {
         OkHttpClient okHttpClient = new OkHttpClient();
-        sharedPreferences=this.getSharedPreferences("user",MODE_PRIVATE);
-        int userId=sharedPreferences.getInt("id",-1);
+        sharedPreferences = this.getSharedPreferences("user", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("id", -1);
         FormBody.Builder builder = new FormBody.Builder().add("str", str + "").add("userId", String.valueOf(userId));
         FormBody body = builder.build();
         Request request = new Request.Builder().post(body).url(Constant.URL + "photo/find").build();
@@ -159,14 +185,24 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void viewImage(Map<String, Object> showMap) {
         switch (showMap.get("type").toString()) {
             case "searchshowImg":
-                int position = (int) showMap.get("position");
-                List<String> dataSource = (List<String>) showMap.get("datasource");
-                Log.e("Subscribe_show",dataSource.toString());
-                showBigImgs(position, dataSource);
+                position = (int) showMap.get("position");
+                imgDataSource = (List<String>) showMap.get("datasource");
+                photos = (List<Photo>) showMap.get("photoList");
+                String comment = photos.get(position).getPdescribe();
+                if (null != comment)
+                    tvPhotoComment.setText(comment);
+                else {
+                    tvPhotoComment.setText("");
+                }
+                rlIverShow.setVisibility(View.VISIBLE);
+                iver.setBackgroundColor(Color.parseColor("#000000"));
+                showBigImgs();
                 break;
         }
     }
@@ -177,29 +213,25 @@ public class SearchActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-
     // 展示图片
-    private void showBigImgs(int position, List<String> showImgSource) {
+    private void showBigImgs() {
         iver.setVisibility(View.VISIBLE);
         llOut.setVisibility(View.GONE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             iver.setElevation(3.0f);
         }
         List<ViewData> vdList = new ArrayList<>();
-        Point mScreenSize = ViewDataUtils.getScreenSize(getApplicationContext());
-        for (int i = 0, len = showImgSource.size(); i < len; i++) {
+        Point mScreenSize = ViewDataUtils.getScreenSize(this);
+        for (int i = 0, len = imgDataSource.size(); i < len; i++) {
             ViewData viewData = new ViewData();
-            viewData.setImageSrc(showImgSource.get(i));
+            viewData.setImageSrc(imgDataSource.get(i));
             viewData.setTargetX(0);
             viewData.setTargetY(0);
             viewData.setTargetWidth(mScreenSize.x);
-            viewData.setTargetHeight(ViewDataUtils.dp2px(getApplicationContext(), 200));
+            viewData.setTargetHeight(ViewDataUtils.dp2px(this, 200));
             vdList.add(viewData);
         }
-        for (ViewData data : vdList) {
-//            Log.e("vdList",""+data.getImageSrc().toString());
-        }
-        iver.overlayStatusBar(false) // ImageViewer 是否会占据 StatusBar 的空间
+        iver.overlayStatusBar(true) // ImageViewer 是否会占据 StatusBar 的空间
                 .viewData(vdList) // 数据源
                 .imageLoader(new PhotoLoader()) // 设置图片加载方式
                 .playEnterAnim(true) // 是否开启进场动画，默认为true
@@ -210,16 +242,151 @@ public class SearchActivity extends AppCompatActivity {
 //                            .loadProgressUI(progressUI) // 自定义图片加载进度样式，内置默认样式
                 .watch(position);
 
+        // 监听单击事件
+        iver.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public boolean onItemClick(final int i, ImageView imageView) { // 将展示修改界面
+                if (rlIverShow.getVisibility() == View.VISIBLE) {
+
+                    rlIverShow.setVisibility(View.GONE);    // 展示界面消失
+                    rlIverEdit.setVisibility(View.VISIBLE);
+                    iver.setBackgroundColor(Color.parseColor("#ffffff"));  // 背景色变白
+                    // 展示修改界面显示
+                    ivEditExit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            iver.cancel();
+                        }
+                    });
+                    String time = photos.get(i).getPtime();
+                    if (null != time) {
+                        tvEditTime.setText(time.substring(0, 4) + "年" + time.substring(4, 6) + "月" + time.substring(6, 8) + "日");
+                    } else {
+                        tvEditTime.setText("");
+                    }
+                    ivEditDetail.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ShowPhotoInfoDialog dialog = ShowPhotoInfoDialog.getDialog();
+                            dialog.setContext(SearchActivity.this);
+                            dialog.setPhoto(photos.get(i));
+                            dialog.showBottomDialog();
+                        }
+                    });
+                    ivEditDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showDeleteDialog(i, photos.get(i));
+                        }
+                    });
+                } else if (rlIverEdit.getVisibility() == View.VISIBLE) {  // 将展示展示界面
+                    rlIverEdit.setVisibility(View.GONE);
+                    rlIverShow.setVisibility(View.VISIBLE); // 展示界面显示
+                    iver.setBackgroundColor(Color.parseColor("#000000"));// 背景色变黑
+                    // 修改comment
+                    String comment = photos.get(i).getPdescribe();
+                    if (null != comment)
+                        tvPhotoComment.setText(comment);
+                    else {
+                        tvPhotoComment.setText("");
+                    }
+                }
+                return true;    // 返回值为true，不会退出展示
+            }
+        });
+        // 切换图片
+        iver.setOnItemChangedListener(new OnItemChangedListener() {
+            @Override
+            public void onItemChanged(int i, ImageDrawee drawee) {
+                ivEditDetail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShowPhotoInfoDialog dialog = ShowPhotoInfoDialog.getDialog();
+                        dialog.setContext(SearchActivity.this);
+                        dialog.setPhoto(photos.get(i));
+                        dialog.showBottomDialog();
+                    }
+                });
+                if (rlIverShow.getVisibility() == View.VISIBLE) {
+                    String comment = photos.get(i).getPdescribe();
+                    if (null != comment)
+                        tvPhotoComment.setText(comment);
+                    else {
+                        tvPhotoComment.setText("");
+                    }
+                }
+            }
+        });
         iver.setOnBrowseStatusListener(new OnBrowseStatusListener() {
             @Override
             public void onBrowseStatus(int status) {
                 if (status == ViewerStatus.STATUS_BEGIN_OPEN) {
                     // 正在开启启动预览图片
                     llOut.setVisibility(View.GONE);
+                    iver.setVisibility(View.VISIBLE);
+                    rlIverShow.setVisibility(View.VISIBLE);
+                    rlIverEdit.setVisibility(View.GONE);    // 进来时展示展示界面
                 } else if (status == ViewerStatus.STATUS_SILENCE) {
                     // 此时未开启预览图片
                     llOut.setVisibility(View.VISIBLE);
+                    iver.setVisibility(View.GONE);
+                    rlIverShow.setVisibility(View.GONE);
+                    rlIverEdit.setVisibility(View.GONE);
                 }
+            }
+        });
+    }
+
+    private void showDeleteDialog(int i, Photo photo) {
+        // 显示一个Dialog
+        AlertDialog.Builder adBuilder = new AlertDialog.Builder(this);
+        adBuilder.setTitle("确定删除此图片");
+
+        adBuilder.setPositiveButton("确认删除", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 1. 删除数据源
+                Map<String, String> deleteMap = new HashMap<>();
+                deleteMap.put("type", "delete");
+                deleteMap.put("position", i + "");
+                deleteMap.put("time", photo.getPtime());
+                EventBus.getDefault().post(deleteMap);
+                // 2. 关闭iver
+                iver.cancel();
+                // 3. 修改数据库
+                changeDelete(photo.getId());
+            }
+        });
+        adBuilder.setNegativeButton("我手滑了", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 选中“取消”按钮，取消界面
+            }
+        });
+        adBuilder.create().show();
+    }
+
+    private static final String IP = Constant.IP + "/photo/delete";
+
+    private void changeDelete(int id) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder builder = new FormBody.Builder().add("photoId", id + "");
+        FormBody body = builder.build();
+        Request request = new Request.Builder().post(body).url(IP).build();
+        final Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//                Toast.makeText(context,"delete失败",Toast.LENGTH_SHORT).show();
+                Log.e("deleteee", "失败");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                String strings = response.body().string();
+//                Toast.makeText(context,"1",Toast.LENGTH_SHORT).show();
+                Log.e("deletee", "成果");
             }
         });
     }
