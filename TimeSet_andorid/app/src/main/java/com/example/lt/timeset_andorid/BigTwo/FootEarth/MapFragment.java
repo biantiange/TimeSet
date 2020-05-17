@@ -241,6 +241,7 @@ public class MapFragment extends Fragment {
         for (PhotoList photoList : plToAdaper) {
             allPhoto.addAll(photoList.getPhotoList());
         }
+        photoMap.clear();
         // 将数据源封装入Map
         for (Photo photo : allPhoto) {
             String place = photo.getCity();
