@@ -139,8 +139,11 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 String comment = dataSource.get(position).getPdescribe();
-                if (null != comment && !comment.equals(""))
+                if (null != comment)
                     tvComment.setText(comment);
+                else{
+                    tvComment.setText("");
+                }
                 rlIverShow.setVisibility(View.VISIBLE);
                 iver.setBackgroundColor(Color.parseColor("#000000"));
                 showBigImgs(position);
@@ -217,8 +220,11 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
                     iver.setBackgroundColor(Color.parseColor("#000000"));// 背景色变黑
                     // 修改comment
                     String comment = dataSource.get(position).getPdescribe();
-                    if (null != comment && !comment.equals(""))
+                    if (null != comment)
                         tvComment.setText(comment);
+                    else{
+                        tvComment.setText("");
+                    }
                 }
                 return true;    // 返回值为true，不会退出展示
             }
@@ -227,10 +233,22 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
         iver.setOnItemChangedListener(new OnItemChangedListener() {
             @Override
             public void onItemChanged(int position, ImageDrawee drawee) {
+                ivEditDetail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShowPhotoInfoDialog dialog = ShowPhotoInfoDialog.getDialog();
+                        dialog.setContext(context);
+                        dialog.setPhoto(dataSource.get(position));
+                        dialog.showBottomDialog();
+                    }
+                });
                 if(rlIverShow.getVisibility() == View.VISIBLE){
                     String comment = dataSource.get(position).getPdescribe();
-                    if (null != comment && !comment.equals(""))
+                    if (null != comment)
                         tvComment.setText(comment);
+                    else{
+                        tvComment.setText("");
+                    }
                 }
             }
         });

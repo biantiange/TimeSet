@@ -43,7 +43,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BigTwo.FootEarth.ShowFootPhotoActivity"
+        <activity
+            android:name=".BigTwo.FootEarth.ShowFootPhotoActivity"
             android:launchMode="singleTask">
 
         </activity>
@@ -69,8 +70,7 @@
         <activity android:name=".Login.PhoneTestActivity" />
         <activity android:name=".Login.RegistryActivity" />
         <activity android:name=".Album.AddAlbumActivity" />
-        <activity android:name=".BigTwo.InAlbumActivity" >
-        </activity>
+        <activity android:name=".BigTwo.InAlbumActivity"></activity>
         <activity android:name=".Search.SearchActivity" />
         <activity android:name=".Login.LoginActivity">
             <intent-filter>
@@ -79,17 +79,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!--<provider
-            android:name=".util.PictureFileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>-->
-        <!--<uses-library android:name="com.google.android.maps" />-->
+        
     </application>
 
 </manifest>

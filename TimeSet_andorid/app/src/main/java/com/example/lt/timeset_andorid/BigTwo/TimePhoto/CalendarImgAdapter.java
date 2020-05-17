@@ -20,6 +20,8 @@ import com.example.lt.timeset_andorid.util.PhotoLoader;
 import com.example.lt.timeset_andorid.util.ViewDataUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,7 +54,8 @@ public class CalendarImgAdapter extends BaseAdapter {
         this.item_layout_id = item_layout_id; // 列表项布局文件ID
         if(dataSource!=null) {
             for (Photo photo : dataSource) {
-                showImgSource.add(Constant.URL + photo.getPath());
+//                showImgSource.add(Constant.URL + photo.getPath());
+                showImgSource.add(photo.getPath());
             }
         }
     }
@@ -90,7 +93,8 @@ public class CalendarImgAdapter extends BaseAdapter {
                 .error(R.drawable.timg)
                 .fallback(R.drawable.timg);
 //        Log.e("paht",Constant.URL+path);
-        Glide.with(context).load(Constant.URL+path).apply(requestOptions).into(holder.img);
+//        Glide.with(context).load(Constant.URL+path).apply(requestOptions).into(holder.img);
+        Glide.with(context).load(path).apply(requestOptions).into(holder.img);
 
         //设置图片单击事件，将phone参数传进图片查看器
         holder.img.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +105,7 @@ public class CalendarImgAdapter extends BaseAdapter {
                 postMap.put("type","showImg");
                 postMap.put("datasource",showImgSource);
                 postMap.put("position",position);
+                postMap.put("photoList",dataSource);
                 EventBus.getDefault().post(postMap);
                 Log.e("图片点击事件",photo.toString());
             }
@@ -108,6 +113,7 @@ public class CalendarImgAdapter extends BaseAdapter {
 
         return convertView;
     }
+
     private  class ViewHolder{
         ImageView img;
     }

@@ -67,6 +67,13 @@ public class CalendarFragmentAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    public void checkHaveData(int position){
+        if (dataSource.get(position).getPhotoList().size() == 0){
+            dataSource.remove(position);
+            notifyDataSetChanged();
+        }
+    }
     private  class ViewHolder{
         NoScrollGridView gridView;
         TextView txt_name;

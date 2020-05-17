@@ -98,6 +98,8 @@ public class ShowPhotoInfoDialog {
         tvAlbum.setText(photo.getAlbumId() + "");
         if (photo.getPdescribe() != null) {
             etDescribe.setText(photo.getPdescribe());
+        }else{
+            etDescribe.setText("");
         }
 
         ivExit.setOnClickListener(new View.OnClickListener() {
