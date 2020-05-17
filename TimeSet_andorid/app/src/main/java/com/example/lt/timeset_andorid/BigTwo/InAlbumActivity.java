@@ -3,10 +3,13 @@ package com.example.lt.timeset_andorid.BigTwo;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,12 +30,17 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.lt.timeset_andorid.BigTwo.FootEarth.MapFragment;
 import com.example.lt.timeset_andorid.BigTwo.FootEarth.ShowPhotoInfoDialog;
 import com.example.lt.timeset_andorid.BigTwo.TimePhoto.CalendarFragment;
+import com.example.lt.timeset_andorid.BigTwo.TimePhoto.CalendarFragmentAdapter;
+import com.example.lt.timeset_andorid.BigTwo.TimePhoto.PhotoList;
 import com.example.lt.timeset_andorid.Entity.Photo;
 import com.example.lt.timeset_andorid.R;
 import com.example.lt.timeset_andorid.Search.SearchActivity;
 import com.example.lt.timeset_andorid.util.Constant;
 import com.example.lt.timeset_andorid.util.PhotoLoader;
 import com.example.lt.timeset_andorid.util.ViewDataUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,8 +49,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import indi.liyi.viewer.ImageDrawee;
 import indi.liyi.viewer.ImageViewer;
@@ -87,6 +97,10 @@ public class InAlbumActivity extends AppCompatActivity {
     private int position;
     private List<String> dataSource;
     private List<Photo> photos;
+
+    private SharedPreferences sharedPreferences;//获取用户信息
+    private List<PhotoList> datasource=new ArrayList<>();
+    int userId;
     //抽屉
     private DrawerLayout mDrawer;
     private ListView TimeListView;
@@ -122,8 +136,10 @@ public class InAlbumActivity extends AppCompatActivity {
         setListener();
         changeFragment(tabStrId[0]);
         //时间轴
-        findTime();
+        findTimeData();
     }
+
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -370,24 +386,6 @@ public class InAlbumActivity extends AppCompatActivity {
 
     }
 
-    private void findTime() {
-        for (int i = 0; i < 9; i++) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("time", "11");
-            map.put("statu", 0);
-            listTime.add(map);
-        }
-        tAdapter = new TimeAdapter(this, listTime);
-        TimeListView.setAdapter(tAdapter);
-        TimeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                listTime.get(position).put("statu", 1);
-                tAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
     private void setListener() {
         MyListener listener = new MyListener();
         layout1.setOnClickListener(listener);
@@ -453,7 +451,77 @@ public class InAlbumActivity extends AppCompatActivity {
             }
         }
     }
+    private void findTimeData(){
+        sharedPreferences=getSharedPreferences("user",MODE_PRIVATE);
+        userId=sharedPreferences.getInt("id",-1);
+        albumId = getIntent().getIntExtra("albumId", -1);
+        OkHttpClient okHttpClient=new OkHttpClient();
+        if(albumId!=-1&&userId!=-1) {
+            FormBody.Builder builder = new FormBody.Builder().add("albumId",  String.valueOf(albumId)).add("userId", String.valueOf(userId));
+            FormBody body = builder.build();
+            Request request = new Request.Builder().post(body).url(Constant.URL + "/photo/findByAlbum").build();
+            final Call call = okHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                }
 
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String strings = response.body().string();
+                    Log.e("time111111111",strings);
+                    Message message=new Message();
+                    message.what=1;
+                    message.obj=strings;
+                    handler.sendMessage(message);
+
+                }
+            });
+        }
+    }
+
+    private void findTime(List<PhotoList> datasource) {
+        Log.e("asdfghj","sdfghjk");
+        HashSet<String> hashSet = new HashSet<>();
+        for (int j = 0; j < datasource.size(); j++) {
+            hashSet.add(datasource.get(j).getPtime().substring(0, 6));
+        }
+        TreeSet<String> treeSet = new TreeSet<>(hashSet);
+        treeSet.comparator();
+
+        for (String str : treeSet) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("time", str);
+            map.put("statu", 0);
+            listTime.add(map);
+        }
+            tAdapter = new TimeAdapter(this, listTime);
+            TimeListView.setAdapter(tAdapter);
+            TimeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    EventBus.getDefault().post(listTime.get(position).get("time"));
+                    listTime.get(position).put("statu", 1);
+                    tAdapter.notifyDataSetChanged();
+                    mDrawer.closeDrawers();
+                }
+            });
+    }
+
+
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                List<PhotoList> list= gson.fromJson(msg.obj.toString(),new TypeToken<List<PhotoList>>() {}.getType());
+                datasource = list;
+                findTime(datasource);
+            }
+
+        }
+    };
 }
 
 

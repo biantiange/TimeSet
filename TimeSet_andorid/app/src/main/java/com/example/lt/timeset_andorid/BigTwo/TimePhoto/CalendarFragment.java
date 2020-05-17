@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,9 @@ import com.google.gson.reflect.TypeToken;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +48,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class CalendarFragment extends Fragment {
     private SharedPreferences sharedPreferences;//获取用户信息
-    private List<PhotoList> datasource=new ArrayList<>();
+    private List<PhotoList> datasource = new ArrayList<>();
     private CalendarFragmentAdapter calendarFragmentAdapter;
     private ListView listView;
     int albumId;
@@ -53,7 +57,9 @@ public class CalendarFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View newView = inflater.inflate( R.layout.in_album_calendar, container, false );
+
         EventBus.getDefault().register(this);
         return newView;
     }
@@ -79,12 +85,12 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        listView=getActivity().findViewById(R.id.in_album_list_items);
+        listView = getActivity().findViewById(R.id.in_album_list_items);
         //获取相册id值//根据用户id或者用户手机号以及相册id查询相册数据
+
         albumId=getActivity().getIntent().getIntExtra("albumId",-1);
         sharedPreferences=getContext().getSharedPreferences("user",MODE_PRIVATE);
         userId=sharedPreferences.getInt("id",-1);
-
         OkHttpClient okHttpClient = new OkHttpClient();
         if (albumId != -1 && userId != -1) {
             FormBody.Builder builder = new FormBody.Builder().add("albumId", String.valueOf(albumId)).add("userId", String.valueOf(userId));
@@ -127,8 +133,28 @@ public class CalendarFragment extends Fragment {
                listView.setAdapter(calendarFragmentAdapter);
            }
 
-       }
-   };
+   
+        }
+    };
+
+    @Subscribe
+    public void receiver(String event) {
+        listView.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("event", event);
+                int position = 0;
+                for (int i = 0; i < datasource.size(); i++) {
+                    if (datasource.get(i).getPtime().substring(0, 6).equals(event)) {
+                        position = i;
+                        listView.smoothScrollToPositionFromTop(position, 0);
+                        break;
+                    }
+                }
+            }
+        });
+
+    }
 
 //    private void getData() {
 //        // 1. 获取照片数据( 模拟通过intent获取phonoList数据源)
