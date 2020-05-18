@@ -79,7 +79,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+        <activity android:name=".Person.PrivacyAgreementActivity" />
+        <activity android:name=".Person.FeedBackActivity" />
+        <activity android:name=".Person.FunctionIntroductionActivity" />
+
     </application>
 
 </manifest>

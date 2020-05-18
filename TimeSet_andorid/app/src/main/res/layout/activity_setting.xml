@@ -67,6 +67,7 @@
                 android:padding="10dp">
 
                 <TextView
+                    android:onClick="settingClick"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -84,6 +85,8 @@
             </RelativeLayout>
 
             <TextView
+
+                android:id="@+id/cankao1"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="#ffffff"
@@ -92,14 +95,6 @@
                 android:text="功能介绍"
                 android:textSize="16dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#ffffff"
-                android:onClick="settingClick"
-                android:padding="10dp"
-                android:text="帮助"
-                android:textSize="16dp" />
 
             <RelativeLayout
                 android:id="@+id/clean_cache"
@@ -129,6 +124,7 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/cankao2"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="#ffffff"
@@ -138,12 +134,13 @@
                 android:textSize="16dp" />
 
             <TextView
+                android:id="@+id/cankao"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="#ffffff"
                 android:onClick="settingClick"
                 android:padding="10dp"
-                android:text="反馈"
+                android:text="帮助与反馈"
                 android:textSize="16dp" />
         </LinearLayout>
 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="#7adfb8">
+
+        <Button
+            android:id="@+id/btn_return_setting"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/fanhui32"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:text="功能介绍"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:textSize="20dp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:lineSpacingExtra="20dp"
+        android:text="一、上传照片保存到软件，为您清理手机内存空间\n
+二、在时间相册根据时间将照片排序，清晰明确的查看照片\n
+三、通过记忆中的印象查找照片，例如照片上的'飞机，山，人物'等，或者根据照片的备注，时间，地点查询\n
+四、地图上浏览足迹，点击地图回忆曾经的记忆\n
+五、点击照片查看、更改、删除\n
+六、设置中更改账号密码等\n
+七、更多的功能敬请等待。。。\n
+
+
+"
+
+
+
+        />
+
+
+
+
+
+
+</LinearLayout>
