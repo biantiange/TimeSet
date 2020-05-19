@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="#7adfb8">
+
+        <Button
+            android:id="@+id/btn_return_setting"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/fanhui32"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:text="隐私协议"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:textSize="20dp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+    <TextView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:scrollbars="vertical"
+        android:id="@+id/sc"
+
+        android:text="以下隐私协议是本软件对用户隐私保护的许诺，请您务必仔细阅读本协议，以了解我们关于管理您个人信息的情况。本隐私协议的全部条款属于本软件用户服务协议的重要部份之一。\n
+       二、保有您的使用记录
+当您使用本软件的服务时，服务器会自动记录一些信息，包括手机型号、IP地址等。\n
+在如下情况下，本软件会遵照您的意愿或法律的规定披露您的个人信息，由此引发的问题将由您个人承担：\n
+（1）事先获得您的授权； \n
+（2）只有透露你的个人资料，才能提供你所要求的产品和服务；\n 
+（3）根据有关的法律法规要求； \n
+（4）按照相关政府主管部门的要求；\n
+（5）为维护本软件的合法权益。 \n
+（6）您同意让第三方共享资料。 \n
+（7）我们发现您违反了本软件的服务条款或使用规定。\n
+（8）我们需要向代表我们提供产品或服务的公司提供资料（除非我们另行通知你，否则这些公司无权使用你的身份识别资料）。\n
+三、本《隐私政策》不适用于以下情况：\n
+（1）通过我们的服务而接入的第三方服务（包括任何第三方网站）收集的信息。本政策仅适用于我们所收集的信息，并不适用于任何第三方提供的服务或第三方的信息使用规则，我们对任何第三方使用由您提供的信息不承担任何责任；\n
+（2）通过在我们服务中进行广告服务的其他公司或机构所收集的信息。\n
+四、隐私权政策的修订\n
+ 我们可能适时修订本政策的条款，修订政策也是构成本政策的一部分。如修订政策造成您在本政策下权利的实质减少，我们将在修订生效前通过在主页上显著位置提示或向您发送电子邮件或以其他方式通知您。在该种情况下，若您继续使用我们的服务，即表示同意受经修订的本政策的约束。\n
+五、用户如何更正或投诉个人信息\n
+如果您需要查询、修改或更正您的个人信息，或对个人信息保护问题有任何疑问或建议，您可在帮助与反馈页面寻求支持\n
+\n\n\n\n\n\n\n
+"/>
+
+
+
+
+
+</LinearLayout>

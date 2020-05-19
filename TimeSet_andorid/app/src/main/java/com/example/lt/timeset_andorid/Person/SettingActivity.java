@@ -32,6 +32,11 @@ public class SettingActivity extends AppCompatActivity {
     private String string;
     private TextView textView;
 
+    private TextView textView1;
+    private TextView textView2;
+    private TextView textView3;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +45,17 @@ public class SettingActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
         }
+
         findViews();
         initData();
     }
 
     private void findViews() {
         textView = findViewById(R.id.clean_number);
+        textView1=findViewById(R.id.cankao);
+        textView2=findViewById(R.id.cankao1);
+        textView3=findViewById(R.id.cankao2);
+
     }
 
     public void settingClick(View view) {
@@ -63,6 +73,22 @@ public class SettingActivity extends AppCompatActivity {
                 //跳转到登录页面
                 Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.cankao:
+                Intent intent4=new Intent(this,FeedBackActivity.class);
+                startActivity(intent4);
+
+
+                break;
+            case R.id.cankao1:
+                Intent intent1=new Intent(this,FunctionIntroductionActivity.class);
+                startActivity(intent1);
+
+                break;
+
+            case R.id.cankao2:
+                Intent intent2=new Intent(this,PrivacyAgreementActivity.class);
+                startActivity(intent2);
                 break;
         }
     }
