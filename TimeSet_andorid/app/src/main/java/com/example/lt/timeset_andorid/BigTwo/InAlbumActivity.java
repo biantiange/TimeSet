@@ -1,6 +1,7 @@
 package com.example.lt.timeset_andorid.BigTwo;
 
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -117,10 +118,14 @@ public class InAlbumActivity extends AppCompatActivity {
 
     private ImageButton addImg;
 
+    public static Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.in_album);
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xff7adfb8);
@@ -137,6 +142,8 @@ public class InAlbumActivity extends AppCompatActivity {
         changeFragment(tabStrId[0]);
         //时间轴
         findTimeData();
+
+        activity = this;
     }
 
 

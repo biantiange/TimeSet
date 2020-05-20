@@ -3,6 +3,7 @@ package com.example.lt.timeset_andorid.BigTwo.FootEarth;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -41,6 +42,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.lt.timeset_andorid.BigTwo.InAlbumActivity;
 import com.example.lt.timeset_andorid.BigTwo.TimePhoto.PhotoList;
 import com.example.lt.timeset_andorid.Entity.Photo;
 import com.example.lt.timeset_andorid.R;
@@ -225,7 +227,10 @@ public class MapFragment extends Fragment {
                 baiduMap.setMapStatus(msu);
                 // 定位自己
                 locationClient = new LocationClient(getContext());
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_GPS);
+//                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//                    ActivityCompat.requestPermissions(this, ACCESS_FINE_LOCATION, 1);
+//                }
+                ActivityCompat.requestPermissions(InAlbumActivity.activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_GPS);
                 // 给所有图片覆盖到地图上
                 setAllPhotoToBaiduMap();
                 // 添加标注物点击监听器
@@ -435,7 +440,7 @@ public class MapFragment extends Fragment {
 
     // 获取覆盖物控件
     private View getMarkView(List<PhotoList> imgRes) {
-        View markView = LayoutInflater.from(getContext()).inflate(R.layout.foot_earth_mark_item, null);
+        View markView = LayoutInflater.from(InAlbumActivity.activity).inflate(R.layout.foot_earth_mark_item, null);
         TextView tvCount = markView.findViewById(R.id.tv_foot_earth_mark_item_count);
         ImageView ivCover = markView.findViewById(R.id.iv_foot_earth_mark_item_cover);
         if (imgRes.size() == 1) {
@@ -446,7 +451,7 @@ public class MapFragment extends Fragment {
         RequestOptions options = new RequestOptions().placeholder(R.drawable.moren_img);
         Log.e("ttttttttttt", Constant.IP + imgRes.get(0).getPhotoList().get(0).getPath());
         String url = Constant.IP + imgRes.get(0).getPhotoList().get(0).getPath();
-        Glide.with(this)
+        Glide.with(InAlbumActivity.activity)
                 .load(url)
                 .apply(options)
                 .into(ivCover);

@@ -113,21 +113,15 @@ public class UserController {
         if (file != null) {
             //上传服务器
             // 生成新的文件名
-            String headImg = System.currentTimeMillis()+file.getOriginalFilename();
-            // 保存路径
-//            String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+headImg;
-            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+headImg;
-            System.out.println(destFileName);
-            // 执行保存操作
-            File destFile = new File(destFileName);
-            if (!destFile.getParentFile().exists()){
-                destFile.getParentFile().mkdir();
-            }
+            String headImg = null;
             try {
-                file.transferTo(destFile);
-            } catch (IOException e) {
+                headImg = qiniuUtil.saveImage(MultipartFileToFileUtil.multipartFileToFile(file),file.getOriginalFilename());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+            // 保存路径
+//            String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+headImg;
+
             int result = userService.updateUserImgByPhone(phone,headImg);
             if (result != 0) {
                 return 0;
