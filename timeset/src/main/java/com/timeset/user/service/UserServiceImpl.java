@@ -3,6 +3,7 @@ package com.timeset.user.service;
 import com.timeset.user.entity.User;
 import com.timeset.user.mapper.UserMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,6 +19,7 @@ public class UserServiceImpl {
     @Resource
     private UserMapper userMapper;
 
+    @Transactional
     public int insertUser(User user){return userMapper.insertUser(user);};
 
     public int deleteUser(String phone){return userMapper.deleteUser(phone);};

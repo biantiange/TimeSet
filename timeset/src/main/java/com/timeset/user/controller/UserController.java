@@ -3,6 +3,8 @@ package com.timeset.user.controller;
 import com.timeset.photo.entity.Photo;
 import com.timeset.user.entity.User;
 import com.timeset.user.service.UserServiceImpl;
+import com.timeset.util.MultipartFileToFileUtil;
+import com.timeset.util.QiniuUtil;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +29,8 @@ import java.util.List;
 public class UserController {
     @Resource
     private UserServiceImpl userService;
-
+    @Resource
+    private QiniuUtil qiniuUtil;
     @RequestMapping("/registry")
     public String insertUser(@RequestParam("phone") String phone,
                              @RequestParam(value = "password") String password,
@@ -36,6 +39,7 @@ public class UserController {
                              HttpServletRequest request) {
         System.out.println("插入用户");
         User user = new User();
+
         if(userService.findUserByPhone(phone)==null) {
             user.setPhone(phone);
             if (password != null && !password.equals("")) {
@@ -45,24 +49,30 @@ public class UserController {
                 user.setUserName(userName);
             }
             if (file != null) {
-                //上传服务器
-                // 生成新的文件名
+//                //上传服务器
+//                // 生成新的文件名
                 String fileName = System.currentTimeMillis()+file.getOriginalFilename();
-                // 保存路径
-//                String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+fileName;
-//                String destFileName=request.getServletContext().getRealPath("")+"headImg/"+fileName;
-                String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+fileName;
-                // 执行保存操作
-                File destFile = new File(destFileName);
-                if (!destFile.getParentFile().exists()){
-                    destFile.getParentFile().mkdir();
-                }
+//                // 保存路径
+////                String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+fileName;
+////                String destFileName=request.getServletContext().getRealPath("")+"headImg/"+fileName;
+//                String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+fileName;
+//                // 执行保存操作
+//                File destFile = new File(destFileName);
+//                if (!destFile.getParentFile().exists()){
+//                    destFile.getParentFile().mkdir();
+//                }
+//                try {
+//                    file.transferTo(destFile);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                user.setHeadImg(fileName);
                 try {
-                    file.transferTo(destFile);
-                } catch (IOException e) {
+                    String path = qiniuUtil.saveImage(MultipartFileToFileUtil.multipartFileToFile(file),fileName);
+                    user.setHeadImg(path);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                user.setHeadImg(fileName);
             }
             int result = userService.insertUser(user);
             if (result != 0) {
