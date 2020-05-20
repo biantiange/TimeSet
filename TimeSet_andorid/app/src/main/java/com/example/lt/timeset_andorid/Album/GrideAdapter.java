@@ -78,7 +78,8 @@ public class GrideAdapter extends BaseAdapter {
         }else{
             holder=(ViewHolder) convertView.getTag();
         }
-        holder.textView.setText(list.get(position).get("text").toString());
+        Log.e("listss",list.get(position).get("text")+"");
+        holder.textView.setText(list.get(position).get("text")+"");
         Glide.with(context).load(list.get(position).get("image") ).into(holder.image);
 
         //跳转相片

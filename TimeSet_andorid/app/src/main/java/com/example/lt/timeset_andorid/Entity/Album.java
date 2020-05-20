@@ -5,17 +5,17 @@ package com.example.lt.timeset_andorid.Entity;
  */
 public class Album {
     private int id;
-    private int useId;
+    private int user_id;
     private String theme;
-    private String albumName;
-    private String albumPic;
+    private String album_name;
+    private String album_pic;
 
     public String getAlbumPic() {
-        return albumPic;
+        return album_pic;
     }
 
     public void setAlbumPic(String albumPic) {
-        this.albumPic = albumPic;
+        this.album_pic = albumPic;
     }
 
     public int getId() {
@@ -27,11 +27,11 @@ public class Album {
     }
 
     public int getUseId() {
-        return useId;
+        return user_id;
     }
 
     public void setUseId(int useId) {
-        this.useId = useId;
+        this.user_id = useId;
     }
 
     public String getTheme() {
@@ -43,10 +43,10 @@ public class Album {
     }
 
     public String getAlbumName() {
-        return albumName;
+        return album_name;
     }
 
     public void setAlbumName(String albumName) {
-        this.albumName = albumName;
+        this.album_name = albumName;
     }
 }

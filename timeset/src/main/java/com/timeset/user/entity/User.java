@@ -10,8 +10,8 @@ public class User {
     private int id;
     private String phone;
     private String password;
-    private String userName;
-    private String headImg;
+    private String user_name;
+    private String head_img;
 
     public int getId() {
         return id;
@@ -38,19 +38,19 @@ public class User {
     }
 
     public String getUserName() {
-        return userName;
+        return user_name;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.user_name = userName;
     }
 
     public String getHeadImg() {
-        return headImg;
+        return head_img;
     }
 
     public void setHeadImg(String headImg) {
-        this.headImg = headImg;
+        this.head_img = headImg;
     }
 
     @Override
@@ -59,8 +59,8 @@ public class User {
                 "id=" + id +
                 ", phone='" + phone + '\'' +
                 ", password='" + password + '\'' +
-                ", userName='" + userName + '\'' +
-                ", headImg='" + headImg + '\'' +
+                ", userName='" + user_name + '\'' +
+                ", headImg='" + head_img + '\'' +
                 '}';
     }
 }
