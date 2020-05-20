@@ -2,7 +2,7 @@ package com.example.lt.timeset_andorid.Entity;
 public class Photo {
     private int id;
     private int album_id;
-    private int user_id;
+    private int userId;
     private String pdescribe;
     private String ptime;
     private String place;
@@ -47,11 +47,11 @@ public class Photo {
     }
 
     public int getUserId() {
-        return user_id;
+        return userId;
     }
 
     public void setUserId(int userId) {
-        this.user_id = userId;
+        this.userId = userId;
     }
 
     public String getPdescribe() {
@@ -123,7 +123,7 @@ public class Photo {
         return "Photo{" +
                 "id=" + id +
                 ", albumId=" + album_id +
-                ", userId=" + user_id +
+                ", userId=" + userId +
                 ", pdescribe='" + pdescribe + '\'' +
                 ", ptime='" + ptime + '\'' +
                 ", place='" + place + '\'' +
@@ -139,7 +139,7 @@ public class Photo {
 
     public Photo(int albumId, int userId, String pdescribe, String ptime, String place, String path, String identify, String latitude, String longitude, String district, String city, String province) {
         this.album_id = albumId;
-        this.user_id = userId;
+        this.userId = userId;
         this.pdescribe = pdescribe;
         this.ptime = ptime;
         this.place = place;

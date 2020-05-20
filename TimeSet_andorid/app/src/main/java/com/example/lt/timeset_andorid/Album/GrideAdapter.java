@@ -88,7 +88,7 @@ public class GrideAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(context, InAlbumActivity.class);
                 intent.putExtra("albumId",(Integer) list.get(position).get("id"));
-                intent.putExtra("albumName",list.get(position).get("text").toString());
+                intent.putExtra("albumName",list.get(position).get("text")+"");
                 context.startActivity(intent);
             }
         });
