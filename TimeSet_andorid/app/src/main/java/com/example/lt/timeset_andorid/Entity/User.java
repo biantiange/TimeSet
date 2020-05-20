@@ -7,8 +7,8 @@ public class User {
     private int id;
     private String phone;  //手机号
     private String password;  //密码
-    private String user_name;  // 昵称，如果没有设置就是手机号
-    private String head_img;  // 头像，如果没有设置就是默认头像 R.drwaable.moren_img
+    private String userName;  // 昵称，如果没有设置就是手机号
+    private String headImg;  // 头像，如果没有设置就是默认头像 R.drwaable.moren_img
 
     public int getId() {
         return id;
@@ -35,19 +35,19 @@ public class User {
     }
 
     public String getUserName() {
-        return user_name;
+        return userName;
     }
 
     public void setUserName(String userName) {
-        this.user_name = userName;
+        this.userName = userName;
     }
 
     public String getHeadImg() {
-        return head_img;
+        return headImg;
     }
 
     public void setHeadImg(String headImg) {
-        this.head_img = headImg;
+        this.headImg = headImg;
     }
 
     @Override
@@ -56,8 +56,8 @@ public class User {
                 "id=" + id +
                 ", phone='" + phone + '\'' +
                 ", password='" + password + '\'' +
-                ", userName='" + user_name + '\'' +
-                ", headImg='" + head_img + '\'' +
+                ", userName='" + userName + '\'' +
+                ", headImg='" + headImg + '\'' +
                 '}';
     }
 }

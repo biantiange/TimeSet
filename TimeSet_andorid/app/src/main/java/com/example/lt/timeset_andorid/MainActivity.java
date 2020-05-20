@@ -255,12 +255,14 @@ public class MainActivity extends AppCompatActivity {
                 Gson gson=new Gson();
                 Type listType=new TypeToken<List<Album>>(){}.getType();
                 List<Album> albumList= gson.fromJson((String) msg.obj,listType);
+
                 inData(albumList);
             }
             if(msg.what==2){
                 Gson gson=new Gson();
                 Type listType=new TypeToken<List<Album>>(){}.getType();
                 List<Album> albumList= gson.fromJson((String) msg.obj,listType);
+                Log.e("albumList",albumList.toString());
                 inData(albumList);
             }
             if(msg.what==3){
