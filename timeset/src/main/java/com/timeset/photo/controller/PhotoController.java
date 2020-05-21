@@ -9,6 +9,9 @@ import com.timeset.photo.entity.PhotoList;
 import com.timeset.photo.service.PhotoServiceImpl;
 import com.timeset.user.controller.UserController;
 import com.timeset.util.Constant;
+import com.timeset.util.FileUtil;
+import com.timeset.util.MultipartFileToFileUtil;
+import com.timeset.util.QiniuUtil;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,13 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.thymeleaf.util.StringUtils.trim;
 
@@ -43,10 +44,12 @@ public class PhotoController {
 
     @Resource
     private PhotoServiceImpl photoService;
+    @Resource
+    private QiniuUtil qiniuUtil;
 
     @RequestMapping("/add")
     public int addPhoto(@RequestParam("file") MultipartFile files[], HttpServletRequest request, @RequestParam("userId") int userId, @RequestParam("albumId") int albumId,
-                       @RequestParam("describe") String describe, @RequestParam("infor") String infor) {
+                        @RequestParam("describe") String describe, @RequestParam("infor") String infor) {
         System.out.println("插入图片");
         Gson gson = new GsonBuilder().serializeNulls().create();
         List<PhotoJson> jlist = gson.fromJson(infor, new TypeToken<List<PhotoJson>>() {
@@ -55,68 +58,80 @@ public class PhotoController {
         String pa = UserController.class.getClassLoader().getResource("").getPath().split("timeset")[0];
         int repeat = 0;
         for (int i = 0; i < files.length; i++) {
-            // 生成新的文件名
-//            String fileName = System.currentTimeMillis() + files[i].getOriginalFilename();
             String fileName = files[i].getOriginalFilename();
-            String dir1 = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/";
-            File file1=new File((dir1));
-            if(!file1.exists()){
-                file1.mkdir();
-            }
-            String dir2 = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/"+userId+"/";
-            File file2=new File((dir2));
-            if(!file2.exists()){
-                file2.mkdir();
-            }
-            // 保存路径
-            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + userId + "/" +albumId+"/"+  fileName;
-            //String destFileName1 = request.getServletContext().getRealPath("") + "uploaded" + File.separator + fileName;
-            System.out.println(destFileName);
-            //System.out.println(destFileName1);
-            //String destFileName=Constant.ImgPath+File.separator+fileName;
-            // 执行保存操作
-            File destFile = new File(destFileName);
+//            String dir1 = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/";
+//            File file1=new File((dir1));
+//            if(!file1.exists()){
+//                file1.mkdir();
+//            }
+//            String dir2 = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/"+userId+"/";
+//            File file2=new File((dir2));
+//            if(!file2.exists()){
+//                file2.mkdir();
+//            }
+//            // 保存路径
+//            String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + userId + "/" +albumId+"/"+  fileName;
+//            //String destFileName1 = request.getServletContext().getRealPath("") + "uploaded" + File.separator + fileName;
 //            System.out.println(destFileName);
-//            if(destFile.exists()){
+//            //System.out.println(destFileName1);
+//            //String destFileName=Constant.ImgPath+File.separator+fileName;
+//            // 执行保存操作
+//            File destFile = new File(destFileName);
+////            System.out.println(destFileName);
+////            if(destFile.exists()){
+////                repeat++;
+////            }else {
+//            if (!destFile.getParentFile().exists()) {
+//                destFile.getParentFile().mkdir();
+//                System.out.println("创建目录");
+//            }else{
+//                System.out.println("目录存在");
+//            }
+//            if (destFile.exists()) {
 //                repeat++;
-//            }else {
-            if (!destFile.getParentFile().exists()) {
-                destFile.getParentFile().mkdir();
-                System.out.println("创建目录");
-            }else{
-                System.out.println("目录存在");
-            }
-            if (destFile.exists()) {
-                repeat++;
+//            } else {
+//                try {
+//                    files[i].transferTo(destFile);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+            Photo photo = new Photo();
+            photo.setCity(jlist.get(i).getCity());
+            photo.setDistrict(jlist.get(i).getDistrict());
+            photo.setPlace(jlist.get(i).getPlace());
+            photo.setUserId(userId);
+            photo.setAlbumId(albumId);
+            photo.setProvince(jlist.get(i).getProvince());
+            String date = "";
+            if (jlist.get(i).getPtime().length() == 0) {
+                SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
+                date = df.format(new Date());// new Date()为获取当前系统时间
             } else {
+                date = jlist.get(i).getPtime();
+            }
+            photo.setPtime(date);
+            photo.setPdescribe(describe);
+            photo.setLatitude(jlist.get(i).getLat());
+            photo.setLongitude(jlist.get(i).getLon());
+            MultipartFile file=files[i];
+            File f=null;
+            if(file!=null) {
                 try {
-                    files[i].transferTo(destFile);
-                } catch (IOException e) {
+                    f=MultipartFileToFileUtil.multipartFileToFile(file);
+                    String path = qiniuUtil.saveImage(f, fileName);
+                    photo.setPath(path);
+                    int result = photoService.addPhoto(photo, path);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Photo photo = new Photo();
-                photo.setCity(jlist.get(i).getCity());
-                photo.setDistrict(jlist.get(i).getDistrict());
-                photo.setPlace(jlist.get(i).getPlace());
-                photo.setUserId(userId);
-                photo.setAlbumId(albumId);
-                photo.setProvince(jlist.get(i).getProvince());
-                String date = "";
-                if (jlist.get(i).getPtime().length() == 0) {
-                    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
-                    date = df.format(new Date());// new Date()为获取当前系统时间
-                } else {
-                    date = jlist.get(i).getPtime();
-                }
-                photo.setPtime(date);
-                photo.setPdescribe(describe);
-                photo.setLatitude(jlist.get(i).getLat());
-                photo.setLongitude(jlist.get(i).getLon());
-                photo.setPath(+ userId + "/" +albumId+"/"+fileName);
-
-                int result = photoService.addPhoto(photo, destFileName);
             }
+            MultipartFileToFileUtil.delteTempFile(f);
+
+//            photo.setPath(+userId + "/" + albumId + "/" + fileName);
+//
+//            int result = photoService.addPhoto(photo, destFileName);
         }
+//        }
 
 //            if (result == 0) {
 //                return -1;
@@ -139,10 +154,10 @@ public class PhotoController {
     }
 
     @RequestMapping("updatePhotoDescription")
-    public int updatePhotoDescription(@RequestParam("newDescribe") String newDescribe,@RequestParam("photoId") int id){
+    public int updatePhotoDescription(@RequestParam("newDescribe") String newDescribe, @RequestParam("photoId") int id) {
         System.out.println("修改图片描述");
         if (id != 0) {
-            int result = photoService.updatePhotoDescription(newDescribe,id);
+            int result = photoService.updatePhotoDescription(newDescribe, id);
             if (result != 0) {
                 return 0;
             }

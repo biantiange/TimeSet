@@ -3,9 +3,11 @@ package com.timeset.photo.service;
 import com.baidu.aip.ocr.AipOcr;
 import com.timeset.photo.entity.Photo;
 import com.timeset.util.Constant;
+import com.timeset.util.FileUtil;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import static com.timeset.util.Constant.*;
@@ -53,7 +55,13 @@ public class TextRecogintion {
          * 通用文字识别 : client.basicGeneral();
          * 通用文字识别（高精度）: client.basicAccurateGeneral()
          */
-        JSONObject res = client.basicAccurateGeneral(path, new HashMap<String, String>());
+        // 参数为本地图片路径
+//        JSONObject res = client.basicAccurateGeneral(path, new HashMap<String, String>());
+        // 通用文字识别, 图片参数为远程url图片
+//        JSONObject res = client.basicGeneralUrl(path, new HashMap<String, String>());
+        // 参数为本地图片二进制数组
+        byte[] file = FileUtil.urlToByte(path);
+        JSONObject  res = client.basicAccurateGeneral(file, new HashMap<String, String>());
         System.out.println(res.toString(2));
         return (res.toString(2));
     }

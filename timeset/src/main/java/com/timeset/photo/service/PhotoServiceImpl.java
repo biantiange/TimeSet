@@ -72,7 +72,6 @@ public class PhotoServiceImpl {
         return -1;
     }
 
-
     public int deletePhoto(int id){
 
         String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/" + photoMapper.findPhotoNameById(id).getPath().trim();

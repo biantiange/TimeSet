@@ -29,7 +29,7 @@ public class MultipartFileToFileUtil {
             InputStream ins = null;
             ins = file.getInputStream();
             toFile = new File(file.getOriginalFilename());
-//            inputStreamToFile(ins, toFile);
+            inputStreamToFile(ins, toFile);
             ins.close();
         }
         return toFile;

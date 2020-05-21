@@ -3,6 +3,7 @@ package com.timeset.user.controller;
 import com.timeset.photo.entity.Photo;
 import com.timeset.user.entity.User;
 import com.timeset.user.service.UserServiceImpl;
+import com.timeset.util.FileUtil;
 import com.timeset.util.MultipartFileToFileUtil;
 import com.timeset.util.QiniuUtil;
 import org.springframework.util.ClassUtils;
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -67,12 +69,15 @@ public class UserController {
 //                    e.printStackTrace();
 //                }
 //                user.setHeadImg(fileName);
+                File f=null;
                 try {
-                    String path = qiniuUtil.saveImage(MultipartFileToFileUtil.multipartFileToFile(file),fileName);
+                    f=MultipartFileToFileUtil.multipartFileToFile(file);
+                    String path = qiniuUtil.saveImage(f,fileName);
                     user.setHeadImg(path);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                MultipartFileToFileUtil.delteTempFile(f);
             }
             int result = userService.insertUser(user);
             if (result != 0) {
@@ -114,11 +119,14 @@ public class UserController {
             //上传服务器
             // 生成新的文件名
             String headImg = null;
+            File f=null;
             try {
-                headImg = qiniuUtil.saveImage(MultipartFileToFileUtil.multipartFileToFile(file),file.getOriginalFilename());
+                f=MultipartFileToFileUtil.multipartFileToFile(file);
+                headImg = qiniuUtil.saveImage(f,file.getOriginalFilename());
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            MultipartFileToFileUtil.delteTempFile(f);
             // 保存路径
 //            String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+headImg;
 

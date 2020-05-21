@@ -1,11 +1,30 @@
 package com.timeset.util;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * 文件读取工具类
  */
 public class FileUtil {
+
+    public static void inputStreamToFile(InputStream ins, File file) {
+        try {
+            OutputStream os = new FileOutputStream(file);
+            int bytesRead = 0;
+            byte[] buffer = new byte[8192];
+            while ((bytesRead = ins.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            os.close();
+            ins.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 读取文件内容，作为字符串返回
@@ -80,6 +99,47 @@ public class FileUtil {
             }
         }
         return false;
+    }
+
+    //网络图片转成二进制数组
+    public static byte[] urlToByte(String url) {
+        return getFileStream(url);
+    }
+    /**
+     * 得到文件流
+     * @param url
+     * @return
+     */
+    public static byte[] getFileStream(String url){
+        try {
+            URL httpUrl = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection)httpUrl.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5 * 1000);
+            InputStream inStream = conn.getInputStream();//通过输入流获取图片数据
+            byte[] btImg = readInputStream(inStream);//得到图片的二进制数据
+            return btImg;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 从输入流中获取数据
+     * @param inStream 输入流
+     * @return
+     * @throws Exception
+     */
+    public static byte[] readInputStream(InputStream inStream) throws Exception{
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while( (len=inStream.read(buffer)) != -1 ){
+            outStream.write(buffer, 0, len);
+        }
+        inStream.close();
+        return outStream.toByteArray();
     }
 
 }

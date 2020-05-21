@@ -46,7 +46,7 @@ public class QiniuUtil {
     }
 
 
-    public String saveImage(File file , String fileName) throws IOException {
+    public String saveImage(File file, String fileName) throws IOException {
         try {
             int dotPos = fileName.lastIndexOf(".");
             if (dotPos < 0) {
@@ -58,12 +58,11 @@ public class QiniuUtil {
                 return null;
             }
             String randName = UUID.randomUUID().toString().replaceAll("-", "") + "." + fileExt;
-
             Response res = uploadManager.put(file, randName, getUpToken());
             // 打印返回的信息
             if (res.isOK() && res.isJson()) {
                 // 返回这张存储照片的地址
-                return "http://qamf9zffk.bkt.clouddn.com/"+JSONObject.parseObject(res.bodyString()).get("key").toString();
+                return "http://qamf9zffk.bkt.clouddn.com/" + JSONObject.parseObject(res.bodyString()).get("key").toString();
             } else {
                 System.out.println("七牛异常1:" + res.bodyString());
                 return null;
@@ -74,9 +73,6 @@ public class QiniuUtil {
             return null;
         }
     }
-
-
-
 
 
 }
