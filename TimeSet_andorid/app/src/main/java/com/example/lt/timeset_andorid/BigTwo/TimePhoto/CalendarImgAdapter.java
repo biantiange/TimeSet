@@ -93,7 +93,7 @@ public class CalendarImgAdapter extends BaseAdapter {
                 .error(R.drawable.timg)
                 .fallback(R.drawable.timg);
 //        Log.e("paht",Constant.URL+path);
-        Glide.with(context).load(Constant.URL+path).apply(requestOptions).into(holder.img);
+        Glide.with(context).load(path).apply(requestOptions).into(holder.img);
 //        Glide.with(context).load(path).apply(requestOptions).into(holder.img);
 
         //设置图片单击事件，将phone参数传进图片查看器
