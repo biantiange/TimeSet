@@ -48,7 +48,8 @@ public class GridViewAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         showImgSource.clear();
         for (Photo photo : dataSource){
-            showImgSource.add(Constant.URL+photo.getPath());
+//            showImgSource.add(Constant.URL+photo.getPath());
+            showImgSource.add(photo.getPath());
         }
         ViewHolder holder;
         if(convertView==null){
@@ -60,7 +61,9 @@ public class GridViewAdapter extends BaseAdapter {
         }
         // 给数据项填充数据
         Photo photo=dataSource.get(position);
-        Glide.with(context).load(Constant.URL+photo.getPath()).into(holder.img);
+//        Glide.with(context).load(Constant.URL+photo.getPath()).into(holder.img);
+        Glide.with(context).load(photo.getPath()).into(holder.img);
+
 
         //设置图片单击事件，将phone参数传进图片查看器
         holder.img.setOnClickListener(v -> {

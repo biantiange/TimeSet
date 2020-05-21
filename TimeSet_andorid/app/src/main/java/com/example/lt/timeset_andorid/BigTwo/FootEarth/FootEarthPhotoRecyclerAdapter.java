@@ -81,8 +81,8 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
         this.ivEditDetail = ivEditDetail;
         this.ivEditDelete = ivEditDelete;
         for (Photo photo : dataSource) {
-            showImgSource.add(Constant.URL + photo.getPath());
-//            showImgSource.add(photo.getPath());
+//            showImgSource.add(Constant.URL + photo.getPath());
+            showImgSource.add(photo.getPath());
         }
     }
 
@@ -131,8 +131,8 @@ public class FootEarthPhotoRecyclerAdapter extends BaseAdapter {
                 .fallback(R.drawable.timg);
 
 //        Log.e("paht",Constant.URL+path);
-//        Glide.with(context).load(path).apply(requestOptions).into(holder.ivImg);
-        Glide.with(context).load(Constant.URL + path).apply(requestOptions).into(holder.ivImg);
+        Glide.with(context).load(path).apply(requestOptions).into(holder.ivImg);
+//        Glide.with(context).load(Constant.URL + path).apply(requestOptions).into(holder.ivImg);
 
         //设置图片单击事件，将phone参数传进图片查看器
         holder.ivImg.setOnClickListener(new View.OnClickListener() {

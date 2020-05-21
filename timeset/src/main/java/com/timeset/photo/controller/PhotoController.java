@@ -20,11 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigInteger;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -110,7 +109,15 @@ public class PhotoController {
                 date = jlist.get(i).getPtime();
             }
             photo.setPtime(date);
-            photo.setPdescribe(describe);
+            String d=null;
+            try {
+                d=URLDecoder.decode(describe,"utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            if(d!=null) {
+                photo.setPdescribe(d);
+            }
             photo.setLatitude(jlist.get(i).getLat());
             photo.setLongitude(jlist.get(i).getLon());
             MultipartFile file=files[i];

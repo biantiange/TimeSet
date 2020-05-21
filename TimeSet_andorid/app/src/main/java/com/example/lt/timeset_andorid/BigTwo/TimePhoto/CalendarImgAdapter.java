@@ -54,8 +54,8 @@ public class CalendarImgAdapter extends BaseAdapter {
         this.item_layout_id = item_layout_id; // 列表项布局文件ID
         if(dataSource!=null) {
             for (Photo photo : dataSource) {
-                showImgSource.add(Constant.URL + photo.getPath());
-//                showImgSource.add(photo.getPath());
+//                showImgSource.add(Constant.URL + photo.getPath());
+                showImgSource.add(photo.getPath());
             }
         }
     }

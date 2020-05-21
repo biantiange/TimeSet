@@ -458,6 +458,7 @@ public class InAlbumActivity extends AppCompatActivity {
             }
         }
     }
+
     private void findTimeData(){
         sharedPreferences=getSharedPreferences("user",MODE_PRIVATE);
         userId=sharedPreferences.getInt("id",-1);

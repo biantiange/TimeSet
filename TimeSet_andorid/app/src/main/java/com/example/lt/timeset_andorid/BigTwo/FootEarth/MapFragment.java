@@ -450,7 +450,8 @@ public class MapFragment extends Fragment {
         }
         RequestOptions options = new RequestOptions().placeholder(R.drawable.moren_img);
         Log.e("ttttttttttt", Constant.IP + imgRes.get(0).getPhotoList().get(0).getPath());
-        String url = Constant.IP + imgRes.get(0).getPhotoList().get(0).getPath();
+//        String url = Constant.IP + imgRes.get(0).getPhotoList().get(0).getPath();
+        String url =  imgRes.get(0).getPhotoList().get(0).getPath();
         Glide.with(InAlbumActivity.activity)
                 .load(url)
                 .apply(options)
