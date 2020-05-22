@@ -35,6 +35,7 @@ import com.example.lt.timeset_andorid.util.ReadUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.PictureSelectorExternalUtils;
 import com.luck.picture.lib.animators.AnimationType;
 import com.luck.picture.lib.camera.CustomCameraView;
 import com.luck.picture.lib.config.PictureConfig;
@@ -184,6 +185,10 @@ public class AddPictureActivity extends AppCompatActivity {
 
         @Override
         public void onResult(List<LocalMedia> result1) {
+//            ExifInterface exifInterface=PictureSelectorExternalUtils.getExifInterface(AddPictureActivity.this,result1.get(0).getPath());
+//            float[] ll=new float[]{0,0};
+//            exifInterface.getLatLong(ll);
+//            Log.e("YYYYYYYYYYYYYYY1",ll[0]+" "+ll[1]);
             result = result1;
             int i = 0;
             Toast.makeText(AddPictureActivity.this, "正在获取图片信息请等待", Toast.LENGTH_SHORT);
@@ -211,7 +216,7 @@ public class AddPictureActivity extends AppCompatActivity {
                 photoJson.setLon(lon);
                 re.add(photoJson);
                 //if (lon!=null && !lon.equals("") && lat!=null && !lat.equals("")) {
-                    getPlaceByLongitudeAndLatitude(Constant.AK, Constant.MCODE, i);
+                getPlaceByLongitudeAndLatitude(Constant.AK, Constant.MCODE, i);
                 //}
                 i++;
             }
@@ -275,6 +280,7 @@ public class AddPictureActivity extends AppCompatActivity {
                 try {
                     Response response = call.execute();
                     String str = response.body().string();
+                    Log.e("YYYYYYYYYYYYYYY", str);
                     Map<String, String> map = new HashMap<>();
                     map.put("pi", i + "");
                     map.put("str", str);
@@ -455,16 +461,34 @@ public class AddPictureActivity extends AppCompatActivity {
                                         JSONObject result2 = new JSONObject(result1.get("result").toString());
                                         String add = result2.get("formatted_address").toString();
                                         JSONObject result3 = new JSONObject(result2.get("addressComponent").toString());
-                                        String province = result3.get("province").toString();
-                                        String city = result3.get("city").toString();
-                                        String district = result3.get("district").toString();
-                                        String town = result3.get("town").toString();
-                                        String street = result3.get("street").toString();
+                                        String province = null;
+                                        if (result3.get("province") != null && !result3.get("province").toString().equals("")) {
+                                            province = result3.get("province").toString();
+                                        }
+                                        String city = null;
+                                        if (result3.get("city") != null && !result3.get("city").toString().equals("")) {
+                                            city = result3.get("city").toString();
+                                        }
+                                        String district = null;
+                                        if (result3.get("district") != null && !result3.get("district").toString().equals("")) {
+                                            district = result3.get("district").toString();
+                                        }
+                                        String town = null;
+                                        if (result3.get("town") != null && !result3.get("town").toString().equals("")) {
+                                            town = result3.get("town").toString();
+                                        }
+                                        String street = null;
+                                        if (result3.get("street") != null && !result3.get("street").toString().equals("")) {
+                                            street = result3.get("street").toString();
+                                        }
                                         String place = province + city + district + town + street;
                                         re.get(i).setProvince(province);
                                         re.get(i).setCity(city);
                                         re.get(i).setDistrict(district);
                                         re.get(i).setPlace(place);
+                                        upLoad.setTextColor(Color.parseColor("#FFA000"));
+                                        upLoad.setText("上传");
+                                        upLoad.setEnabled(true);
                                     } else {
                                         upLoad.setTextColor(Color.GRAY);
                                         upLoad.setText("获取失败");
@@ -534,31 +558,32 @@ public class AddPictureActivity extends AppCompatActivity {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("光圈 = " + guangquan + "\n")
                     .append("时间 = " + shijain + "\n")
-                    .append("曝光时长 = " + baoguangshijian + "\n")
-                    .append("焦距 = " + jiaoju + "\n")
-                    .append("长 = " + chang + "\n")
-                    .append("宽 = " + kuan + "\n")
-                    .append("型号 = " + moshi + "\n")
-                    .append("制造商 = " + zhizaoshang + "\n")
-                    .append("ISO = " + iso + "\n")
-                    .append("角度 = " + jiaodu + "\n")
-                    .append("白平衡 = " + baiph + "\n")
-                    .append("海拔高度 = " + altitude_ref + "\n")
-                    .append("GPS参考高度 = " + altitude + "\n")
-                    .append("GPS时间戳 = " + timestamp + "\n")
-                    .append("GPS定位类型 = " + processing_method + "\n")
-                    .append("GPS参考经度 = " + latitude_ref + "\n")
-                    .append("GPS参考纬度 = " + longitude_ref + "\n")
+//                    .append("曝光时长 = " + baoguangshijian + "\n")
+//                    .append("焦距 = " + jiaoju + "\n")
+//                    .append("长 = " + chang + "\n")
+//                    .append("宽 = " + kuan + "\n")
+//                    .append("型号 = " + moshi + "\n")
+//                    .append("制造商 = " + zhizaoshang + "\n")
+//                    .append("ISO = " + iso + "\n")
+//                    .append("角度 = " + jiaodu + "\n")
+//                    .append("白平衡 = " + baiph + "\n")
+//                    .append("海拔高度 = " + altitude_ref + "\n")
+//                    .append("GPS参考高度 = " + altitude + "\n")
+//                    .append("GPS时间戳 = " + timestamp + "\n")
+//                    .append("GPS定位类型 = " + processing_method + "\n")
+//                    .append("GPS参考经度 = " + latitude_ref + "\n")
+//                    .append("GPS参考纬度 = " + longitude_ref + "\n")
                     .append("GPS经度 = " + lat + "\n")
                     .append("GPS经度 = " + lon + "\n");
 
             Log.e("YYYYYYYYYYYYYYY", stringBuilder.toString());
             photo = new Photo();
+
             photo.setPtime(shijain);
             if (latitude != null && longitude != null) {
                 photo.setLatitude(String.valueOf(wgs2bd[0]));
                 photo.setLongitude(String.valueOf(wgs2bd[1]));
-            }else{
+            } else {
                 photo.setLatitude(null);
                 photo.setLongitude(null);
 //                upLoad.setTextColor(Color.GRAY);

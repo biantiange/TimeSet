@@ -95,12 +95,20 @@ public class PhotoController {
 //                    e.printStackTrace();
 //                }
             Photo photo = new Photo();
-            photo.setCity(jlist.get(i).getCity());
-            photo.setDistrict(jlist.get(i).getDistrict());
-            photo.setPlace(jlist.get(i).getPlace());
+            if (jlist.get(i).getCity() != null && jlist.get(i).getCity().equals("")) {
+                photo.setCity(jlist.get(i).getCity());
+            }
+            if (jlist.get(i).getDistrict() != null && jlist.get(i).getDistrict().equals("")) {
+                photo.setDistrict(jlist.get(i).getDistrict());
+            }
+            if (jlist.get(i).getPlace() != null && jlist.get(i).getPlace().equals("")) {
+                photo.setPlace(jlist.get(i).getPlace());
+            }
             photo.setUserId(userId);
             photo.setAlbumId(albumId);
-            photo.setProvince(jlist.get(i).getProvince());
+            if (jlist.get(i).getProvince()!= null && jlist.get(i).getProvince().equals("")) {
+                photo.setProvince(jlist.get(i).getProvince());
+            }
             String date = "";
             if (jlist.get(i).getPtime().length() == 0) {
                 SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
@@ -109,22 +117,22 @@ public class PhotoController {
                 date = jlist.get(i).getPtime();
             }
             photo.setPtime(date);
-            String d=null;
+            String d = null;
             try {
-                d=URLDecoder.decode(describe,"utf-8");
+                d = URLDecoder.decode(describe, "utf-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            if(d!=null) {
+            if (d != null) {
                 photo.setPdescribe(d);
             }
             photo.setLatitude(jlist.get(i).getLat());
             photo.setLongitude(jlist.get(i).getLon());
-            MultipartFile file=files[i];
-            File f=null;
-            if(file!=null) {
+            MultipartFile file = files[i];
+            File f = null;
+            if (file != null) {
                 try {
-                    f=MultipartFileToFileUtil.multipartFileToFile(file);
+                    f = MultipartFileToFileUtil.multipartFileToFile(file);
                     String path = qiniuUtil.saveImage(f, fileName);
                     photo.setPath(path);
                     int result = photoService.addPhoto(photo, path);
