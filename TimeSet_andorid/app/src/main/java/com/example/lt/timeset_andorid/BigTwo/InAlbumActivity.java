@@ -118,7 +118,7 @@ public class InAlbumActivity extends AppCompatActivity {
 
     private ImageButton addImg;
 
-    public static Activity activity;
+//    public static Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +143,7 @@ public class InAlbumActivity extends AppCompatActivity {
         //时间轴
         findTimeData();
 
-        activity = this;
+//        activity = this;
     }
 
 
@@ -420,13 +420,13 @@ public class InAlbumActivity extends AppCompatActivity {
         FragmentTransaction transaction =
                 getSupportFragmentManager().beginTransaction();
         if (curFragment != null)
-            transaction.remove(curFragment);
+            transaction.hide(curFragment);
         if (!fragment.isAdded()) {
             transaction.add(R.id.tab_content, fragment);
         }
         transaction.show(fragment);
-        curFragment = fragment;
         transaction.commit();
+        curFragment = fragment;
     }
 
     private class MyListener implements View.OnClickListener {

@@ -64,6 +64,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -191,11 +192,14 @@ public class AddPictureActivity extends AppCompatActivity {
 //            Log.e("YYYYYYYYYYYYYYY1",ll[0]+" "+ll[1]);
             result = result1;
             int i = 0;
-            Toast.makeText(AddPictureActivity.this, "正在获取图片信息请等待", Toast.LENGTH_SHORT);
+            Log.e("getPPP","nook");
+            Toast.makeText(AddPictureActivity.this, "正在获取图片信息请等待", Toast.LENGTH_SHORT).show();
+            Log.e("getPPP","ok");
             upLoad.setTextColor(Color.GRAY);
             upLoad.setText("正在获取");
             upLoad.setEnabled(false);
             for (LocalMedia media : result1) {
+
                 String ptime = "";
                 String lon = "";
                 String lat = "";
@@ -220,6 +224,7 @@ public class AddPictureActivity extends AppCompatActivity {
                 //}
                 i++;
             }
+            Log.e("getPPP",""+re.toString());
 
 
 //            for (LocalMedia media : result1) {
@@ -361,12 +366,17 @@ public class AddPictureActivity extends AppCompatActivity {
 
     }
 
-    private OkHttpClient client = new OkHttpClient();
+
+    private OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(60000, TimeUnit.MILLISECONDS)
+            .readTimeout(60000, TimeUnit.MILLISECONDS)
+            .writeTimeout(60000, TimeUnit.MILLISECONDS)
+            .build();
 
     private void upLoadAllMessage() {
         //将re转为json字符串
         Gson gson = new Gson();
         String jr = gson.toJson(re);
+        Log.e("PPP1",jr.toString());
         MediaType MutilPart_Form_Data = MediaType.parse("application/octet-stream;charset=utf-8");
         MultipartBody.Builder requestBodyBuilder = null;
         try {
@@ -406,6 +416,10 @@ public class AddPictureActivity extends AppCompatActivity {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                client.dispatcher().cancelAll();
+                client.connectionPool().evictAll();
+                client.newCall(request).enqueue(this);
+
                 Message message = new Message();
                 message.what = ADD_ACHIEVE;
                 message.obj = "网络错误，上传失败";
@@ -506,6 +520,7 @@ public class AddPictureActivity extends AppCompatActivity {
                         upLoad.setTextColor(Color.parseColor("#FFA000"));
                         upLoad.setEnabled(true);
                     }
+                    Log.e("setPPP",re.toString());
                     break;
             }
         }

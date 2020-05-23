@@ -64,4 +64,17 @@ public class PhotoJson {
     public void setProvince(String province) {
         this.province = province;
     }
+
+    @Override
+    public String toString() {
+        return "PhotoJson{" +
+                "ptime='" + ptime + '\'' +
+                ", lon='" + lon + '\'' +
+                ", lat='" + lat + '\'' +
+                ", place='" + place + '\'' +
+                ", district='" + district + '\'' +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                '}';
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.lt.timeset_andorid.BigTwo.FootEarth;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -101,27 +102,28 @@ public class MapFragment extends Fragment {
         //获取地图控件引用
         mapView = newView.findViewById(R.id.map);
         baiduMap = mapView.getMap();
+        initDataByOkHTTP();
         return newView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initDataByOkHTTP();
-//        getData();
-//        initPlToMark(plToAdaper);
-//        hideBaiduLogo();
-//        // 比例尺设置为市级
-//        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(8.0f);
-//        baiduMap.setMapStatus(msu);
-//        // 定位自己
-//        locationClient = new LocationClient(getContext());
-//        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_GPS);
-//        // 给所有图片覆盖到地图上
-//        setAllPhotoToBaiduMap();
-//        // 添加标注物点击监听器
-//        addItemTouchListener();
-    }
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//
+////        getData();
+////        initPlToMark(plToAdaper);
+////        hideBaiduLogo();
+////        // 比例尺设置为市级
+////        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(8.0f);
+////        baiduMap.setMapStatus(msu);
+////        // 定位自己
+////        locationClient = new LocationClient(getContext());
+////        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_GPS);
+////        // 给所有图片覆盖到地图上
+////        setAllPhotoToBaiduMap();
+////        // 添加标注物点击监听器
+////        addItemTouchListener();
+//    }
 
     private void getData() {
         // 1. 获取照片数据( 模拟通过intent获取phonoList数据源)
@@ -203,6 +205,7 @@ public class MapFragment extends Fragment {
                     String strings = response.body().string();
                     Message message = new Message();
                     message.what = 2;
+                    Log.e("what=2",""+strings);
                     message.obj = strings;
                     handler.sendMessage(message);
                 }
@@ -230,7 +233,8 @@ public class MapFragment extends Fragment {
 //                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 //                    ActivityCompat.requestPermissions(this, ACCESS_FINE_LOCATION, 1);
 //                }
-                ActivityCompat.requestPermissions(InAlbumActivity.activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_GPS);
+                Log.e("connnn",getContext()+"");
+                MapFragment.this.requestPermissions( new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_GPS);
                 // 给所有图片覆盖到地图上
                 setAllPhotoToBaiduMap();
                 // 添加标注物点击监听器
@@ -440,7 +444,7 @@ public class MapFragment extends Fragment {
 
     // 获取覆盖物控件
     private View getMarkView(List<PhotoList> imgRes) {
-        View markView = LayoutInflater.from(InAlbumActivity.activity).inflate(R.layout.foot_earth_mark_item, null);
+        View markView = LayoutInflater.from(getContext()).inflate(R.layout.foot_earth_mark_item, null);
         TextView tvCount = markView.findViewById(R.id.tv_foot_earth_mark_item_count);
         ImageView ivCover = markView.findViewById(R.id.iv_foot_earth_mark_item_cover);
         if (imgRes.size() == 1) {
@@ -452,7 +456,8 @@ public class MapFragment extends Fragment {
         Log.e("ttttttttttt", Constant.IP + imgRes.get(0).getPhotoList().get(0).getPath());
 //        String url = Constant.IP + imgRes.get(0).getPhotoList().get(0).getPath();
         String url =  imgRes.get(0).getPhotoList().get(0).getPath();
-        Glide.with(InAlbumActivity.activity)
+        Log.e("mapImg",url);
+        Glide.with(getContext())
                 .load(url)
                 .apply(options)
                 .into(ivCover);
@@ -540,6 +545,10 @@ public class MapFragment extends Fragment {
         // 1. 脱裤子放屁，但不这样就出错
         LatLng latLng = new LatLng(latLng1.longitude, latLng1.latitude); // 纬度、精度
         // 2. 创建标注覆盖物选项对象
+//        View view = getMarkView(imgResource);
+//        ImageView ivCover = view.findViewById(R.id.iv_foot_earth_mark_item_cover);
+//        Glide.with(this).load(imgResource.get(0).getPhotoList().get(0).getPath()).into(ivCover);
+//        BitmapDescriptor descriptor1 = BitmapDescriptorFactory.fromView(view);
         BitmapDescriptor descriptor1 = BitmapDescriptorFactory.fromView(getMarkView(imgResource));
         MarkerOptions markerOptions = new MarkerOptions()
                 .icon(descriptor1)     // 指定 添加的图片
@@ -587,7 +596,7 @@ public class MapFragment extends Fragment {
         super.onResume();
         // 在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mapView.onResume();
-        initDataByOkHTTP();
+//        initDataByOkHTTP();
     }
 
     @Override
