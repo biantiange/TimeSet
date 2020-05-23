@@ -545,11 +545,13 @@ public class MapFragment extends Fragment {
         // 1. 脱裤子放屁，但不这样就出错
         LatLng latLng = new LatLng(latLng1.longitude, latLng1.latitude); // 纬度、精度
         // 2. 创建标注覆盖物选项对象
-//        View view = getMarkView(imgResource);
-//        ImageView ivCover = view.findViewById(R.id.iv_foot_earth_mark_item_cover);
-//        Glide.with(this).load(imgResource.get(0).getPhotoList().get(0).getPath()).into(ivCover);
-//        BitmapDescriptor descriptor1 = BitmapDescriptorFactory.fromView(view);
-        BitmapDescriptor descriptor1 = BitmapDescriptorFactory.fromView(getMarkView(imgResource));
+
+        View view = getMarkView(imgResource);
+        ImageView ivCover = view.findViewById(R.id.iv_foot_earth_mark_item_cover);
+        Glide.with(this).load(imgResource.get(0).getPhotoList().get(0).getPath()).into(ivCover);
+        BitmapDescriptor descriptor1 = BitmapDescriptorFactory.fromView(view);
+
+//        BitmapDescriptor descriptor1 = BitmapDescriptorFactory.fromView(getMarkView(imgResource));
         MarkerOptions markerOptions = new MarkerOptions()
                 .icon(descriptor1)     // 指定 添加的图片
                 .title(city)

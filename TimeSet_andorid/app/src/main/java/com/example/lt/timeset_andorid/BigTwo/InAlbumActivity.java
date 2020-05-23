@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -83,7 +84,7 @@ public class InAlbumActivity extends AppCompatActivity {
     private ImageView ivEditDelete;
 
     private ImageButton return0;
-    private TextView btn_search;
+    private TextView btn_time;
     private LinearLayout layout1;
     private LinearLayout layout2;
     private LinearLayout llOut;
@@ -374,7 +375,7 @@ public class InAlbumActivity extends AppCompatActivity {
         layout2 = findViewById(R.id.tab_spec_2);
         addImg = findViewById(R.id.add_img);
         return0 = findViewById(R.id.btn_return1);
-        btn_search = findViewById(R.id.btn_search);
+        btn_time = findViewById(R.id.btn_time);
         albumName = findViewById(R.id.album_name);
         llOut = findViewById(R.id.ll_in_album_out);
         iver = findViewById(R.id.iver_show_img);
@@ -398,7 +399,7 @@ public class InAlbumActivity extends AppCompatActivity {
         layout1.setOnClickListener(listener);
         layout2.setOnClickListener(listener);
         return0.setOnClickListener(listener);
-        btn_search.setOnClickListener(listener);
+        btn_time.setOnClickListener(listener);
         addImg.setOnClickListener(listener);
     }
 
@@ -450,10 +451,10 @@ public class InAlbumActivity extends AppCompatActivity {
                 case R.id.btn_return1:
                     finish();
                     break;
-                case R.id.btn_search:
-                    Intent intent1 = new Intent(InAlbumActivity.this, SearchActivity.class);
-                    startActivity(intent1);
-
+                case R.id.btn_time:
+                    if (!mDrawer.isDrawerOpen(GravityCompat.START)) {
+                        mDrawer.openDrawer(GravityCompat.START);
+                    }
                     break;
             }
         }

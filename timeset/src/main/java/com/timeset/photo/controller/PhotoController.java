@@ -53,11 +53,12 @@ public class PhotoController {
         Gson gson = new GsonBuilder().serializeNulls().create();
         List<PhotoJson> jlist = gson.fromJson(infor, new TypeToken<List<PhotoJson>>() {
         }.getType());
-        System.out.println(jlist);
+        System.out.println("jlist"+jlist);
         String pa = UserController.class.getClassLoader().getResource("").getPath().split("timeset")[0];
         int repeat = 0;
         for (int i = 0; i < files.length; i++) {
             String fileName = files[i].getOriginalFilename();
+            System.out.println("imgName"+fileName);
 //            String dir1 = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/";
 //            File file1=new File((dir1));
 //            if(!file1.exists()){
@@ -95,18 +96,20 @@ public class PhotoController {
 //                    e.printStackTrace();
 //                }
             Photo photo = new Photo();
-            if (jlist.get(i).getCity() != null && jlist.get(i).getCity().equals("")) {
+            if (jlist.get(i).getCity() != null && !jlist.get(i).getCity().equals("")) {
                 photo.setCity(jlist.get(i).getCity());
+                System.out.println("city"+jlist.get(i).getCity());
             }
-            if (jlist.get(i).getDistrict() != null && jlist.get(i).getDistrict().equals("")) {
+            System.out.println("city_ok"+jlist.get(i).getCity());
+            if (jlist.get(i).getDistrict() != null && !jlist.get(i).getDistrict().equals("")) {
                 photo.setDistrict(jlist.get(i).getDistrict());
             }
-            if (jlist.get(i).getPlace() != null && jlist.get(i).getPlace().equals("")) {
+            if (jlist.get(i).getPlace() != null && !jlist.get(i).getPlace().equals("")) {
                 photo.setPlace(jlist.get(i).getPlace());
             }
             photo.setUserId(userId);
             photo.setAlbumId(albumId);
-            if (jlist.get(i).getProvince()!= null && jlist.get(i).getProvince().equals("")) {
+            if (jlist.get(i).getProvince()!= null && !jlist.get(i).getProvince().equals("")) {
                 photo.setProvince(jlist.get(i).getProvince());
             }
             String date = "";

@@ -135,6 +135,7 @@ public class AddPictureActivity extends AppCompatActivity {
         // 直接启动图片查看器
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())//相册 媒体类型 PictureMimeType.ofAll()、ofImage()、ofVideo()、ofAudio()
+                .isWeChatStyle(false)
                 //.openCamera()//单独使用相机 媒体类型 PictureMimeType.ofImage()、ofVideo()
                 .theme(R.style.picture_Sina_style)// xml样式配制 R.style.picture_default_style、picture_WeChat_style or 更多参考Demo
                 .loadImageEngine(GlideEngine.createGlideEngine())// 图片加载引擎 需要 implements ImageEngine接口
