@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#fff">
+        android:background="#7adfb8">
 
         <ImageView
             android:id="@+id/iv_add_picture_back"
@@ -17,7 +17,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/dp10"
             android:layout_marginBottom="@dimen/dp10"
-            android:src="@drawable/ic_back_arrow" />
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/fanhui32" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,19 +27,9 @@
             android:layout_weight="8"
             android:gravity="center"
             android:text="添加照片"
-            android:textColor="#000"
+            android:textColor="@color/FloralWhite"
             android:textSize="20sp" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_add_picture_upload"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:gravity="center"-->
-            <!--android:layout_marginRight="@dimen/dp10"-->
-            <!--android:text="上传"-->
-            <!--android:textColor="#FFA000"-->
-            <!--android:textSize="18sp" />-->
         <Button
             android:id="@+id/tv_add_picture_upload"
             android:layout_width="wrap_content"
@@ -48,8 +39,8 @@
             android:stateListAnimator="@null"
             android:layout_marginRight="@dimen/dp10"
             android:text="上传"
-            android:background="#fff"
-            android:textColor="#FFA000"
+            android:textColor="#fff"
+            android:background="#7adfb8"
             android:textSize="18sp" />
 
     </RelativeLayout>
@@ -68,9 +59,9 @@
         android:layout_marginTop="40.5dp"
         android:background="#FFFFFF"
         android:gravity="start"
-        android:hint="说点什么吧..."
+        android:hint="为你的加点描述吧..."
         android:maxEms="128"
-        android:textSize="15sp"
+        android:textSize="16dp"
         android:paddingLeft="@dimen/dp10" />
 
     <View
