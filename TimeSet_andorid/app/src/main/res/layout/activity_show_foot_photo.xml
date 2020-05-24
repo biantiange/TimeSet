@@ -5,38 +5,40 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:background="#7adfb8"
         android:id="@+id/rl_show_foot_earth_out"
         android:layout_width="match_parent"
         android:layout_height="40dp">
 
         <ImageView
+            style="?android:attr/borderlessButtonStyle"
             android:id="@+id/iv_foot_earth_show_exit"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/left_exit" />
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/fanhui32" />
 
         <TextView
             android:id="@+id/tv_foot_earth_show_img_province"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/iv_foot_earth_show_exit"
             android:gravity="center_vertical"
             android:text="承德市"
-            android:textColor="#000"
+            android:textColor="@color/FloralWhite"
             android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_foot_earth_show_img_count"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:layout_toRightOf="@id/tv_foot_earth_show_img_province"
             android:gravity="center_vertical"
             android:text="3"
-            android:textColor="#000"
+            android:textColor="@color/FloralWhite"
             android:textSize="18sp" />
 
         <TextView
@@ -46,7 +48,7 @@
             android:layout_toRightOf="@id/tv_foot_earth_show_img_count"
             android:gravity="center_vertical"
             android:text="张照片"
-            android:textColor="#000"
+            android:textColor="@color/FloralWhite"
             android:textSize="18sp" />
     </RelativeLayout>
 
