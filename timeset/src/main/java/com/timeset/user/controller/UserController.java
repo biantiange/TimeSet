@@ -86,6 +86,7 @@ public class UserController {
                 return "NO";
             }
         }else{
+            System.out.println("用户已被注册");
            return "";
         }
     }

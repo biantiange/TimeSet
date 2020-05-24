@@ -405,7 +405,7 @@ public class RegistryActivity extends AppCompatActivity {
             if (etPwd.getText().toString().equals(etPwd1.getText().toString())) {
                 Log.e("密码与确认密码", "想等了");
                 //做忘记密码操作
-                MyOkHttp(Constant.IP + "user/forget?phone=" + etPhone.getText().toString() + "&&password=" + etPwd.getText().toString());
+                MyOkHttp(Constant.IP + "user/registry?phone=" + etPhone.getText().toString() + "&&password=" + etPwd.getText().toString());
 //                Toast.makeText(RegistryActivity.this, "忘记密码操作连接数据库", Toast.LENGTH_LONG).show();
             } else {
                 Log.e("密码与确认密码", "不相等");
