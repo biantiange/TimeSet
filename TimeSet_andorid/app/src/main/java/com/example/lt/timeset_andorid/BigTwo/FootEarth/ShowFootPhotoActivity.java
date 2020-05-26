@@ -1,5 +1,6 @@
 package com.example.lt.timeset_andorid.BigTwo.FootEarth;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -49,6 +50,10 @@ public class ShowFootPhotoActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_foot_photo);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(0xff7adfb8);
+        }
+
         Log.e("keydown2","reen");
 
         initDatas();

@@ -445,7 +445,7 @@ public class InAlbumActivity extends AppCompatActivity {
                     albumId = getIntent().getIntExtra("albumId", -1);
                     Intent intent = new Intent(InAlbumActivity.this, AddPictureActivity.class).putExtra("albumId", albumId);
                     startActivity(intent);
-                    finish();
+
                     break;
 
                 case R.id.btn_return1:

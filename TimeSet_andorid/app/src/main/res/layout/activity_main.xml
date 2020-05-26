@@ -40,8 +40,8 @@
                 android:textSize="20dp" />
 
             <ImageView
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="40dp"
+
+               android:layout_gravity="center"
                 android:id="@+id/sousuo"
                 android:layout_width="0dp"
                 android:layout_weight="1"

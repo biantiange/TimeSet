@@ -288,8 +288,8 @@ public class AddPictureActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Response response = call.execute();
+                /*  try {
+                 *//* Response response = call.execute();
                     String str = response.body().string();
                     Log.e("YYYYYYYYYYYYYYY", str);
                     Map<String, String> map = new HashMap<>();
@@ -298,11 +298,39 @@ public class AddPictureActivity extends AppCompatActivity {
                     Message message = new Message();
                     message.what = GET_LOCATION;
                     message.obj = new Gson().toJson(map);
-                    myHandler.sendMessage(message);
+                    myHandler.sendMessage(message);*//*
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
+
+                Request request = new Request.Builder().url(url)
+
+                        .build();
+                OkHttpClient client = new OkHttpClient();
+                Call call = client.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String str = response.body().string();
+                        Log.e("YYYYYYYYYYYYYYY", str);
+                        Map<String, String> map = new HashMap<>();
+                        map.put("pi", i + "");
+                        map.put("str", str);
+                        Message message = new Message();
+                        message.what = GET_LOCATION;
+                        message.obj = new Gson().toJson(map);
+                        myHandler.sendMessage(message);
+
+
+                    }
+                });
             }
+
         }).start();
     }
 

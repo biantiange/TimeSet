@@ -186,6 +186,8 @@ public class MapFragment extends Fragment {
         albumId = getActivity().getIntent().getIntExtra("albumId", -1);
         sharedPreferences = getContext().getSharedPreferences("user", MODE_PRIVATE);
         userId = sharedPreferences.getInt("id", -1);
+
+
         OkHttpClient okHttpClient = new OkHttpClient();
         if (albumId != -1 && userId != -1) {
             FormBody.Builder builder = new FormBody.Builder().add("albumId", String.valueOf(albumId)).add("userId", String.valueOf(userId));
@@ -352,11 +354,13 @@ public class MapFragment extends Fragment {
     // 给所有图片覆盖到地图上
     private void setAllPhotoToBaiduMap() {
         for (String city : photoMap.keySet()) {
+
             List<PhotoList> photoList = photoMap.get(city);
            // for (PhotoList photoList1 : photoList) {
             PhotoList photoList1=photoList.get(0);
                 for (Photo photo : photoList1.getPhotoList()) {
                     String lat = photo.getLatitude();
+                    Log.e("infor",photo.getLatitude());
                     String lon = photo.getLongitude();
                     new GetLatLngTask(lat, lon, city).execute();
                 }
