@@ -54,21 +54,6 @@ public class UserController {
 //                //上传服务器
 //                // 生成新的文件名
                 String fileName = System.currentTimeMillis()+file.getOriginalFilename();
-//                // 保存路径
-////                String destFileName=request.getServletContext().getRealPath("")+"headImg"+ File.separator+fileName;
-////                String destFileName=request.getServletContext().getRealPath("")+"headImg/"+fileName;
-//                String destFileName = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/"+fileName;
-//                // 执行保存操作
-//                File destFile = new File(destFileName);
-//                if (!destFile.getParentFile().exists()){
-//                    destFile.getParentFile().mkdir();
-//                }
-//                try {
-//                    file.transferTo(destFile);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                user.setHeadImg(fileName);
                 File f=null;
                 try {
                     f=MultipartFileToFileUtil.multipartFileToFile(file);
